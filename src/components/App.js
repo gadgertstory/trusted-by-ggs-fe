@@ -3,9 +3,9 @@ import Header from "./Header";
 
 const App = () => {
     return (
-        <h1>
+        <div>
             <Header />
-        </h1>
+        </div>
     );
 };
 
