@@ -46,7 +46,7 @@ import { fetchLogin } from "../../middleware/auth";
 // };
 
 const login = (userLogin) => (dispatch) => {
-     console.log('🥹Action🥹',userLogin)
+    console.log("🥹Action🥹", userLogin);
     return fetchLogin(userLogin).then(
         (data) => {
             dispatch({

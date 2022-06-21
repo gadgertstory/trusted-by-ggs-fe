@@ -1,16 +1,22 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/api/auth/";
+const API_URL = "https://app-hlcys.stagin-1ulf1.trial-62qxuv.wpcp-demo.run/";
 
 const fetchLogin = (userLogin) => {
-    console.log('FetchLogin🌝',userLogin)
-    return axios.post(`${API_URL}signin"`,{userLogin}).then((response) => {
-        if (response.data.accessToken) {
-            localStorage.setItem("user", JSON.stringify(response.data));
-        }
+    return axios
+        .post(`${API_URL}`, {
+            userLogin,
+        })
+        .then((response) => {
+            if (response.data.accessToken) {
+                console.log('tttttttt',response);
+                localStorage.setItem("user", JSON.stringify(response.data));
+            }
 
-        return response.data;
-    });
+            return response.data;
+        }).catch(e => {
+            console.log(e);
+        });
 };
 
 const logout = () => {

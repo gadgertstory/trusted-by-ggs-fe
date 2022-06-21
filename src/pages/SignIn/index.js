@@ -34,6 +34,7 @@ import { history } from "../../helpers/history";
 
 const SignIn = () => {
     const dispatch = useDispatch();
+    // const [loading,setloading] = useState(true)
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -48,15 +49,14 @@ const SignIn = () => {
         };
 
         if (loginUser) {
-            dispatch(login(loginUser)).then(() => {
-              history.push("/repairs");
-              window.location.reload();
-            })
-            .catch(() => {
-              this.setState({
-                loading: false
-              });
-            });;
+            dispatch(login(loginUser))
+                .then(() => {
+                    history.push("/repairs");
+                    // window.location.reload();
+                })
+                .catch(() => {
+                    console.log(loginUser);
+                });
         }
     };
 
