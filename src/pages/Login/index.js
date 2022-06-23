@@ -12,7 +12,6 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-// import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import { login } from "../../services/actions/auth";
 import { history } from "../../helpers/history";
@@ -30,7 +29,6 @@ import { history } from "../../helpers/history";
 //   );
 // }
 
-// const theme = createTheme();
 
 const LogIn = () => {
     const dispatch = useDispatch();
@@ -60,7 +58,7 @@ const LogIn = () => {
         if (loginUser) {
             dispatch(login(loginUser))
                 .then(() => {
-                    history.push("/dasboard");
+                    history.push("/");
                     window.location.reload();
                 })
                 .catch(() => {
