@@ -1,4 +1,5 @@
-import * as React from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
@@ -18,6 +19,10 @@ import Tab from "@mui/material/Tab";
 import MenuIcon from "@mui/icons-material/Menu";
 import AdbIcon from "@mui/icons-material/Adb";
 
+import { logout } from "../../services/actions/auth";
+// import AuthVerify from "./common/AuthVerify";
+import EventBus from "../../common/EventBus";
+
 const pages = [
     {
         pathname: "/",
@@ -29,21 +34,30 @@ const pages = [
     },
 ];
 
-const settings = ["Profile", "Account", "Logout"];
+const settings = [
+    {
+        pathname: "/profile",
+        name: "Profile",
+    },
+    {
+        pathname: "logout",
+        name: "Logout",
+    },
+];
 
 const LinkTab = (props) => {
     console.log(props);
     return (
         // <Link to={props.href}>
-            <Tab
-            textColor='secondary'
-                {...props}
-            />
+        <Tab textColor="secondary" {...props} />
         // </Link>
     );
 };
 
-const ResponsiveAppBar = () => {
+const ResponsiveAppBar = (currentUser) => {
+    const dispatch = useDispatch(); 
+    const [showModeratorBoard, setShowModeratorBoard] = useState(false);
+    const [showAdminBoard, setShowAdminBoard] = useState(false);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [value, setValue] = React.useState(0);
@@ -66,6 +80,28 @@ const ResponsiveAppBar = () => {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+
+    const logOut = useCallback(() => {
+        dispatch(logout());
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (currentUser) {
+            // setShowModeratorBoard(currentUser.roles.includes("ROLE_MODERATOR"));
+            // setShowAdminBoard(currentUser.roles.includes("ROLE_ADMIN"));
+        } else {
+            setShowModeratorBoard(false);
+            setShowAdminBoard(false);
+        }
+
+        EventBus.on("logout", () => {
+            logOut();
+        });
+
+        return () => {
+            EventBus.remove("logout");
+        };
+    }, [currentUser, logOut]);
 
     return (
         <AppBar position="static">
@@ -195,10 +231,7 @@ const ResponsiveAppBar = () => {
                                     />
                                 );
                             })} */}
-                              <LinkTab
-                                        label={'text'}
-                                        href={'/'}
-                                    />
+                            <LinkTab label={"text"} href={"/"} />
                         </Tabs>
                     </Box>
 
@@ -209,7 +242,7 @@ const ResponsiveAppBar = () => {
                                 sx={{ p: 0 }}
                             >
                                 <Avatar
-                                    alt="Remy Sharp"
+                                    // alt={currentUser.data.name.toUpperCase()}
                                     src="/static/images/avatar/2.jpg"
                                 />
                             </IconButton>
@@ -235,9 +268,21 @@ const ResponsiveAppBar = () => {
                                     key={setting}
                                     onClick={handleCloseUserMenu}
                                 >
-                                    <Typography textAlign="center">
-                                        {setting}
-                                    </Typography>
+                                    {setting.pathname !== "logout" ? (
+                                        <Link to={`${setting.pathname}`}>
+                                            <Typography textAlign="center">
+                                                {setting.name}
+                                            </Typography>
+                                        </Link>
+                                    ) : (
+                                        <a
+                                            href="/login"
+                                            className="nav-link"
+                                            onClick={logOut}
+                                        >
+                                            LogOut
+                                        </a>
+                                    )}
                                 </MenuItem>
                             ))}
                         </Menu>
