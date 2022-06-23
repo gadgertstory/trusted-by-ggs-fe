@@ -117,7 +117,7 @@ const ResponsiveAppBar = (currentUser) => {
                             cursor: "pointer",
                         }}
                     >
-                        Repairs System
+                        Repair System
                     </Typography>
                     <Box
                         sx={{
@@ -191,7 +191,7 @@ const ResponsiveAppBar = (currentUser) => {
                             textDecoration: "none",
                         }}
                     >
-                        Repairs System
+                        Repair System
                     </Typography>
                     <Box
                         sx={{
