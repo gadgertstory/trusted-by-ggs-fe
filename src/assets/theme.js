@@ -1,13 +1,15 @@
-import { createTheme, responsiveFontSizes } from "@mui/material/styles";
+import { createTheme } from "@mui/material/styles";
+import {
+    blue,
+    yellow,
+    green,
+    lightBlue,
+    grey,
+    red,
+    teal,
+} from "@mui/material/colors";
 
-import blue from "@mui/material/colors/blue";
-import yellow from "@mui/material/colors/yellow";
-import green from "@mui/material/colors/green";
-import lightBlue from "@mui/material/colors/lightBlue";
-import grey from "@mui/material/colors/grey";
-import blueGrey from "@mui/material/colors/blueGrey";
-
-const theme = createTheme({
+export const theme = createTheme({
     palette: {
         mode: "light",
         primary: {
@@ -17,16 +19,16 @@ const theme = createTheme({
             contrastText: grey[50],
         },
         secondary: {
-            light: blueGrey[500],
-            main: blueGrey[700],
-            dark: blueGrey[900],
-            contrastText: grey[50],
+            main: teal[700],
+            light: teal[500],
+            dark: teal[900],
+            contrastText: grey[100],
         },
         error: {
-            light: blueGrey[400],
-            main: blueGrey[500],
-            dark: blueGrey[300],
-            contrastText: grey[800],
+            light: red[400],
+            main: red[500],
+            dark: red[300],
+            contrastText: grey[700],
         },
         success: {
             main: green[500],
@@ -44,15 +46,15 @@ const theme = createTheme({
             disabled: grey[500],
         },
         action: {
-            active: blueGrey[200],
+            active: teal[200],
             activeOpacity: 1,
             disabled: grey[700],
             disabledBackground: grey[200],
-            hover: blueGrey[100],
+            hover: grey[300],
             hoverOpacity: 0.7,
-            focus: blueGrey[600],
+            focus: teal[600],
             focusOpacity: 1,
-            selected: blueGrey[300],
+            selected: teal[300],
             selectedOpacity: 1,
         },
         background: {
@@ -66,5 +68,3 @@ const theme = createTheme({
         tonalOffset: 0.2,
     },
 });
-
-export default theme;

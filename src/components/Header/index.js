@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import Link from "@mui/material/Link";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -13,11 +13,9 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
 
 import MenuIcon from "@mui/icons-material/Menu";
-import AdbIcon from "@mui/icons-material/Adb";
+import ConstructionIcon from "@mui/icons-material/Construction";
 
 import { logout } from "../../services/actions/auth";
 // import AuthVerify from "./common/AuthVerify";
@@ -45,22 +43,14 @@ const settings = [
     },
 ];
 
-const LinkTab = (props) => {
-    console.log(props);
-    return (
-        // <Link to={props.href}>
-        <Tab textColor="secondary" {...props} />
-        // </Link>
-    );
-};
-
 const ResponsiveAppBar = (currentUser) => {
-    const dispatch = useDispatch(); 
-    const [showModeratorBoard, setShowModeratorBoard] = useState(false);
-    const [showAdminBoard, setShowAdminBoard] = useState(false);
+    const dispatch = useDispatch();
+    // const [showModeratorBoard, setShowModeratorBoard] = useState(false);
+    // const [showAdminBoard, setShowAdminBoard] = useState(false);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [value, setValue] = React.useState(0);
+    const dataUser = currentUser.currentUser.data;
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -86,13 +76,14 @@ const ResponsiveAppBar = (currentUser) => {
     }, [dispatch]);
 
     useEffect(() => {
-        if (currentUser) {
-            // setShowModeratorBoard(currentUser.roles.includes("ROLE_MODERATOR"));
-            // setShowAdminBoard(currentUser.roles.includes("ROLE_ADMIN"));
-        } else {
-            setShowModeratorBoard(false);
-            setShowAdminBoard(false);
-        }
+        console.log("dataUer in Header", dataUser);
+        // if (dataUser) {
+        //     setShowModeratorBoard(currentUser.roles.includes("ROLE_MODERATOR"));
+        //     setShowAdminBoard(currentUser.roles.includes("ROLE_ADMIN"));
+        // } else {
+        //     setShowModeratorBoard(false);
+        //     setShowAdminBoard(false);
+        // }
 
         EventBus.on("logout", () => {
             logOut();
@@ -101,13 +92,13 @@ const ResponsiveAppBar = (currentUser) => {
         return () => {
             EventBus.remove("logout");
         };
-    }, [currentUser, logOut]);
+    }, [dataUser, logOut]);
 
     return (
         <AppBar position="static">
-            <Container maxWidth="xl">
+            <Container maxWidth="lg">
                 <Toolbar disableGutters>
-                    <AdbIcon
+                    <ConstructionIcon
                         sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
                     />
                     <Typography
@@ -120,14 +111,14 @@ const ResponsiveAppBar = (currentUser) => {
                             display: { xs: "none", md: "flex" },
                             fontFamily: "monospace",
                             fontWeight: 700,
-                            letterSpacing: ".3rem",
+                            letterSpacing: ".1rem",
                             color: "inherit",
                             textDecoration: "none",
+                            cursor: "pointer",
                         }}
                     >
-                        LOGO
+                        Repairs System
                     </Typography>
-
                     <Box
                         sx={{
                             flexGrow: 1,
@@ -163,22 +154,27 @@ const ResponsiveAppBar = (currentUser) => {
                             }}
                         >
                             {pages.map((page) => (
-                                <MenuItem
-                                    key={page.pathname}
-                                    onClick={handleCloseNavMenu}
+                                <Link
+                                    key={`${page.pathname}`}
+                                    href={`${page.pathname}`}
+                                    underline="none"
                                 >
-                                    <Link to={`${page.pathname}`}>
+                                    <MenuItem onClick={handleCloseNavMenu}>
                                         <Typography textAlign="center">
                                             {page.name}
                                         </Typography>
-                                    </Link>
-                                </MenuItem>
+                                    </MenuItem>
+                                </Link>
                             ))}
                         </Menu>
                     </Box>
-                    <AdbIcon
+
+                    {/* ==========================Menu Responsive=========================== */}
+
+                    <ConstructionIcon
                         sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
                     />
+
                     <Typography
                         variant="h5"
                         noWrap
@@ -195,7 +191,7 @@ const ResponsiveAppBar = (currentUser) => {
                             textDecoration: "none",
                         }}
                     >
-                        LOGO
+                        Repairs System
                     </Typography>
                     <Box
                         sx={{
@@ -203,10 +199,13 @@ const ResponsiveAppBar = (currentUser) => {
                             display: { xs: "none", md: "flex" },
                         }}
                     >
-                        {/* {pages.map((page) => (
-                            <Link to={`${page.pathname}`}>
+                        {pages.map((page) => (
+                            <Link
+                                underline="none"
+                                key={page.pathname}
+                                href={`${page.pathname}`}
+                            >
                                 <Button
-                                    key={page.pathname}
                                     onClick={handleCloseNavMenu}
                                     sx={{
                                         my: 2,
@@ -217,23 +216,10 @@ const ResponsiveAppBar = (currentUser) => {
                                     {page.name}
                                 </Button>
                             </Link>
-                        ))} */}
-                        <Tabs
-                            value={value}
-                            onChange={handleChange}
-                            aria-label="nav tabs example"
-                        >
-                            {/* {pages.map((page) => {
-                                return (
-                                    <LinkTab
-                                        label={page.name}
-                                        href={page.pathname}
-                                    />
-                                );
-                            })} */}
-                            <LinkTab label={"text"} href={"/"} />
-                        </Tabs>
+                        ))}
                     </Box>
+
+                    {/* ============================Setting==========================      */}
 
                     <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Open settings">
@@ -242,7 +228,7 @@ const ResponsiveAppBar = (currentUser) => {
                                 sx={{ p: 0 }}
                             >
                                 <Avatar
-                                    // alt={currentUser.data.name.toUpperCase()}
+                                    alt={dataUser.name.toUpperCase()}
                                     src="/static/images/avatar/2.jpg"
                                 />
                             </IconButton>
@@ -265,23 +251,27 @@ const ResponsiveAppBar = (currentUser) => {
                         >
                             {settings.map((setting) => (
                                 <MenuItem
-                                    key={setting}
+                                    key={setting.pathname}
                                     onClick={handleCloseUserMenu}
                                 >
                                     {setting.pathname !== "logout" ? (
-                                        <Link to={`${setting.pathname}`}>
+                                        <Link
+                                            underline="none"
+                                            href={`${setting.pathname}`}
+                                        >
                                             <Typography textAlign="center">
                                                 {setting.name}
                                             </Typography>
                                         </Link>
                                     ) : (
-                                        <a
+                                        <Link
+                                            underline="none"
                                             href="/login"
                                             className="nav-link"
                                             onClick={logOut}
                                         >
                                             LogOut
-                                        </a>
+                                        </Link>
                                     )}
                                 </MenuItem>
                             ))}

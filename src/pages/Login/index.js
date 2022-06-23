@@ -3,17 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from 'react-router-dom';
 
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import LoadingButton from '@mui/lab/LoadingButton';
 import TextField from "@mui/material/TextField";
 import { ToastContainer, toast } from "react-toastify";
 
-import { ErrorMessage } from "@hookform/error-message";
 import { useForm, Controller } from "react-hook-form";
-// import FormControlLabel from '@mui/material/FormControlLabel';
-// import Checkbox from '@mui/material/Checkbox';
-// import Link from '@mui/material/Link';
-// import Grid from '@mui/material/Grid';
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
@@ -66,7 +60,7 @@ const LogIn = () => {
         if (loginUser) {
             dispatch(login(loginUser))
                 .then(() => {
-                    history.push("/profile");
+                    history.push("/dasboard");
                     window.location.reload();
                 })
                 .catch(() => {
@@ -80,9 +74,7 @@ const LogIn = () => {
       }
 
     return (
-        // <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs">
-            {/* <CssBaseline /> */}
             <Box
                 sx={{
                     marginTop: 8,
@@ -178,7 +170,6 @@ const LogIn = () => {
             </Box>
             {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
         </Container>
-        // </ThemeProvider>
     );
 };
 
