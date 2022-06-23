@@ -1,48 +1,106 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import Header from "./Header/index";
-import SignIn from "../pages/SignIn/index";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import { ThemeProvider } from "@mui/material";
+import { theme } from "../assets/theme";
+import { CssBaseline } from "@mui/material";
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
+import "react-toastify/dist/ReactToastify.css";
+
+import Header from "./Header";
+import Dashboard from "../pages/Dashboard";
+import Profile from "../pages/Profile";
 import Repairs from "../pages/Repairs";
-import { PrivateRoute } from "./Layout/PrivateRoute";
+import LogIn from "../pages/Login";
+
+import { clearMessage } from "../services/actions/message";
 import { history } from "../helpers/history";
 
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { CssBaseline } from "@mui/material";
-// import theme from "../assets/theme";
-
-const theme = createTheme();
-// const <Repairs/> = props;
 const App = () => {
+    const { user: currentUser } = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        history.listen((location) => {
+            dispatch(clearMessage()); // clear message when changing location
+        });
+    }, [dispatch]);
+
+    const routeMapping = [
+        {
+            pathname: "/",
+            element: <Dashboard />,
+        },
+        {
+            pathname: "/profile",
+            element: <Profile />,
+        },
+        {
+            pathname: "/repairs",
+            element: <Repairs />,
+        },
+    ];
+
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
-            <Router>
-                <Header />
-                <Routes history={history}>
-                    <Route
-                        // {...rest}
-                        render={(props) => {
-                            if (!localStorage.getItem("user")) {
-                                // not logged in so redirect to login page with the return url
+            <Router history={history}>
+                {currentUser ? <Header currentUser={currentUser} /> : ""}
+                <Routes>
+                    {currentUser === null ? (
+                        <>
+                            <Route exact path="/login" element={<LogIn />} />
+                            <Route exact path="*" element={<LogIn />} />
+                        </>
+                    ) : (
+                        <>
+                            {routeMapping.map((index) => {
                                 return (
-                                    <Link
-                                        to={{
-                                            pathname: "/",
-                                            // state: { from: props.location },
-                                        }}
+                                    <Route
+                                        key={index.pathname}
+                                        exact
+                                        path={index.pathname}
+                                        element={
+                                            <Box sx={{ display: "flex" }}>
+                                                <Box
+                                                    component="main"
+                                                    sx={{
+                                                        backgroundColor: (
+                                                            theme
+                                                        ) =>
+                                                            theme.palette
+                                                                .mode ===
+                                                            "light"
+                                                                ? theme.palette
+                                                                      .grey[100]
+                                                                : theme.palette
+                                                                      .grey[900],
+                                                        flexGrow: 1,
+                                                        height: "100vh",
+                                                        overflow: "auto",
+                                                    }}
+                                                >
+                                                    <Container
+                                                        maxWidth="lg"
+                                                        sx={{ mt: 4, mb: 4 }}
+                                                    >
+                                                        {index.element}
+                                                    </Container>
+                                                </Box>
+                                            </Box>
+                                        }
                                     />
                                 );
-                            }
-
-                            // logged in so return component
-                            return <element Repairs {...props} />;
-                        }}
-                    />
-                    {/* <PrivateRoute exact path="/" element={<Repairs />} /> */}
-                    <Route exact path="/" element={<SignIn />} />
-                    <Route exact path="/repairs" element={<Repairs />} />
-                    {/* <Link from="*" to="/" /> */}
+                            })}
+                        </>
+                    )}
+                    {/* <Route path="/user" component={BoardUser} />
+                            <Route path="/mod" component={BoardModerator} />
+                        <Route path="/admin" component={BoardAdmin} /> */}
                 </Routes>
+                {/* <AuthVerify logOut={logOut}/> */}
             </Router>
         </ThemeProvider>
     );

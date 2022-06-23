@@ -1,0 +1,6 @@
+{
+    "conventionalCommits.scopes": [
+        "test",
+        "redesign dashboard page and custom mui theme"
+    ]
+}
