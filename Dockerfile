@@ -1,8 +1,8 @@
 FROM node:16-alpine 
-EXPOSE 3000
 WORKDIR /app
 COPY package.json ./
-COPY package-lock.json ./
 COPY ./ ./
-RUN npm i
+RUN npm config set legacy-peer-deps true
+RUN npm install
+EXPOSE 3000
 CMD ["npm", "run", "start"]
