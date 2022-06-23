@@ -23,6 +23,7 @@ const App = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        console.log(currentUser);
         history.listen((location) => {
             dispatch(clearMessage()); // clear message when changing location
         });
@@ -33,29 +34,43 @@ const App = () => {
             <CssBaseline />
             <Router history={history}>
                 <div>
-                        <Header
-                            currentUser={currentUser}
-                        />
+                    {currentUser ? <Header currentUser={currentUser} /> : ""}
 
                     <div className="container mt-3">
                         <Routes>
-                            <Route exact path="/" element={<Dashboard />} />
-                            <Route
-                                exact
-                                path="/dashboard"
-                                element={<Dashboard />}
-                            />
-                            <Route exact path="/login" element={<LogIn />} />
-                            <Route
-                                exact
-                                path="/profile"
-                                element={<Profile />}
-                            />
-                            <Route
-                                exact
-                                path="/repairs"
-                                element={<Repairs />}
-                            />
+                            {currentUser === null ? (
+                                <>
+                                    <Route
+                                        exact
+                                        path="/login"
+                                        element={<LogIn />}
+                                    />
+                                    <Route exact path="*" element={<LogIn />} />
+                                </>
+                            ) : (
+                                <>
+                                    <Route
+                                        exact
+                                        path={"/dashoboard"}
+                                        element={<Dashboard />}
+                                    />
+                                    <Route
+                                        exact
+                                        path="*"
+                                        element={<Dashboard />}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/profile"
+                                        element={<Profile />}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/repairs"
+                                        element={<Repairs />}
+                                    />
+                                </>
+                            )}
                             {/* <Route path="/user" component={BoardUser} />
                             <Route path="/mod" component={BoardModerator} />
                             <Route path="/admin" component={BoardAdmin} /> */}
