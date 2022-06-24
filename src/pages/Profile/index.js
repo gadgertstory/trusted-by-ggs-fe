@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -7,7 +7,7 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Avatar from "@mui/material/Avatar";
 
-import UserService from "../../middleware/user";
+// import UserService from "../../middleware/user";
 
 const Profile = () => {
     const { user: currentUser } = useSelector((state) => state.auth);

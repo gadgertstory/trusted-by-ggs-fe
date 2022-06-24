@@ -5,7 +5,7 @@ import Chart from "../../components/Chart";
 // import Deposits from "./Deposits";
 import Orders from "../../components/Orders";
 
-import UserService from "../../middleware/user";
+// import UserService from "../../middleware/user";
 
 const Dashboard = () => {
     // const [content, setContent] = useState("");
