@@ -23,7 +23,6 @@ const App = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        console.log(App,process.env)
         history.listen((location) => {
             dispatch(clearMessage()); // clear message when changing location
         });
