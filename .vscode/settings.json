@@ -2,6 +2,7 @@
     "conventionalCommits.scopes": [
         "test",
         "redesign dashboard page and custom mui theme",
-        "update dockerignore "
+        "update dockerignore ",
+        "Update Dockerfile "
     ]
 }
