@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from 'react-router-dom';
 
 import Avatar from "@mui/material/Avatar";
 import LoadingButton from '@mui/lab/LoadingButton';
 import TextField from "@mui/material/TextField";
-import { ToastContainer, toast } from "react-toastify";
+// import { ToastContainer, toast } from "react-toastify";
 
 import { useForm, Controller } from "react-hook-form";
 import Box from "@mui/material/Box";
@@ -36,18 +36,18 @@ const LogIn = () => {
     const { handleSubmit, control } = useForm();
 
     const { isLoggedIn } = useSelector((state) => state.auth);
-    const { message } = useSelector((state) => state.message);
+    // const { message } = useSelector((state) => state.message);
 
-    const notify = (message) =>
-        toast.error(`${message}`, {
-            position: "top-right",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-        });
+    // const notify = (message) =>
+    //     toast.error(`${message}`, {
+    //         position: "top-right",
+    //         autoClose: 1000,
+    //         hideProgressBar: false,
+    //         closeOnClick: true,
+    //         pauseOnHover: true,
+    //         draggable: true,
+    //         progress: undefined,
+    //     });
 
     const onSubmit = (data) => {
         const loginUser = data;

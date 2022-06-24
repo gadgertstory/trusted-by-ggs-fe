@@ -1,8 +1,14 @@
 import axios from "axios";
 
-// const API_URL = "http://192.168.1.41:31585/auth"; kube
 //==========================================
-const API_URL = "http://192.168.1.107:8080/auth";
+// const API_URL = "http://192.168.1.107:8080/auth";
+// ======================================================
+// const API_URL = "http://192.168.1.107:8080/auth"; prod
+
+const API_URL =
+    process.env.NODE_ENV !== "production"
+        ? `${process.env.REACT_APP_BASE_URL}`
+        : `${process.env.REACT_APP_BASE_URL_PROD}`;
 
 const register = (username, email, password) => {
     return axios.post(API_URL + "signup", {
@@ -13,7 +19,7 @@ const register = (username, email, password) => {
 };
 
 const login = (loginUser) => {
-    return axios.post(`${API_URL}/login`, loginUser).then((response) => {
+    return axios.post(`${API_URL}/auth/login`, loginUser).then((response) => {
         const accessToken = response.data.access_token;
         if (accessToken) {
             localStorage.setItem("user", JSON.stringify(response.data));
@@ -27,8 +33,10 @@ const logout = () => {
     localStorage.removeItem("user");
 };
 
-export default {
+const exportedFunction = {
     register,
     login,
     logout,
 };
+
+export default exportedFunction;

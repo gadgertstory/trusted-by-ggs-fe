@@ -49,12 +49,13 @@ const ResponsiveAppBar = (currentUser) => {
     // const [showAdminBoard, setShowAdminBoard] = useState(false);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-    const [value, setValue] = React.useState(0);
-    const dataUser = currentUser.currentUser.data;
+    // const [value, setValue] = React.useState(0);
 
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
+    const [dataUser] = useState(currentUser)
+
+    // const handleChange = (event, newValue) => {
+    //     setValue(newValue);
+    // };
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -76,7 +77,7 @@ const ResponsiveAppBar = (currentUser) => {
     }, [dispatch]);
 
     useEffect(() => {
-        console.log("dataUer in Header", dataUser);
+        console.log("dataUser in Header", dataUser);
         // if (dataUser) {
         //     setShowModeratorBoard(currentUser.roles.includes("ROLE_MODERATOR"));
         //     setShowAdminBoard(currentUser.roles.includes("ROLE_ADMIN"));
@@ -228,7 +229,7 @@ const ResponsiveAppBar = (currentUser) => {
                                 sx={{ p: 0 }}
                             >
                                 <Avatar
-                                    alt={dataUser.name.toUpperCase()}
+                                    // alt={dataUser.name.toUpperCase()}
                                     src="/static/images/avatar/2.jpg"
                                 />
                             </IconButton>
