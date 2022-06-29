@@ -59,7 +59,7 @@ export const theme = createTheme({
         },
         background: {
             default: "white",
-            paper: grey[100],
+            paper: "white",
         },
         common: {
             black: grey[900],
