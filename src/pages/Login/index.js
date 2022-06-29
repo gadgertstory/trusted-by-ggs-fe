@@ -6,6 +6,7 @@ import Avatar from "@mui/material/Avatar";
 import LoadingButton from '@mui/lab/LoadingButton';
 import TextField from "@mui/material/TextField";
 // import { ToastContainer, toast } from "react-toastify";
+import { Link } from "@mui/material";
 
 import { useForm, Controller } from "react-hook-form";
 import Box from "@mui/material/Box";
@@ -16,18 +17,23 @@ import Container from "@mui/material/Container";
 import { login } from "../../services/actions/auth";
 import { history } from "../../helpers/history";
 
-// function Copyright(props) {
-//   return (
-//     <Typography variant="body2" color="text.secondary" align="center" {...props}>
-//       {'Copyright © '}
-//       <Link color="inherit" href="https://mui.com/">
-//         Your Website
-//       </Link>{' '}
-//       {new Date().getFullYear()}
-//       {'.'}
-//     </Typography>
-//   );
-// }
+//button
+
+import { IconButton,InputAdornment,Visibility,VisibilityOff } from "@mui/material";
+
+
+function Copyright(props) {
+  return (
+    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+      {'Copyright © '}
+      <Link color="inherit" href="https://gadgetstory.co.th/">
+        Gadgetstory
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
 
 
 const LogIn = () => {
@@ -51,7 +57,6 @@ const LogIn = () => {
 
     const onSubmit = (data) => {
         const loginUser = data;
-        console.log(loginUser);
 
         setLoading(true);
 
@@ -152,21 +157,9 @@ const LogIn = () => {
                     >
                         Sign In
                     </LoadingButton>
-                    {/* <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid> */}
                 </Box>
+            <Copyright sx={{ mt: 5, mb: 4 }} />
             </Box>
-            {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
         </Container>
     );
 };

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter as Router, Routes, Route,useParams } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../assets/theme";
@@ -12,20 +12,17 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "./Header";
 import Dashboard from "../pages/Dashboard";
 import Profile from "../pages/Profile";
-import Repairs from "../pages/Repairs";
-import RepairDetail from "../pages/Repairs/components/RepairDetail";
+import Repair from "../pages/Repair";
 import LogIn from "../pages/Login";
 
 import { clearMessage } from "../services/actions/message";
 import { history } from "../helpers/history";
 
 const App = () => {
-    let { id } = useParams();
     const { user: currentUser } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     
     useEffect(() => {
-        console.log('iddddd',id)
         history.listen((location) => {
             dispatch(clearMessage()); // clear message when changing location
         });
@@ -41,12 +38,8 @@ const App = () => {
             element: <Profile />,
         },
         {
-            pathname: "/repairs",
-            element: <Repairs />,
-        },
-        {
-            pathname: `/repairs/detail/*`,
-            element: <RepairDetail />,
+            pathname: "/repair/*",
+            element: <Repair />,
         },
     ];
 
