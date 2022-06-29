@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate } from 'react-router-dom';
+import { Navigate } from "react-router-dom";
 
 import Avatar from "@mui/material/Avatar";
-import LoadingButton from '@mui/lab/LoadingButton';
+import LoadingButton from "@mui/lab/LoadingButton";
 import TextField from "@mui/material/TextField";
 // import { ToastContainer, toast } from "react-toastify";
 import { Link } from "@mui/material";
@@ -13,28 +13,34 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import { FormControl, IconButton, InputAdornment,FormHelperText } from "@mui/material";
 
 import { login } from "../../services/actions/auth";
 import { history } from "../../helpers/history";
 
 //button
 
-import { IconButton,InputAdornment,Visibility,VisibilityOff } from "@mui/material";
-
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://gadgetstory.co.th/">
-        Gadgetstory
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
+    return (
+        <Typography
+            variant="body2"
+            color="text.secondary"
+            align="center"
+            {...props}
+        >
+            {"Copyright © "}
+            <Link color="inherit" href="https://gadgetstory.co.th/">
+                Gadgetstory
+            </Link>{" "}
+            {new Date().getFullYear()}
+            {"."}
+        </Typography>
+    );
 }
-
 
 const LogIn = () => {
     const dispatch = useDispatch();
@@ -43,17 +49,25 @@ const LogIn = () => {
 
     const { isLoggedIn } = useSelector((state) => state.auth);
     // const { message } = useSelector((state) => state.message);
+    const [values, setValues] = React.useState({
+        password: "",
+        showPassword: false,
+    });
 
-    // const notify = (message) =>
-    //     toast.error(`${message}`, {
-    //         position: "top-right",
-    //         autoClose: 1000,
-    //         hideProgressBar: false,
-    //         closeOnClick: true,
-    //         pauseOnHover: true,
-    //         draggable: true,
-    //         progress: undefined,
-    //     });
+    const handleChange = (prop) => (event) => {
+        setValues({ ...values, [prop]: event.target.value });
+    };
+
+    const handleClickShowPassword = () => {
+        setValues({
+            ...values,
+            showPassword: !values.showPassword,
+        });
+    };
+
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    };
 
     const onSubmit = (data) => {
         const loginUser = data;
@@ -74,7 +88,7 @@ const LogIn = () => {
 
     if (isLoggedIn) {
         return <Navigate to="/profile" />;
-      }
+    }
 
     return (
         <Container component="main" maxWidth="xs">
@@ -114,7 +128,6 @@ const LogIn = () => {
                                 label="Email Address"
                                 autoComplete="email"
                                 autoFocus
-                                size="small"
                                 value={value}
                                 onChange={onChange}
                                 error={!!error}
@@ -132,22 +145,52 @@ const LogIn = () => {
                             field: { onChange, value },
                             fieldState: { error },
                         }) => (
-                            <TextField
-                                margin="normal"
-                                required
+                            <FormControl
                                 fullWidth
-                                label="Password"
-                                size="small"
-                                value={value}
-                                onChange={onChange}
-                                error={!!error}
-                                helperText={error ? error.message : null}
-                                type="password"
-                            />
+                                variant="outlined"
+                                error={error}
+                                sx={{mt:2}}
+                            >
+                                <InputLabel htmlFor="outlined-adornment-password">
+                                    Password *
+                                </InputLabel>
+                                <OutlinedInput
+                                    id="outlined-adornment-password"
+                                    type={
+                                        values.showPassword
+                                            ? "text"
+                                            : "password"
+                                    }
+                                    value={value}
+                                    fullWidth={true}
+                                    onChange={onChange}
+                                    endAdornment={
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={
+                                                    handleClickShowPassword
+                                                }
+                                                onMouseDown={
+                                                    handleMouseDownPassword
+                                                }
+                                                edge="end"
+                                            >
+                                                {values.showPassword ? (
+                                                    <VisibilityOff />
+                                                ) : (
+                                                    <Visibility />
+                                                )}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    }
+                                    label="Password *"
+                                />
+                            <FormHelperText id="filled-weight-helper-text">{error ? error.message : null}</FormHelperText>
+                            </FormControl>
                         )}
                         rules={{ required: "Password required" }}
                     />
-                    
                     <LoadingButton
                         type="submit"
                         fullWidth
@@ -158,7 +201,7 @@ const LogIn = () => {
                         Sign In
                     </LoadingButton>
                 </Box>
-            <Copyright sx={{ mt: 5, mb: 4 }} />
+                <Copyright sx={{ mt: 5, mb: 4 }} />
             </Box>
         </Container>
     );
