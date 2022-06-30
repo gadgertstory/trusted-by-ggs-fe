@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import MaterialTable from "material-table";
 import { history } from "../../../helpers/history";
-import { Button, Stack } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 const RepairTable = () => {
@@ -23,12 +23,10 @@ const RepairTable = () => {
 
     return (
         <>
-            <Stack direction="row" justifyContent={"space-between"}>
-                <h2>RepairTable</h2>
+            <Stack sx={{my:2}} direction="row" justifyContent={"space-between"}>
+                <Typography variant="h5" component="h1">RepairTable</Typography>
                 <Button
-                    size="small"
                     sx={{
-                        my: 2,
                         bgcolor: "secondary.light",
                         color: "background.default",
                         ":hover": {

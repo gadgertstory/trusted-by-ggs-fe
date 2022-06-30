@@ -1,8 +1,8 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
-import RepairTable from "./components/RepairTable";
-import RepairDetail from "./components/RepairDetail";
+import RepairTable from "./pages/RepairTable";
+import RepairDetail from "./pages/RepairDetail";
 
 const Repair = () => {
     return (
