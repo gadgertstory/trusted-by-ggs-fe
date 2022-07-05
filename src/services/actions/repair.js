@@ -10,6 +10,8 @@ import {
 } from "./types";
 
 import Repair from "../../middleware/repair";
+import actionHandler from "../../middleware/action_handler";
+import { history } from "../../helpers/history";
 
 export const createRepair = (data) => (dispatch) => {
     return Repair.createRepair(data)
@@ -18,8 +20,15 @@ export const createRepair = (data) => (dispatch) => {
                 type: CREATE_REPAIR_SUCCESS,
                 payload: { data: data },
             });
-
-            return Promise.resolve();
+            return (
+                Promise.resolve(),
+                actionHandler({
+                    successMessage: "Create Repair Success",
+                }),
+                history.push("/repair"),
+                window.location.reload
+            );
+            
         })
         .catch((error) => {
             const message =
@@ -38,19 +47,30 @@ export const createRepair = (data) => (dispatch) => {
                 payload: message,
             });
 
-            return Promise.reject();
+            return (
+                Promise.reject(),
+                actionHandler({
+                    error: message,
+                })
+            );
         });
 };
 
-export const updateRepair = (id, data) => (dispatch) => {
-    return Repair.updateRepair(data)
-        .then((data) => {
+export const updateRepair = (id, data) => async (dispatch) => {
+    await Repair.updateRepair(id, data)
+        .then((id, data) => {
             dispatch({
-                type: CREATE_REPAIR_SUCCESS,
-                payload: { data: id, data: data },
+                type: UPDATE_REPAIR_SUCCESS,
+                payload: { id, data: data },
             });
-
-            return Promise.resolve();
+            return (
+                Promise.resolve(),
+                actionHandler({
+                    successMessage: "Update Repair Success",
+                }),
+                history.push("/repair"),
+                window.location.reload
+            );
         })
         .catch((error) => {
             const message =
@@ -61,7 +81,7 @@ export const updateRepair = (id, data) => (dispatch) => {
                 error.toString();
 
             dispatch({
-                type: CREATE_REPAIR_FAIL,
+                type: UPDATE_REPAIR_FAIL,
             });
 
             dispatch({
@@ -69,7 +89,8 @@ export const updateRepair = (id, data) => (dispatch) => {
                 payload: message,
             });
 
-            return Promise.reject();
+            // return Promise.reject();
+            return actionHandler({ error: message });
         });
 };
 

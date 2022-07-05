@@ -19,6 +19,7 @@ import Input from "../../../components/Input";
 
 const ProductDetail = (props) => {
     const {
+        id,
         control,
         brandList,
         returnDate,
@@ -27,7 +28,8 @@ const ProductDetail = (props) => {
         setReturnDate,
         setError,
         onSelectReceivedDate,
-        onSelectReturnDate
+        onSelectReturnDate,
+        onEdit,
     } = props;
 
     const handleReceivedDateChange = (receivedDate) => {
@@ -62,6 +64,7 @@ const ProductDetail = (props) => {
                             fieldState: { error },
                         }) => (
                             <Input
+                                disabled={!onEdit}
                                 onChange={onChange}
                                 value={value}
                                 required
@@ -84,6 +87,7 @@ const ProductDetail = (props) => {
                             fieldState: { error },
                         }) => (
                             <Input
+                                disabled={!onEdit || id !== "new"}
                                 onChange={onChange}
                                 value={value}
                                 required
@@ -113,6 +117,7 @@ const ProductDetail = (props) => {
                                     Brand
                                 </InputLabel>
                                 <Select
+                                    disabled={!onEdit}
                                     size="small"
                                     value={value}
                                     label="Brand"
@@ -147,6 +152,7 @@ const ProductDetail = (props) => {
                         defaultValue=""
                         render={({ field: { onChange, value } }) => (
                             <Input
+                                disabled={!onEdit}
                                 onChange={onChange}
                                 value={value}
                                 fullWidth={true}
@@ -164,6 +170,7 @@ const ProductDetail = (props) => {
                         defaultValue=""
                         render={({ field: { onChange, value } }) => (
                             <Input
+                                disabled={!onEdit}
                                 onChange={onChange}
                                 value={value}
                                 fullWidth={true}
@@ -179,6 +186,7 @@ const ProductDetail = (props) => {
                             inputFormat="dd/MM/yyyy"
                             value={receivedDate}
                             onChange={handleReceivedDateChange}
+                            disabled={!onEdit || id !== "new"}
                             renderInput={(params) => (
                                 <TextField fullWidth size="small" {...params} />
                             )}
@@ -195,6 +203,7 @@ const ProductDetail = (props) => {
                             inputFormat="dd/MM/yyyy"
                             value={returnDate}
                             onChange={handleReturnDateChange}
+                            disabled={!onEdit}
                             renderInput={(params) => (
                                 <TextField fullWidth size="small" {...params} />
                             )}
@@ -203,35 +212,6 @@ const ProductDetail = (props) => {
                             {/* {error ? error.message : null} */}
                         </FormHelperText>
                     </LocalizationProvider>
-                    {/* <Controller
-                        name="return_date"
-                        control={control}
-                        defaultValue={""}
-                        render={({
-                            field: { onChange, value },
-                            fieldState: { error },
-                        }) => (
-                            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                <MobileDatePicker
-                                    label="วันที่นัดรับ"
-                                    inputFormat="MM/dd/yyyy"
-                                    value={value}
-                                    onChange={onChange}
-                                    renderInput={(params) => (
-                                        <TextField
-                                            size="small"
-                                            fullWidth
-                                            {...params}
-                                        />
-                                    )}
-                                />
-                                <FormHelperText error>
-                                    {error ? error.message : null}
-                                </FormHelperText>
-                            </LocalizationProvider>
-                        )}
-                        rules={{ required: "กรุณากรอกวันที่นัดรับ" }}
-                    /> */}
                 </Grid>
                 <Grid item xs={12} md={4}>
                     <Controller
@@ -243,6 +223,7 @@ const ProductDetail = (props) => {
                             fieldState: { error },
                         }) => (
                             <Input
+                                disabled={!onEdit}
                                 onChange={onChange}
                                 value={value}
                                 required

@@ -21,7 +21,8 @@ const Input = (props) => {
         fullWidth,
         rows,
         helperText,
-        multiline
+        multiline,
+        inputProps
     } = props;
     return (
         <FormControl fullWidth={fullWidth} sx={sx}>
@@ -43,6 +44,7 @@ const Input = (props) => {
                 rows={rows}
                 autoComplete={autoComplete}
                 multiline={multiline}
+                inputProps={inputProps}
             />
         </FormControl>
     );
@@ -63,6 +65,7 @@ Input.propTypes = {
     autoComplete:PropTypes.string,
     fullWidth:PropTypes.bool,
     rows:PropTypes.number,
+    inputProps:PropTypes.object,
   };
 
 export default Input;

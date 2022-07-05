@@ -22,6 +22,7 @@ const CustomerDetail = (props) => {
         setError,
         onSelect,
         register,
+        onEdit,
     } = props;
     return (
         <Paper
@@ -44,6 +45,7 @@ const CustomerDetail = (props) => {
                             fieldState: { error },
                         }) => (
                             <Input
+                                disabled={!onEdit}
                                 required={true}
                                 fullWidth
                                 label="ชื่อ"
@@ -66,6 +68,7 @@ const CustomerDetail = (props) => {
                             fieldState: { error },
                         }) => (
                             <Input
+                                disabled={!onEdit}
                                 required={true}
                                 fullWidth
                                 label="นามสกุล"
@@ -88,6 +91,7 @@ const CustomerDetail = (props) => {
                             fieldState: { error },
                         }) => (
                             <Input
+                                disabled={!onEdit}
                                 required={true}
                                 fullWidth
                                 label="เบอร์โทรศัพท์"
@@ -95,6 +99,9 @@ const CustomerDetail = (props) => {
                                 onChange={onChange}
                                 error={!!error}
                                 type="number"
+                                inputProps={{
+                                    maxLength: 10,
+                                  }}
                                 helperText={error ? error.message : null}
                             />
                         )}
@@ -111,6 +118,7 @@ const CustomerDetail = (props) => {
                             fieldState: { error },
                         }) => (
                             <Input
+                                disabled={!onEdit}
                                 onChange={onChange}
                                 value={value}
                                 required
@@ -130,6 +138,7 @@ const CustomerDetail = (props) => {
                         แขวง / ตำบล*
                     </Typography>
                     <ThailandAddress
+                        disabled={!onEdit}
                         style={{ width: "100%" }}
                         address="subdistrict"
                         value={subdistrict}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 import MaterialTable from "material-table";
 import { history } from "../../../helpers/history";
@@ -15,8 +16,10 @@ const RepairTable = () => {
     const [dataFetched, setDataFetched] = useState(false);
     const { dataAllRepair = [] } = useSelector((state) => state.repairs);
     // const [selectedRow, setSelectedRow] = useState(null);
+    const { message } = useSelector((state) => state.message);
 
     useEffect(() => {
+
         if (dataAllRepair) {
             dispatch(getAllRepair());
 
@@ -67,17 +70,17 @@ const RepairTable = () => {
                 options={{
                     search: false,
                     actionsColumnIndex: -1,
-                    pageSize:5,
-                    toolbar:false
+                    pageSize: 5,
+                    toolbar: false,
                     // maxBodyHeight: "50vh",
-                    // headerStyle: { position: 'sticky', top: 0 } 
+                    // headerStyle: { position: 'sticky', top: 0 }
                 }}
                 title=""
                 columns={[
                     { title: "เลขที่ใบรับ", field: "repair_no" },
                     {
-                        title: "ชื่อ",
-                        field: "serial",
+                        title: "Serial number",
+                        field: "product_serial_no",
                         textOverflow: "ellipsis",
                     },
                     {

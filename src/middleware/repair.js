@@ -15,9 +15,9 @@ const createRepair = (data) => {
         });
 };
 
-const updateRepair = (data) => {
+const updateRepair = (id,data) => {
     return axios
-        .patch(`${API_URL}/repair-request`, data, { headers: authHeader() })
+        .patch(`${API_URL}/repair-request/${id}`, data, { headers: authHeader() })
         .then((response) => {
             return response.data;
         });
