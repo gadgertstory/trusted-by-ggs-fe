@@ -6,16 +6,16 @@ import {
 
 const INITIAL_STATE = {
     brandList: [],
+    isLoading: false
 };
 
 const master = (state = INITIAL_STATE, action) => {
-    console.log("4. [inside reducer], action = ", action);
     switch (action.type) {
         case FETCH_BRAND_REQUEST:
-            console.log("5. [inside reducer Loading]", action);
+            // console.log("4. [FETCH_BRAND_REQUEST MASTER]", action);
             return FETCH_BRAND_REQUEST;
         case FETCH_BRAND_SUCCESS:
-            console.log("5. [inside reducer RECEIVING]", action.payload);
+            // console.log("5. [MASTER]", action.payload);
             return {
                 brandList: action.payload,
             };

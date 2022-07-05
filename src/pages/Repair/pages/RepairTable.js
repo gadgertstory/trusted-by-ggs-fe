@@ -1,30 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import MaterialTable from "material-table";
 import { history } from "../../../helpers/history";
 import { Button, Stack, Typography } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
+import { getAllRepair } from "../../../services/actions/repairs";
+
 const RepairTable = () => {
+    const dispatch = useDispatch();
     const [rowData, setRowData] = useState("");
+    const [dataFetched, setDataFetched] = useState(false);
+    const { dataAllRepair = [] } = useSelector((state) => state.repairs);
     // const [selectedRow, setSelectedRow] = useState(null);
 
+    useEffect(() => {
+        if (dataAllRepair) {
+            dispatch(getAllRepair());
+
+            setDataFetched(true);
+        }
+    }, []);
+
     const selectRow = (selectRow) => {
-        // alert(selectRow.tableData.id);
-        const id = selectRow.tableData.id;
+        // alert(selectRow.repair_id);
+        const id = selectRow.repair_id;
 
         history.push(`/repair/${id}`);
         window.location.reload();
     };
 
-    const handleCreateRepair = () =>{
-        history.push('/repair/new');
+    const handleCreateRepair = () => {
+        history.push("/repair/new");
         window.location.reload();
-    }
+    };
 
     return (
         <>
-            <Stack sx={{my:2}} direction="row" justifyContent={"space-between"}>
-                <Typography variant="h5" component="h1">RepairTable</Typography>
+            <Stack
+                sx={{ my: 2 }}
+                direction="row"
+                justifyContent={"space-between"}
+            >
+                <Typography variant="h5" component="h1">
+                    RepairTable
+                </Typography>
                 <Button
                     sx={{
                         bgcolor: "secondary.light",
@@ -40,40 +62,63 @@ const RepairTable = () => {
                     เพิ่มใบแจ้งซ่อม
                 </Button>
             </Stack>
+
             <MaterialTable
                 options={{
                     search: false,
                     actionsColumnIndex: -1,
+                    pageSize:5,
+                    toolbar:false
+                    // maxBodyHeight: "50vh",
+                    // headerStyle: { position: 'sticky', top: 0 } 
                 }}
-                title="Simple Action Preview"
+                title=""
                 columns={[
-                    { title: "Name", field: "name" },
-                    { title: "Surname", field: "surname" },
+                    { title: "เลขที่ใบรับ", field: "repair_no" },
                     {
-                        title: "Birth Year",
-                        field: "birthYear",
+                        title: "ชื่อ",
+                        field: "serial",
+                        textOverflow: "ellipsis",
+                    },
+                    {
+                        title: "ชื่อ",
+                        field: "customer_firstname",
+                        textOverflow: "ellipsis",
+                    },
+                    {
+                        title: "นามสกุล",
+                        field: "customer_lastname",
+                        textOverflow: "ellipsis",
+                    },
+                    {
+                        title: "โทรศัพท์",
+                        field: "customer_tel",
                         type: "numeric",
                     },
                     {
-                        title: "Birth Place",
-                        field: "birthCity",
-                        lookup: { 34: "İstanbul", 63: "Şanlıurfa" },
-                    },
-                ]}
-                data={[
-                    {
-                        name: "Mehmet",
-                        surname: "Baran",
-                        birthYear: 1987,
-                        birthCity: 63,
+                        title: "อุปกรณ์",
+                        field: "product_name",
+                        textOverflow: "ellipsis",
                     },
                     {
-                        name: "Zerya Betül",
-                        surname: "Baran",
-                        birthYear: 2017,
-                        birthCity: 34,
+                        title: "วันที่รับซ่อม",
+                        field: "received_date",
                     },
+                    {
+                        title: "วันที่นัดรับ",
+                        field: "return_date",
+                    },
+                    {
+                        title: "สถานะการซ่อม",
+                        field: "status_name",
+                    },
+                    // {
+                    //     title: "Birth Place",
+                    //     field: "birthCity",
+                    //     lookup: { 34: "İstanbul", 63: "Şanlıurfa" },
+                    // },
                 ]}
+                data={dataAllRepair}
                 actions={[
                     {
                         icon: "visibility",

@@ -4,10 +4,12 @@ import reducers from '../reducers';
 
 // import profile from '../reducers/profile';
 
+import logger from 'redux-logger'
+
 const configureStore = () => {
   return createStore(
     reducers,
-    compose(applyMiddleware(thunk))
+    compose(applyMiddleware(thunk,logger)),
   );
 };
 

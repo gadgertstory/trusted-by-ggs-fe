@@ -10,22 +10,42 @@ import {
     FormHelperText,
     FormControl,
     Grid,
+    InputLabel,
 } from "@mui/material";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import Grow from "@mui/material/Grow";
+import Paper from "@mui/material/Paper";
+import Popper from "@mui/material/Popper";
+import MenuItem from "@mui/material/MenuItem";
+import MenuList from "@mui/material/MenuList";
 import FeedIcon from "@mui/icons-material/Feed";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 import CustomerDetail from "../components/CustomerDetail";
 import ProductDetail from "../components/ProductDetail";
 
 import { history } from "../../../helpers/history";
 import { getAllBrand } from "../../../services/actions/master";
-import { createRepair } from "../../../services/actions/repair";
+import {
+    createRepair,
+    getRepair,
+    updateRepair,
+} from "../../../services/actions/repair";
+
+import Repair from "../../../middleware/repair";
+import { convertISOtoGMT } from "../../../utils/ConvertDate";
+
+const options = ["Edit", "Print", "Delete"];
 
 const RepairDetail = () => {
-    const { handleSubmit, control } = useForm();
+    const { handleSubmit, control, setValue, register } = useForm();
     const { id } = useParams();
     const dispatch = useDispatch();
     const { user: currentUser } = useSelector((state) => state.auth);
     const { brandList = [] } = useSelector((state) => state.master);
+    const { dataRepair } = useSelector((state) => state.repair);
+
     const [loading, setLoading] = useState(false);
 
     const [error, setError] = useState("");
@@ -42,9 +62,68 @@ const RepairDetail = () => {
     const [receivedDate, setReceivedDate] = React.useState("");
     const [returnDate, setReturnDate] = React.useState("");
 
+    const [open, setOpen] = React.useState(false);
+    const anchorRef = React.useRef(null);
+    const [selectedIndex, setSelectedIndex] = React.useState(1);
+
     useEffect(() => {
         dispatch(getAllBrand());
-    }, []);
+
+        dispatch(getRepair(id))
+        console.log("test repair");
+        // Repair.fetchRepair(id).then((res) => {
+        //     const dataRepair = res.data;
+        //     console.log(res.data);
+        //     if (dataRepair) {
+        //         setSubDistrict(dataRepair.customer_subdistrict);
+        //         setDistrict(dataRepair.customer_district);
+        //         setProvince(dataRepair.customer_province);
+        //         setZipcode(dataRepair.customer_zipcode);
+        //         setFullAddress({
+        //             subdistrict,
+        //             district,
+        //             province,
+        //             zipcode,
+        //         });
+        //         setReceivedDate(convertISOtoGMT(dataRepair.received_date));
+        //         setReturnDate(convertISOtoGMT(dataRepair.return_date));
+        //         setValue(
+        //             "customer_firstname",
+        //             dataRepair.customer_firstname || ""
+        //         );
+        //         setValue("customer_surname", dataRepair.customer_surname || "");
+        //         setValue("customer_tel", dataRepair.customer_tel || "");
+        //         setValue(
+        //             "customer_house_no",
+        //             dataRepair.customer_house_no || ""
+        //         );
+        //         setValue("product_name", dataRepair.product_name || "");
+        //         setValue(
+        //             "product_serial_no",
+        //             dataRepair.product_serial_no || ""
+        //         );
+        //         setValue(
+        //             "product_serial_no",
+        //             dataRepair.product_serial_no || ""
+        //         );
+        //         setValue("brand_id", dataRepair.brand.brand_id || "");
+        //         setValue("remark", dataRepair.remark || "");
+        //         setValue(receivedDate || "");
+        //         setValue(returnDate || "");
+        //         setValue("product_price", dataRepair.product_price || "");
+        //     }
+        // });
+    }, [dispatch, id]);
+
+    useEffect(() => {
+        if (id === "new") {
+            setSubDistrict("");
+            setDistrict("");
+            setProvince("");
+            setZipcode("");
+            setFullAddress("");
+        }
+    }, [id]);
 
     useEffect(() => {
         setFullAddress({
@@ -81,6 +160,8 @@ const RepairDetail = () => {
                 .catch(() => {
                     setLoading(false);
                 });
+        } else {
+            dispatch(updateRepair(id, _data));
         }
     };
 
@@ -102,11 +183,13 @@ const RepairDetail = () => {
     };
 
     const onSelectReceivedDate = (receivedDate) => {
+        console.log(receivedDate);
         setReceivedDate(receivedDate?.toISOString().split("T")[0]);
         setError("");
     };
 
     const onSelectReturnDate = (returnDate) => {
+        console.log(returnDate);
         setReturnDate(returnDate?.toISOString().split("T")[0]);
         setError("");
     };
@@ -125,6 +208,28 @@ const RepairDetail = () => {
         );
     };
 
+    const handleClick = () => {
+        console.info(`You clicked ${options[selectedIndex]}`);
+    };
+
+    const handleMenuItemClick = (event, index) => {
+        console.log("event", index);
+        setSelectedIndex(index);
+        setOpen(false);
+    };
+
+    const handleToggle = () => {
+        setOpen((prevOpen) => !prevOpen);
+    };
+
+    const handleClose = (event) => {
+        if (anchorRef.current && anchorRef.current.contains(event.target)) {
+            return;
+        }
+
+        setOpen(false);
+    };
+
     return (
         <>
             <Box
@@ -136,17 +241,98 @@ const RepairDetail = () => {
                 <Grid
                     container
                     flexDirection="row"
-                    alignItems="center"
+                    justifyContent="space-between"
                     spacing={2}
                 >
                     <Grid item>
-                        <FeedIcon fontSize="large" />
+                        <Grid
+                            container
+                            flexDirection="row"
+                            alignItems={"center"}
+                            spacing={2}
+                        >
+                            <FeedIcon fontSize="large" />
+                            <h2>รับซ่อม</h2>
+                        </Grid>
                     </Grid>
                     <Grid item>
-                        <h2>รับซ่อม</h2>
+                        <ButtonGroup
+                            variant="contained"
+                            ref={anchorRef}
+                            aria-label="split button"
+                        >
+                            {/* <Button onClick={handleClick}>{options[selectedIndex]}</Button> */}
+                            <Button
+                                size="small"
+                                aria-controls={
+                                    open ? "split-button-menu" : undefined
+                                }
+                                aria-expanded={open ? "true" : undefined}
+                                aria-label="select merge strategy"
+                                aria-haspopup="menu"
+                                onClick={handleToggle}
+                            >
+                                <MoreVertIcon />
+                            </Button>
+                        </ButtonGroup>
+                        <Popper
+                            open={open}
+                            anchorEl={anchorRef.current}
+                            role={undefined}
+                            transition
+                            disablePortal
+                        >
+                            {({ TransitionProps, placement }) => (
+                                <Grow
+                                    {...TransitionProps}
+                                    style={{
+                                        transformOrigin:
+                                            placement === "right bottom"
+                                                ? "center top"
+                                                : "center bottom",
+                                    }}
+                                >
+                                    <Paper>
+                                        <ClickAwayListener
+                                            onClickAway={handleClose}
+                                        >
+                                            <MenuList
+                                                id="split-button-menu"
+                                                autoFocusItem
+                                            >
+                                                {options.map(
+                                                    (option, index) => (
+                                                        <MenuItem
+                                                            key={option}
+                                                            // disabled={
+                                                            //     index === 2
+                                                            // }
+                                                            selected={
+                                                                index ===
+                                                                selectedIndex
+                                                            }
+                                                            onClick={(event) =>
+                                                                handleMenuItemClick(
+                                                                    event,
+                                                                    index
+                                                                )
+                                                            }
+                                                        >
+                                                            {option}
+                                                        </MenuItem>
+                                                    )
+                                                )}
+                                            </MenuList>
+                                        </ClickAwayListener>
+                                    </Paper>
+                                </Grow>
+                            )}
+                        </Popper>
                     </Grid>
                 </Grid>
+
                 <CustomerDetail
+                    register={register}
                     setSubDistrict={setSubDistrict}
                     setDistrict={setDistrict}
                     setProvince={setProvince}
@@ -212,3 +398,4 @@ const RepairDetail = () => {
 };
 
 export default RepairDetail;
+

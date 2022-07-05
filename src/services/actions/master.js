@@ -7,7 +7,7 @@ import {
 import fetchMaster from "../../middleware/master";
 
 export const getAllBrand = () => async (dispatch) => {
-    console.log("[*** 2. inside addLastNameActionCreator]");
+    // console.log("[*** 2. inside addLastNameActionCreator]");
     // Case1: Think returns Loading until receives response
     dispatch({ type: FETCH_BRAND_REQUEST });
     // Calling the server
@@ -15,7 +15,7 @@ export const getAllBrand = () => async (dispatch) => {
         .fetchAllBrand()
         .then((response) => response.data)
         .then((responseJson) => {
-            console.log("3. received ", responseJson);
+            // console.log("3. received ", responseJson);
             dispatch({
                 type: FETCH_BRAND_SUCCESS,
                 payload: responseJson,

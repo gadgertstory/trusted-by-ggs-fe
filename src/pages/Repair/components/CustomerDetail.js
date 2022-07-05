@@ -1,11 +1,7 @@
 import React from "react";
 import { Controller } from "react-hook-form";
 
-import {
-    Grid,
-    Paper,
-    Typography
-} from "@mui/material";
+import { Grid, Paper, Typography } from "@mui/material";
 
 import Input from "../../../components/Input";
 
@@ -24,7 +20,8 @@ const CustomerDetail = (props) => {
         zipcode,
         setZipcode,
         setError,
-        onSelect
+        onSelect,
+        register,
     } = props;
     return (
         <Paper
