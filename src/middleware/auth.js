@@ -1,14 +1,6 @@
 import axios from "axios";
 
-//==========================================
-// const API_URL = "http://192.168.1.107:8080/auth";
-// ======================================================
-// const API_URL = "http://192.168.1.107:8080/auth"; prod
-
-const API_URL =
-    process.env.NODE_ENV !== "production"
-        ? `${process.env.REACT_APP_BASE_URL}`
-        : `${process.env.REACT_APP_BASE_URL_PROD}`;
+const API_URL = process.env.REACT_APP_BASE_URL
 
 const register = (username, email, password) => {
     return axios.post(API_URL + "signup", {

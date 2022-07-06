@@ -12,7 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "./Header";
 import Dashboard from "../pages/Dashboard";
 import Profile from "../pages/Profile";
-import Repairs from "../pages/Repairs";
+import Repair from "../pages/Repair";
 import LogIn from "../pages/Login";
 
 import { clearMessage } from "../services/actions/message";
@@ -21,7 +21,7 @@ import { history } from "../helpers/history";
 const App = () => {
     const { user: currentUser } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
-
+    
     useEffect(() => {
         history.listen((location) => {
             dispatch(clearMessage()); // clear message when changing location
@@ -38,8 +38,8 @@ const App = () => {
             element: <Profile />,
         },
         {
-            pathname: "/repairs",
-            element: <Repairs />,
+            pathname: "/repair/*",
+            element: <Repair />,
         },
     ];
 
