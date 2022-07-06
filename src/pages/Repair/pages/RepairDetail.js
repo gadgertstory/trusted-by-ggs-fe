@@ -158,7 +158,7 @@ const RepairDetail = () => {
         if (id === "new") {
             dispatch(createRepair(_data));
         } else {
-            const updateData = delete _data.user_id;
+            delete _data.user_id;
             dispatch(updateRepair(id, _data))
                 .then(() => {
                     // console.log("dispatch", id, _data);
