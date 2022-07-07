@@ -7,7 +7,10 @@ import { history } from "../../../helpers/history";
 import { Button, Stack, Typography } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-import { getAllRepair } from "../../../services/actions/repairs";
+import {
+    getAllRepair,
+    requestRepairSearch,
+} from "../../../services/actions/repairs";
 import { getAllStatus } from "../../../services/actions/status";
 import HeaderTable from "../components/HeaderTable";
 
@@ -16,13 +19,17 @@ const RepairTable = () => {
     const { handleSubmit, control, setValue, register } = useForm();
     const [rowData, setRowData] = useState("");
     const { dataAllRepair = [] } = useSelector((state) => state.repairs);
-    const { statusList = [] } = useSelector((state) => state.status);
-    // const [selectedRow, setSelectedRow] = useState(null);
+
+    const [status, setStatus] = React.useState(0);
+    const [keyword, setKeyword] = React.useState("");
 
     useEffect(() => {
-        dispatch(getAllRepair());
         dispatch(getAllStatus());
-    }, []);
+    }, [dispatch]);
+
+    React.useEffect(() => {
+        handleSearch();
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const selectRow = (selectRow) => {
         // alert(selectRow.repair_id);
@@ -36,6 +43,31 @@ const RepairTable = () => {
         history.push("/repair/new");
         window.location.reload();
     };
+
+    const handleChangeStatus = (e) => {
+        setStatus(e.target.value);
+    };
+
+    const handleChangeKeyword = (e) => {
+        setKeyword(e.target.value);
+    };
+
+    const handleSearch = React.useCallback(
+        (isClear) => {
+            const _keyword = isClear ? "" : keyword;
+            const params = {
+                status_no: status,
+                serial_no: _keyword,
+            };
+
+            if (status === 0 && _keyword === "") {
+                dispatch(getAllRepair());
+            } else {
+                dispatch(requestRepairSearch(params));
+            }
+        },
+        [keyword,status]
+    );
 
     return (
         <>
@@ -62,7 +94,14 @@ const RepairTable = () => {
                     เพิ่มใบแจ้งซ่อม
                 </Button>
             </Stack>
-            <HeaderTable control={control} statusList={statusList} />
+            <HeaderTable
+                status={status}
+                onChangeStatus={handleChangeStatus}
+                control={control}
+                onSearch={handleSearch}
+                keyword={keyword}
+                onChangeKeyword={handleChangeKeyword}
+            />
             <MaterialTable
                 options={{
                     search: false,
@@ -123,6 +162,20 @@ const RepairTable = () => {
                         },
                     },
                 ]}
+                localization={{
+                    body: {
+                        emptyDataSourceMessage: (
+                            <h1
+                                style={{
+                                    top: "50%",
+                                    textAlign: "center",
+                                }}
+                            >
+                                ไม่พบข้อมูล
+                            </h1>
+                        ),
+                    },
+                }}
             />
         </>
     );
