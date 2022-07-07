@@ -9,7 +9,7 @@ import {
 } from "../actions/types";
 
 const initialState = {
-    data: {},
+    // data: {},
     dataRepair: {},
     isLoading: false,
 };
@@ -19,7 +19,6 @@ const repair = (state = initialState, action) => {
         case CREATE_REPAIR_SUCCESS:
             return {
                 ...state,
-                data: action.payload.data,
                 isLoading: true,
             };
         case CREATE_REPAIR_FAIL:
@@ -31,7 +30,6 @@ const repair = (state = initialState, action) => {
         case UPDATE_REPAIR_SUCCESS:
             return {
                 ...state,
-                data: action.payload.data,
                 isLoading: true,
             };
         case UPDATE_REPAIR_FAIL:

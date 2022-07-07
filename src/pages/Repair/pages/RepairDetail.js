@@ -1,38 +1,42 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { toast } from "react-toastify";
 
 import {
     Button,
+    ButtonGroup,
     Stack,
     Box,
     FormHelperText,
     FormControl,
     Grid,
-    // InputLabel,
     Typography,
+    MenuItem,
+    MenuList,
+    Paper,
+    Popper,
+    Grow,
+    ClickAwayListener,
 } from "@mui/material";
-import ButtonGroup from "@mui/material/ButtonGroup";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
-import Grow from "@mui/material/Grow";
-import Paper from "@mui/material/Paper";
-import Popper from "@mui/material/Popper";
-import MenuItem from "@mui/material/MenuItem";
-import MenuList from "@mui/material/MenuList";
-import FeedIcon from "@mui/icons-material/Feed";
-import { MoreVert, Edit, Print, Delete } from "@mui/icons-material";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { MoreVert, Edit, Print, Delete, Feed } from "@mui/icons-material";
 
 import CustomerDetail from "../components/CustomerDetail";
 import ProductDetail from "../components/ProductDetail";
 
 import { history } from "../../../helpers/history";
-import { getAllBrand } from "../../../services/actions/master";
-import { createRepair, updateRepair } from "../../../services/actions/repair";
+import { getAllBrand } from "../../../services/actions/brand";
+import { getAllStatus } from "../../../services/actions/status";
+import {
+    createRepair,
+    updateRepair,
+    getRepair,
+} from "../../../services/actions/repair";
 
 import Repair from "../../../middleware/repair";
 import { convertISOtoGMT } from "../../../utils/ConvertDate";
+import HistoryTableDetail from "../components/HistoryTableDetail";
 
 const options = [
     { name: "Edit", icon: <Edit /> },
@@ -45,8 +49,10 @@ const RepairDetail = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
     const { user: currentUser } = useSelector((state) => state.auth);
-    const { brandList = [] } = useSelector((state) => state.master);
-    const { message } = useSelector((state) => state.message);
+
+    const { brandList = [] } = useSelector((state) => state.brand);
+    const { statusList = [] } = useSelector((state) => state.status);
+    const { dataRepair } = useSelector((state) => state.repair);
 
     const [loading, setLoading] = useState(false);
 
@@ -69,18 +75,7 @@ const RepairDetail = () => {
     const [onEdit, setOnEdit] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(null);
 
-    useEffect(() => {
-        dispatch(getAllBrand());
-
-        if (id === "new") {
-            setOnEdit(true);
-            setSubDistrict("");
-            setDistrict("");
-            setProvince("");
-            setZipcode("");
-            setFullAddress("");
-        }
-
+    const fetch = useCallback(() => {
         Repair.fetchRepair(id).then((res) => {
             const dataRepair = res.data;
             if (dataRepair) {
@@ -129,6 +124,15 @@ const RepairDetail = () => {
     }, []);
 
     useEffect(() => {
+        dispatch(getAllBrand());
+        dispatch(getAllStatus());
+        dispatch(getRepair(id));
+        if (id !== "new") {
+            fetch();
+        }
+    }, []);
+
+    useEffect(() => {
         setFullAddress({
             subdistrict,
             district,
@@ -151,23 +155,34 @@ const RepairDetail = () => {
             setError("กรุณากรอกข้อมูลให้ครบ");
             return;
         }
-
+        setLoading(true);
         const _data = Object.assign(data, newData);
-        // console.log(id, _data);
+        const _updateData = {
+            data: {
+                customer_firstname: _data.customer_firstname,
+                customer_lastname: _data.customer_lastname,
+                customer_tel: _data.customer_tel,
+                customer_house_no: _data.customer_house_no,
+                customer_subdistrict: _data.customer_subdistrict,
+                customer_district: _data.customer_district,
+                customer_province: _data.customer_province,
+                customer_zipcode: _data.customer_zipcode,
+                brand_id: _data.brand_id,
+                product_name: _data.product_name,
+                description: _data.description,
+                return_date: _data.return_date.toISOString().split("T")[0],
+                remark: _data.remark,
+            },
+            status: {
+                status_id: _data.status_id,
+                user_id: _data.user_id,
+            },
+        };
 
         if (id === "new") {
             dispatch(createRepair(_data));
         } else {
-            const updateData = delete _data.user_id;
-            dispatch(updateRepair(id, _data))
-                .then(() => {
-                    // console.log("dispatch", id, _data);
-                    // history.push("/repair");
-                    // window.location.reload();
-                })
-                .catch(() => {
-                    setLoading(false);
-                });
+            dispatch(updateRepair(id, _updateData));
         }
     };
 
@@ -178,12 +193,7 @@ const RepairDetail = () => {
         setDistrict(district);
         setProvince(province);
         setZipcode(zipcode);
-        setFullAddress({
-            subdistrict,
-            district,
-            province,
-            zipcode,
-        });
+        setFullAddress(fullAddress);
 
         setError("");
     };
@@ -212,12 +222,8 @@ const RepairDetail = () => {
         );
     };
 
-    const handleClick = () => {
-        console.info(`You clicked ${options[selectedIndex]}`);
-    };
-
-    const handleMenuItemClick = (event, index) => {
-        if (index === 0) {
+    const handleMenuItemClick = (index, option) => {
+        if (option.name === "Edit") {
             setOnEdit(true);
         }
         setSelectedIndex(index);
@@ -248,29 +254,34 @@ const RepairDetail = () => {
                     container
                     flexDirection="row"
                     justifyContent="space-between"
+                    alignItems="center"
                     spacing={2}
                 >
-                    <Grid item>
+                    <Grid>
                         <Grid
                             container
                             flexDirection="row"
                             alignItems={"center"}
-                            spacing={2}
+                            // spacing={2}
+                            sx={{
+                                p: 2,
+                            }}
                         >
-                            <FeedIcon fontSize="large" />
-                            <h2>รับซ่อม</h2>
+                            <Feed fontSize="large" />
+                            <Typography variant="h4" component="h2">
+                                รับซ่อม
+                            </Typography>
                         </Grid>
                     </Grid>
                     {id === "new" ? (
                         ""
                     ) : (
-                        <Grid item>
+                        <Grid>
                             <ButtonGroup
                                 variant="contained"
                                 ref={anchorRef}
                                 aria-label="split button"
                             >
-                                {/* <Button onClick={handleClick}>{options[selectedIndex]}</Button> */}
                                 <Button
                                     size="small"
                                     aria-controls={
@@ -315,9 +326,6 @@ const RepairDetail = () => {
                                                                 key={
                                                                     option.name
                                                                 }
-                                                                // disabled={
-                                                                //     index === 2
-                                                                // }
                                                                 selected={
                                                                     index ===
                                                                     selectedIndex
@@ -327,7 +335,8 @@ const RepairDetail = () => {
                                                                 ) =>
                                                                     handleMenuItemClick(
                                                                         event,
-                                                                        index
+                                                                        index,
+                                                                        option
                                                                     )
                                                                 }
                                                             >
@@ -396,16 +405,18 @@ const RepairDetail = () => {
                     onSelectReturnDate={onSelectReturnDate}
                     onSelectReceivedDate={onSelectReceivedDate}
                     brandList={brandList}
+                    statusList={statusList}
                     receivedDate={receivedDate}
                     setReceivedDate={setReceivedDate}
                     returnDate={returnDate}
                     setReturnDate={setReturnDate}
                 />
+                <HistoryTableDetail id={id} />
                 <Stack
                     direction="row"
                     justifyContent="space-between"
                     alignItems="center"
-                    spacing={2}
+                    // spacing={2}
                 >
                     <Button
                         sx={{
@@ -424,14 +435,15 @@ const RepairDetail = () => {
                     >
                         Cancel
                     </Button>
-                    <Button
+                    <LoadingButton
                         sx={{ my: 2 }}
                         variant="contained"
                         color="primary"
                         type="submit"
+                        loading={loading}
                     >
                         Submit
-                    </Button>
+                    </LoadingButton>
                 </Stack>
             </Box>
         </>

@@ -1,8 +1,10 @@
 import { combineReducers } from "redux";
 import auth from "./auth";
-import master from "./master";
+import master from "./brand";
 import repairs from "./repairs";
 import repair from "./repair";
+import brand from "./brand";
+import status from "./status";
 
 import message from "./message";
 
@@ -11,5 +13,7 @@ export default combineReducers({
   message,
   master,
   repairs,
-  repair
+  repair,
+  brand,
+  status
 });

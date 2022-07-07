@@ -6,9 +6,9 @@ import {
 } from "./types";
 
 import Repair from "../../middleware/repair";
+import actionHandler from "../../middleware/action_handler";
 
 export const getAllRepair = () => async (dispatch) => {
-    console.log("GET[REPAIR]");
     // Case1: Think returns Loading until receives response
     dispatch({ type: FETCH_ALL_REPAIR_REQUEST });
     // Calling the server
@@ -38,6 +38,6 @@ export const getAllRepair = () => async (dispatch) => {
                 payload: message,
             });
 
-            return Promise.reject();
+            return Promise.reject(), actionHandler({ error: message });
         });
 };

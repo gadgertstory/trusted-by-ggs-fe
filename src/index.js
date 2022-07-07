@@ -7,7 +7,7 @@ import configureStore from "./services/store";
 // import { PersistGate } from "redux-persist/integration/react";
 
 //Toastify
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // const { persistor } = configureStore(window.__INITIAL_STATE__);

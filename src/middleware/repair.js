@@ -29,11 +29,16 @@ const fetchRepair = (body) => {
     });
 };
 
+const fetchAllRepairHistory = () => {
+    return axios.get(`${API_URL}/repair-history`, { headers: authHeader() });
+};
+
 const exportedFunction = {
     createRepair,
     updateRepair,
     fetchAllRepair,
     fetchRepair,
+    fetchAllRepairHistory
 };
 
 export default exportedFunction;

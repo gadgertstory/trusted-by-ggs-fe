@@ -1,10 +1,10 @@
 import { toast } from "react-toastify";
 
-const actionHandler = ({ successMessage,error }) => {
+const actionHandler = ({ successMessage, error }) => {
     if (successMessage) {
         toast.success(successMessage, {
             position: "top-right",
-            autoClose: 5000,
+            autoClose: 3000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
@@ -12,9 +12,9 @@ const actionHandler = ({ successMessage,error }) => {
             progress: undefined,
         });
     } else {
-        toast.error(error, {
+        toast.error(typeof (error) === 'object' ? error[0] : error, {
             position: "top-right",
-            autoClose: 5000,
+            autoClose: 3000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,

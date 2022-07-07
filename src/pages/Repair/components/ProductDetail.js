@@ -21,7 +21,6 @@ const ProductDetail = (props) => {
     const {
         id,
         control,
-        brandList,
         returnDate,
         receivedDate,
         setReceivedDate,
@@ -30,6 +29,8 @@ const ProductDetail = (props) => {
         onSelectReceivedDate,
         onSelectReturnDate,
         onEdit,
+        brandList,
+        statusList,
     } = props;
 
     const handleReceivedDateChange = (receivedDate) => {
@@ -179,6 +180,46 @@ const ProductDetail = (props) => {
                         )}
                     />
                 </Grid>
+                {id !== "new" ? (
+                    <Grid item xs={12} md={4}>
+                        <Controller
+                            name="status_id"
+                            required
+                            control={control}
+                            defaultValue=""
+                            render={({
+                                field: { onChange, value },
+                                fieldState: { error },
+                            }) => (
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-required-label">
+                                        สถานะการซ่อม
+                                    </InputLabel>
+                                    <Select
+                                        disabled={!onEdit}
+                                        size="small"
+                                        value={value}
+                                        label="Status"
+                                        onChange={onChange}
+                                    >
+                                        {statusList?.map((item) => {
+                                            return (
+                                                <MenuItem
+                                                    key={item.status_id}
+                                                    value={item.status_id}
+                                                >
+                                                    {item.status_name}
+                                                </MenuItem>
+                                            );
+                                        })}
+                                    </Select>
+                                </FormControl>
+                            )}
+                        />
+                    </Grid>
+                ) : (
+                    ""
+                )}
                 <Grid item xs={12} md={4}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <MobileDatePicker
@@ -212,30 +253,6 @@ const ProductDetail = (props) => {
                             {/* {error ? error.message : null} */}
                         </FormHelperText>
                     </LocalizationProvider>
-                </Grid>
-                <Grid item xs={12} md={4}>
-                    <Controller
-                        name="product_price"
-                        control={control}
-                        defaultValue=""
-                        render={({
-                            field: { onChange, value },
-                            fieldState: { error },
-                        }) => (
-                            <Input
-                                disabled={!onEdit}
-                                onChange={onChange}
-                                value={value}
-                                required
-                                fullWidth
-                                label="ประเมินราคา"
-                                type="number"
-                                error={!!error}
-                                helperText={error ? error.message : null}
-                            />
-                        )}
-                        rules={{ required: "กรุณากรอกประเมินราคา" }}
-                    />
                 </Grid>
             </Grid>
         </Paper>
