@@ -26,7 +26,7 @@ const Input = (props) => {
         pattern
     } = props;
     return (
-        <FormControl fullWidth={fullWidth} sx={sx}>
+        <FormControl fullWidth={fullWidth} sx={sx} style={{backgroundColor:'white'}}>
             <TextField
                 error={error}
                 label={label}
