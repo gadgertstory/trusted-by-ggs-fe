@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
 
 import MaterialTable from "material-table";
 import { history } from "../../../helpers/history";
@@ -7,15 +8,20 @@ import { Button, Stack, Typography } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import { getAllRepair } from "../../../services/actions/repairs";
+import { getAllStatus } from "../../../services/actions/status";
+import HeaderTable from "../components/HeaderTable";
 
 const RepairTable = () => {
     const dispatch = useDispatch();
+    const { handleSubmit, control, setValue, register } = useForm();
     const [rowData, setRowData] = useState("");
     const { dataAllRepair = [] } = useSelector((state) => state.repairs);
+    const { statusList = [] } = useSelector((state) => state.status);
     // const [selectedRow, setSelectedRow] = useState(null);
 
     useEffect(() => {
         dispatch(getAllRepair());
+        dispatch(getAllStatus());
     }, []);
 
     const selectRow = (selectRow) => {
@@ -56,7 +62,7 @@ const RepairTable = () => {
                     เพิ่มใบแจ้งซ่อม
                 </Button>
             </Stack>
-
+            <HeaderTable control={control} statusList={statusList} />
             <MaterialTable
                 options={{
                     search: false,

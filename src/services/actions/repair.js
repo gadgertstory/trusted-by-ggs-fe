@@ -57,7 +57,6 @@ export const createRepair = (data) => (dispatch) => {
 };
 
 export const updateRepair = (id, data) => async (dispatch) => {
-    console.log(id,data)
     await Repair.updateRepair(id, data)
         .then((id, data) => {
             dispatch({
@@ -92,8 +91,12 @@ export const updateRepair = (id, data) => async (dispatch) => {
                 payload: message,
             });
 
-            // return Promise.reject();
-            return actionHandler({ error: message });
+            return (
+                Promise.reject(),
+                actionHandler({
+                    error: message,
+                })
+            );
         });
 };
 
@@ -131,7 +134,12 @@ export const getRepair = (id) => async (dispatch) => {
                 payload: message,
             });
 
-            return Promise.reject(), actionHandler({ error: message });
+            return (
+                Promise.reject(),
+                actionHandler({
+                    error: message,
+                })
+            );
         });
 };
 
