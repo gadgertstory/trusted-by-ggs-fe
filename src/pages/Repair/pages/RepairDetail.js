@@ -32,6 +32,7 @@ import {
     createRepair,
     updateRepair,
     getRepair,
+    deleteRepair,
 } from "../../../services/actions/repair";
 
 import Repair from "../../../middleware/repair";
@@ -228,8 +229,12 @@ const RepairDetail = () => {
     const handleMenuItemClick = (event, index, option) => {
         if (option.name === "Edit") {
             setOnEdit(true);
+            setSelectedIndex(index);
+        }else if(option.name === "Delete"){
+            dispatch(deleteRepair(id))
+        }else{
+
         }
-        setSelectedIndex(index);
         setOpen(false);
     };
 

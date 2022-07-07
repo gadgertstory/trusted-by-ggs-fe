@@ -7,6 +7,10 @@ const fetchAllRepair = () => {
     return axios.get(`${API_URL}/repair-request`, { headers: authHeader() });
 };
 
+const requestRepairSearch = (body) => {
+    return axios.post(`${API_URL}/repair-request-search`,body, { headers: authHeader() });
+};
+
 const createRepair = (data) => {
     return axios
         .post(`${API_URL}/repair-request`, data, { headers: authHeader() })
@@ -29,8 +33,8 @@ const fetchRepair = (body) => {
     });
 };
 
-const requestRepairSearch = (body) => {
-    return axios.post(`${API_URL}/repair-request-search`,body, { headers: authHeader() });
+const deleteRepair = (id) => {
+    return axios.delete(`${API_URL}/repair-request/${id}`,{ headers: authHeader() });
 };
 
 const exportedFunction = {
@@ -38,7 +42,7 @@ const exportedFunction = {
     updateRepair,
     fetchAllRepair,
     fetchRepair,
-    requestRepairSearch
+    deleteRepair
 };
 
 export default exportedFunction;

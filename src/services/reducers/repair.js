@@ -6,10 +6,12 @@ import {
     FETCH_REPAIR_REQUEST,
     FETCH_REPAIR_SUCCESS,
     FETCH_REPAIR_ERROR,
+    DELETE_REPAIR_SUCCESS,
+    DELETE_REPAIR_FAIL
 } from "../actions/types";
 
 const initialState = {
-    // data: {},
+    data: {},
     dataRepair: {},
     isLoading: false,
 };
@@ -33,6 +35,17 @@ const repair = (state = initialState, action) => {
                 isLoading: true,
             };
         case UPDATE_REPAIR_FAIL:
+            return {
+                ...state,
+                data: null,
+                isLoading: false,
+            };
+        case DELETE_REPAIR_SUCCESS:
+            return {
+                ...state,
+                isLoading: true,
+            };
+        case DELETE_REPAIR_FAIL:
             return {
                 ...state,
                 data: null,
