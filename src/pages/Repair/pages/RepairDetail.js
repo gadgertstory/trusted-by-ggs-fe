@@ -130,6 +130,8 @@ const RepairDetail = () => {
         if (id !== "new") {
             dispatch(getRepair(id));
             fetch();
+        }else{
+            setOnEdit(true)
         }
     }, []);
 
