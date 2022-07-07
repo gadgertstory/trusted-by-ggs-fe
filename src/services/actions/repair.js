@@ -26,9 +26,10 @@ export const createRepair = (data) => (dispatch) => {
                     successMessage: "Create Repair Success",
                 }),
                 history.push("/repair"),
-                window.location.reload
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000 * 2)
             );
-            
         })
         .catch((error) => {
             const message =
@@ -46,7 +47,6 @@ export const createRepair = (data) => (dispatch) => {
                 type: SET_MESSAGE,
                 payload: message,
             });
-
             return (
                 Promise.reject(),
                 actionHandler({
@@ -57,6 +57,7 @@ export const createRepair = (data) => (dispatch) => {
 };
 
 export const updateRepair = (id, data) => async (dispatch) => {
+    console.log(id,data)
     await Repair.updateRepair(id, data)
         .then((id, data) => {
             dispatch({
@@ -69,7 +70,9 @@ export const updateRepair = (id, data) => async (dispatch) => {
                     successMessage: "Update Repair Success",
                 }),
                 history.push("/repair"),
-                window.location.reload
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000 * 2)
             );
         })
         .catch((error) => {
@@ -128,6 +131,8 @@ export const getRepair = (id) => async (dispatch) => {
                 payload: message,
             });
 
-            return Promise.reject();
+            return Promise.reject(), actionHandler({ error: message });
         });
 };
+
+

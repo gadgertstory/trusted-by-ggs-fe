@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
 
 import MaterialTable from "material-table";
 import { history } from "../../../helpers/history";
 import { Button, Stack, Typography } from "@mui/material";
-import CircularProgress from "@mui/material/CircularProgress";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import { getAllRepair } from "../../../services/actions/repairs";
@@ -13,18 +11,11 @@ import { getAllRepair } from "../../../services/actions/repairs";
 const RepairTable = () => {
     const dispatch = useDispatch();
     const [rowData, setRowData] = useState("");
-    const [dataFetched, setDataFetched] = useState(false);
     const { dataAllRepair = [] } = useSelector((state) => state.repairs);
     // const [selectedRow, setSelectedRow] = useState(null);
-    const { message } = useSelector((state) => state.message);
 
     useEffect(() => {
-
-        if (dataAllRepair) {
-            dispatch(getAllRepair());
-
-            setDataFetched(true);
-        }
+        dispatch(getAllRepair());
     }, []);
 
     const selectRow = (selectRow) => {
@@ -115,11 +106,6 @@ const RepairTable = () => {
                         title: "สถานะการซ่อม",
                         field: "status_name",
                     },
-                    // {
-                    //     title: "Birth Place",
-                    //     field: "birthCity",
-                    //     lookup: { 34: "İstanbul", 63: "Şanlıurfa" },
-                    // },
                 ]}
                 data={dataAllRepair}
                 actions={[

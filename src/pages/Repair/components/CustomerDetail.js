@@ -21,7 +21,6 @@ const CustomerDetail = (props) => {
         setZipcode,
         setError,
         onSelect,
-        register,
         onEdit,
     } = props;
     return (
@@ -99,13 +98,12 @@ const CustomerDetail = (props) => {
                                 onChange={onChange}
                                 error={!!error}
                                 type="number"
-                                inputProps={{
-                                    maxLength: 10,
-                                  }}
                                 helperText={error ? error.message : null}
                             />
                         )}
-                        rules={{ required: "กรุณากรอกเบอร์โทรศัพท์" }}
+                        rules={{
+                            required: "กรุณากรอกเบอร์โทรศัพท์",
+                        }}
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -126,6 +124,9 @@ const CustomerDetail = (props) => {
                                 label="บ้านเลขที่ / อาคาร / ซอย / ถนน"
                                 error={!!error}
                                 helperText={error ? error.message : null}
+                                inputProps={{
+                                    maxLength: 150,
+                                }}
                             />
                         )}
                         rules={{
