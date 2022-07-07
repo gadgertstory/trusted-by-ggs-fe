@@ -119,6 +119,7 @@ const RepairDetail = () => {
                 // setValue(receivedDate || "");
                 // setValue(returnDate || "");
                 setValue("product_price", dataRepair.product_price || "");
+                setValue("status_id", dataRepair.status[0].status.status_id || "");
             }
         });
     }, []);
@@ -126,8 +127,8 @@ const RepairDetail = () => {
     useEffect(() => {
         dispatch(getAllBrand());
         dispatch(getAllStatus());
-        dispatch(getRepair(id));
         if (id !== "new") {
+            dispatch(getRepair(id));
             fetch();
         }
     }, []);
@@ -222,7 +223,7 @@ const RepairDetail = () => {
         );
     };
 
-    const handleMenuItemClick = (index, option) => {
+    const handleMenuItemClick = (event, index, option) => {
         if (option.name === "Edit") {
             setOnEdit(true);
         }
@@ -411,7 +412,7 @@ const RepairDetail = () => {
                     returnDate={returnDate}
                     setReturnDate={setReturnDate}
                 />
-                <HistoryTableDetail id={id} />
+                {id === "new" ? "" : <HistoryTableDetail id={id} />}
                 <Stack
                     direction="row"
                     justifyContent="space-between"

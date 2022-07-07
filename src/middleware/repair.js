@@ -29,8 +29,8 @@ const fetchRepair = (body) => {
     });
 };
 
-const fetchAllRepairHistory = () => {
-    return axios.get(`${API_URL}/repair-history`, { headers: authHeader() });
+const requestRepairSearch = (body) => {
+    return axios.post(`${API_URL}/repair-request-search`,body, { headers: authHeader() });
 };
 
 const exportedFunction = {
@@ -38,7 +38,7 @@ const exportedFunction = {
     updateRepair,
     fetchAllRepair,
     fetchRepair,
-    fetchAllRepairHistory
+    requestRepairSearch
 };
 
 export default exportedFunction;
