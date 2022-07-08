@@ -42,7 +42,8 @@ const exportedFunction = {
     updateRepair,
     fetchAllRepair,
     fetchRepair,
-    deleteRepair
+    deleteRepair,
+    requestRepairSearch
 };
 
 export default exportedFunction;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 import MaterialTable from "material-table";
@@ -15,7 +15,7 @@ const HistoryTableDetail = () => {
             if (processDate) {
                return Object.assign(..._newData,{process_date})
             }else{
-                return
+                return ''
             }
         });
     }, [dataRepair]);

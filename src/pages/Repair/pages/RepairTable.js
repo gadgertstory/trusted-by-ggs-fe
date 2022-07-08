@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect,useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 
@@ -16,8 +16,7 @@ import HeaderTable from "../components/HeaderTable";
 
 const RepairTable = () => {
     const dispatch = useDispatch();
-    const { handleSubmit, control, setValue, register } = useForm();
-    const [rowData, setRowData] = useState("");
+    const { control } = useForm();
     const { dataAllRepair = [] } = useSelector((state) => state.repairs);
 
     const [status, setStatus] = React.useState(0);
@@ -32,7 +31,6 @@ const RepairTable = () => {
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const selectRow = (selectRow) => {
-        // alert(selectRow.repair_id);
         const id = selectRow.repair_id;
 
         history.push(`/repair/${id}`);
@@ -52,7 +50,7 @@ const RepairTable = () => {
         setKeyword(e.target.value);
     };
 
-    const handleSearch = React.useCallback(
+    const handleSearch = useCallback(
         (isClear) => {
             const _keyword = isClear ? "" : keyword;
             const params = {
@@ -66,7 +64,7 @@ const RepairTable = () => {
                 dispatch(requestRepairSearch(params));
             }
         },
-        [keyword,status]
+        [keyword,status,dispatch]
     );
 
     return (

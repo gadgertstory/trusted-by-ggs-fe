@@ -21,7 +21,6 @@ import {
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { MoreVert, Edit, Print, Delete, Feed } from "@mui/icons-material";
-import Skeleton from "@mui/material/Skeleton";
 
 import CustomerDetail from "../components/CustomerDetail";
 import ProductDetail from "../components/ProductDetail";
@@ -54,7 +53,6 @@ const RepairDetail = () => {
     const { user: currentUser } = useSelector((state) => state.auth);
     const { brandList = [] } = useSelector((state) => state.brand);
     const { statusList = [] } = useSelector((state) => state.status);
-    const { dataRepair } = useSelector((state) => state.repair);
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -123,8 +121,6 @@ const RepairDetail = () => {
                 setValue("brand_id", dataRepair.brand.brand_id || "");
                 setValue("remark", dataRepair.remark || "");
                 setValue("description", dataRepair.description || "");
-                // setValue(receivedDate || "");
-                // setValue(returnDate || "");
                 setValue("product_price", dataRepair.product_price || "");
                 setValue(
                     "status_id",
@@ -132,7 +128,7 @@ const RepairDetail = () => {
                 );
             }
         });
-    }, []);
+    }, [district, province, setValue, subdistrict, zipcode, id]);
 
     useEffect(() => {
         dispatch(getAllBrand());
@@ -143,7 +139,7 @@ const RepairDetail = () => {
         } else {
             setOnEdit(true);
         }
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         setFullAddress({
@@ -161,7 +157,15 @@ const RepairDetail = () => {
             customer_zipcode: zipcode,
             user_id: currentUser.data.user_id,
         });
-    }, [subdistrict, district, province, zipcode, receivedDate, returnDate]);
+    }, [
+        subdistrict,
+        district,
+        province,
+        zipcode,
+        receivedDate,
+        returnDate,
+        currentUser,
+    ]);
 
     const onSubmit = (data) => {
         if (!subdistrict || !district || !province || !zipcode) {
@@ -169,7 +173,6 @@ const RepairDetail = () => {
             return;
         }
         setLoading(true);
-        // const _data = Object.assign(data, newData);
 
         if (id === "new") {
             const _data = Object.assign(data, newData);
@@ -401,28 +404,24 @@ const RepairDetail = () => {
                         </Grid>
                     )}
                 </Grid>
-                {loading ? (
-                    <Skeleton width="60%" />
-                ) : (
-                    <CustomerDetail
-                        onEdit={onEdit}
-                        register={register}
-                        setSubDistrict={setSubDistrict}
-                        setDistrict={setDistrict}
-                        setProvince={setProvince}
-                        setZipcode={setZipcode}
-                        subdistrict={subdistrict}
-                        zipcode={zipcode}
-                        district={district}
-                        province={province}
-                        onError={onError}
-                        control={control}
-                        error={error}
-                        setError={setError}
-                        onSelect={onSelect}
-                    />
-                )}
-
+                <CustomerDetail
+                    onEdit={onEdit}
+                    register={register}
+                    setSubDistrict={setSubDistrict}
+                    setDistrict={setDistrict}
+                    setProvince={setProvince}
+                    setZipcode={setZipcode}
+                    subdistrict={subdistrict}
+                    zipcode={zipcode}
+                    district={district}
+                    province={province}
+                    onError={onError}
+                    control={control}
+                    error={error}
+                    setError={setError}
+                    onSelect={onSelect}
+                />
+                )
                 <ProductDetail
                     id={id}
                     onEdit={onEdit}
