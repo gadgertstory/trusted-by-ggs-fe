@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     BrowserRouter as Router,
@@ -24,6 +24,9 @@ import { clearMessage } from "../services/actions/message";
 import { history } from "../helpers/history";
 import PrintDocument from "./PrintDocument";
 
+import { logout } from "../services/actions/auth";
+import AuthVerify from "../common/AuthVerify";
+
 const App = () => {
     const { user: currentUser } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
@@ -32,6 +35,10 @@ const App = () => {
         history.listen((location) => {
             dispatch(clearMessage()); // clear message when changing location
         });
+    }, [dispatch]);
+
+    const logOut = useCallback(() => {
+        dispatch(logout());
     }, [dispatch]);
 
     const routeMapping = [
@@ -57,7 +64,7 @@ const App = () => {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <Router history={history}>
-                {currentUser ? <Header currentUser={currentUser} /> : ""}
+                {currentUser ? <Header logOut={logOut} currentUser={currentUser} /> : ""}
                 <Routes>
                     {currentUser === null ? (
                         <>

@@ -32,8 +32,6 @@ const pagesList = [
     },
 ];
 
-
-
 const settings = [
     {
         pathname: "/profile",
