@@ -10,7 +10,7 @@ const Repair = () => {
         <Routes>
             <Route path=":id" element={<RepairDetail />} />
             <Route path="/" element={<RepairTable />} />
-            <Route path=":id*" element={<NotFound />} />
+            {/* <Route path=":id*" element={<NotFound />} /> */}
             <Route path="*" element={<NotFound />} />
         </Routes>
     );
