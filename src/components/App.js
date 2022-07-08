@@ -4,7 +4,6 @@ import {
     BrowserRouter as Router,
     Routes,
     Route,
-    useParams,
 } from "react-router-dom";
 
 import { ThemeProvider } from "@mui/material/styles";
@@ -26,12 +25,10 @@ import { history } from "../helpers/history";
 import PrintDocument from "./PrintDocument";
 
 const App = () => {
-    const { id } = useParams();
     const { user: currentUser } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        console.log(id)
         history.listen((location) => {
             dispatch(clearMessage()); // clear message when changing location
         });
