@@ -1,6 +1,10 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+} from "react-router-dom";
 
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../assets/theme";
@@ -14,6 +18,7 @@ import Dashboard from "../pages/Dashboard";
 import Profile from "../pages/Profile";
 import Repair from "../pages/Repair";
 import LogIn from "../pages/Login";
+import NotFound from "../pages/NotFound";
 
 import { clearMessage } from "../services/actions/message";
 import { history } from "../helpers/history";
@@ -39,8 +44,12 @@ const App = () => {
             element: <Profile />,
         },
         {
-            pathname: "/repair/*",
+            pathname: `/repair/*`,
             element: <Repair />,
+        },
+        {
+            pathname: "*",
+            element: <NotFound />,
         },
     ];
 
@@ -52,13 +61,14 @@ const App = () => {
                 <Routes>
                     {currentUser === null ? (
                         <>
+                            <Route exact path="/" element={<LogIn />} />
                             <Route exact path="/login" element={<LogIn />} />
-                            <Route exact path="*" element={<LogIn />} />
                             <Route
                                 exact
                                 path="/repair-document"
                                 element={<PrintDocument />}
                             />
+                            <Route path="*" element={<NotFound />} />
                         </>
                     ) : (
                         <>
@@ -89,7 +99,12 @@ const App = () => {
                                                     }}
                                                 >
                                                     <Container
-                                                        maxWidth="lg"
+                                                        maxWidth={
+                                                            index.pathname ===
+                                                            "*"
+                                                                ? "xl"
+                                                                : "lg"
+                                                        }
                                                         sx={{ mt: 4, mb: 4 }}
                                                     >
                                                         {index.element}
