@@ -27,8 +27,14 @@ const updateRepair = (id,data) => {
         });
 };
 
-const fetchRepair = (body) => {
-    return axios.get(`${API_URL}/repair-request/find/${body}`, {
+const fetchRepair = (id) => {
+    return axios.get(`${API_URL}/repair-request/find/${id}`, {
+        headers: authHeader(),
+    });
+};
+
+const fetchRepairPDF = (id) => {
+    return axios.get(`${API_URL}/repair-pdf/${id}`, {
         headers: authHeader(),
     });
 };
@@ -43,7 +49,8 @@ const exportedFunction = {
     fetchAllRepair,
     fetchRepair,
     deleteRepair,
-    requestRepairSearch
+    requestRepairSearch,
+    fetchRepairPDF
 };
 
 export default exportedFunction;

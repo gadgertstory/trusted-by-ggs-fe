@@ -5,14 +5,17 @@ import {
     UPDATE_REPAIR_FAIL,
     FETCH_REPAIR_REQUEST,
     FETCH_REPAIR_SUCCESS,
-    FETCH_REPAIR_ERROR,
+    FETCH_REPAIR_FAIL,
     DELETE_REPAIR_SUCCESS,
-    DELETE_REPAIR_FAIL
+    DELETE_REPAIR_FAIL,
+    FETCH_REPAIR_PDF_SUCCESS,
+    FETCH_REPAIR_PDF_FAIL,
 } from "../actions/types";
 
 const initialState = {
     data: {},
     dataRepair: {},
+    dataRepairPDF: {},
     isLoading: false,
 };
 
@@ -62,7 +65,18 @@ const repair = (state = initialState, action) => {
                 dataRepair: action.payload,
                 isLoading: true,
             };
-        case FETCH_REPAIR_ERROR:
+        case FETCH_REPAIR_FAIL:
+            return {
+                ...state,
+                isLoading: false,
+            };
+        case FETCH_REPAIR_PDF_SUCCESS:
+            return {
+                ...state,
+                dataRepairPDF: action.payload,
+                isLoading: true,
+            };
+        case FETCH_REPAIR_PDF_FAIL:
             return {
                 ...state,
                 isLoading: false,

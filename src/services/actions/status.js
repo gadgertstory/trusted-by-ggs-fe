@@ -1,7 +1,7 @@
 import {
     FETCH_STATUS_REQUEST,
     FETCH_STATUS_SUCCESS,
-    FETCH_STATUS_ERROR
+    FETCH_STATUS_FAIL
 } from "./types";
 
 import fetchMaster from "../../middleware/master";
@@ -18,7 +18,7 @@ export const getAllStatus = () => async (dispatch) => {
             });
         })
         .catch((error) =>
-            dispatch({ type: FETCH_STATUS_ERROR, error: error.message })
+            dispatch({ type: FETCH_STATUS_FAIL, error: error.message })
         );
 };
 

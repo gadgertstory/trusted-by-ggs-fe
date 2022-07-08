@@ -17,11 +17,12 @@ import LogIn from "../pages/Login";
 
 import { clearMessage } from "../services/actions/message";
 import { history } from "../helpers/history";
+import PrintDocument from "./PrintDocument";
 
 const App = () => {
     const { user: currentUser } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
-    
+
     useEffect(() => {
         history.listen((location) => {
             dispatch(clearMessage()); // clear message when changing location
@@ -53,6 +54,11 @@ const App = () => {
                         <>
                             <Route exact path="/login" element={<LogIn />} />
                             <Route exact path="*" element={<LogIn />} />
+                            <Route
+                                exact
+                                path="/repair-document"
+                                element={<PrintDocument />}
+                            />
                         </>
                     ) : (
                         <>

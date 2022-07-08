@@ -6,9 +6,11 @@ import {
     SET_MESSAGE,
     FETCH_REPAIR_REQUEST,
     FETCH_REPAIR_SUCCESS,
-    FETCH_REPAIR_ERROR,
+    FETCH_REPAIR_FAIL,
     DELETE_REPAIR_SUCCESS,
-    DELETE_REPAIR_FAIL
+    DELETE_REPAIR_FAIL,
+    FETCH_REPAIR_PDF_SUCCESS,
+    FETCH_REPAIR_PDF_FAIL,
 } from "./types";
 
 import Repair from "../../middleware/repair";
@@ -128,7 +130,7 @@ export const getRepair = (id) => async (dispatch) => {
                 error.toString();
 
             dispatch({
-                type: FETCH_REPAIR_ERROR,
+                type: FETCH_REPAIR_FAIL,
             });
 
             dispatch({
@@ -177,6 +179,46 @@ export const deleteRepair = (id) => async (dispatch) => {
 
             dispatch({
                 type: DELETE_REPAIR_FAIL,
+            });
+
+            dispatch({
+                type: SET_MESSAGE,
+                payload: message,
+            });
+
+            return (
+                Promise.reject(),
+                actionHandler({
+                    error: message,
+                })
+            );
+        });
+};
+
+export const getRepairPDF = (id) => async (dispatch) => {
+    // Calling the server
+    await Repair.fetchRepairPDF(id)
+        .then((response) => {
+            return response.data;
+        })
+
+        .then((responseJson) => {
+            dispatch({
+                type: FETCH_REPAIR_PDF_SUCCESS,
+                payload: responseJson,
+            });
+            return responseJson;
+        })
+        .catch((error) => {
+            const message =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString();
+
+            dispatch({
+                type: FETCH_REPAIR_PDF_FAIL,
             });
 
             dispatch({

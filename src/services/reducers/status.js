@@ -1,7 +1,7 @@
 import {
     FETCH_STATUS_REQUEST,
     FETCH_STATUS_SUCCESS,
-    FETCH_STATUS_ERROR,
+    FETCH_STATUS_FAIL,
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -18,7 +18,7 @@ const master = (state = INITIAL_STATE, action) => {
                 statusList: action.payload,
                 isLoading: true,
             };
-        case FETCH_STATUS_ERROR:
+        case FETCH_STATUS_FAIL:
             return {
                 ...state,
                 isLoading: false,
