@@ -7,6 +7,8 @@ import {
     FETCH_REPAIR_REQUEST,
     FETCH_REPAIR_SUCCESS,
     FETCH_REPAIR_ERROR,
+    DELETE_REPAIR_SUCCESS,
+    DELETE_REPAIR_FAIL
 } from "./types";
 
 import Repair from "../../middleware/repair";
@@ -143,4 +145,50 @@ export const getRepair = (id) => async (dispatch) => {
         });
 };
 
+export const deleteRepair = (id) => async (dispatch) => {
+    await Repair.deleteRepair(id)
+        .then((response) => {
+            return response.data;
+        })
 
+        .then((responseJson) => {
+            dispatch({
+                type: DELETE_REPAIR_SUCCESS,
+                payload: responseJson,
+            });
+            return (
+                Promise.resolve(),
+                actionHandler({
+                    successMessage: "Delete Success",
+                }),
+                history.push("/repair"),
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000 * 2)
+            );
+        })
+        .catch((error) => {
+            const message =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString();
+
+            dispatch({
+                type: DELETE_REPAIR_FAIL,
+            });
+
+            dispatch({
+                type: SET_MESSAGE,
+                payload: message,
+            });
+
+            return (
+                Promise.reject(),
+                actionHandler({
+                    error: message,
+                })
+            );
+        });
+};

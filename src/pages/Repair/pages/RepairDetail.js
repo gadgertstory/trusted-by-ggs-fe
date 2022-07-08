@@ -32,11 +32,13 @@ import {
     createRepair,
     updateRepair,
     getRepair,
+    deleteRepair,
 } from "../../../services/actions/repair";
 
 import Repair from "../../../middleware/repair";
 import { convertISOtoGMT } from "../../../utils/ConvertDate";
 import HistoryTableDetail from "../components/HistoryTableDetail";
+import ConfirmDialog from "../../../components/Dialog/ConfirmDialog";
 
 const options = [
     { name: "Edit", icon: <Edit /> },
@@ -49,15 +51,17 @@ const RepairDetail = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
     const { user: currentUser } = useSelector((state) => state.auth);
-
     const { brandList = [] } = useSelector((state) => state.brand);
     const { statusList = [] } = useSelector((state) => state.status);
-    const { dataRepair } = useSelector((state) => state.repair);
 
     const [loading, setLoading] = useState(false);
-
     const [error, setError] = useState("");
+
     const [newData, setNewData] = useState({});
+
+    //Dialog warning
+    const [openConfirmRemoveRepair, setOpenConfirmRemoveRepair] =
+        useState(false);
 
     //AddressForm state
     const [subdistrict, setSubDistrict] = useState("");
@@ -70,6 +74,7 @@ const RepairDetail = () => {
     const [receivedDate, setReceivedDate] = useState("");
     const [returnDate, setReturnDate] = useState("");
 
+    //Dropdown
     const [open, setOpen] = useState(false);
     const anchorRef = React.useRef(null);
     const [onEdit, setOnEdit] = useState(false);
@@ -116,13 +121,14 @@ const RepairDetail = () => {
                 setValue("brand_id", dataRepair.brand.brand_id || "");
                 setValue("remark", dataRepair.remark || "");
                 setValue("description", dataRepair.description || "");
-                // setValue(receivedDate || "");
-                // setValue(returnDate || "");
                 setValue("product_price", dataRepair.product_price || "");
-                setValue("status_id", dataRepair.status[0].status.status_id || "");
+                setValue(
+                    "status_id",
+                    dataRepair.status[0].status.status_id || ""
+                );
             }
         });
-    }, []);
+    }, [district, province, setValue, subdistrict, zipcode, id]);
 
     useEffect(() => {
         dispatch(getAllBrand());
@@ -130,10 +136,10 @@ const RepairDetail = () => {
         if (id !== "new") {
             dispatch(getRepair(id));
             fetch();
-        }else{
-            setOnEdit(true)
+        } else {
+            setOnEdit(true);
         }
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         setFullAddress({
@@ -151,7 +157,15 @@ const RepairDetail = () => {
             customer_zipcode: zipcode,
             user_id: currentUser.data.user_id,
         });
-    }, [subdistrict, district, province, zipcode, receivedDate, returnDate]);
+    }, [
+        subdistrict,
+        district,
+        province,
+        zipcode,
+        receivedDate,
+        returnDate,
+        currentUser,
+    ]);
 
     const onSubmit = (data) => {
         if (!subdistrict || !district || !province || !zipcode) {
@@ -159,32 +173,33 @@ const RepairDetail = () => {
             return;
         }
         setLoading(true);
-        const _data = Object.assign(data, newData);
-        const _updateData = {
-            data: {
-                customer_firstname: _data.customer_firstname,
-                customer_lastname: _data.customer_lastname,
-                customer_tel: _data.customer_tel,
-                customer_house_no: _data.customer_house_no,
-                customer_subdistrict: _data.customer_subdistrict,
-                customer_district: _data.customer_district,
-                customer_province: _data.customer_province,
-                customer_zipcode: _data.customer_zipcode,
-                brand_id: _data.brand_id,
-                product_name: _data.product_name,
-                description: _data.description,
-                return_date: _data.return_date.toISOString().split("T")[0],
-                remark: _data.remark,
-            },
-            status: {
-                status_id: _data.status_id,
-                user_id: _data.user_id,
-            },
-        };
 
         if (id === "new") {
+            const _data = Object.assign(data, newData);
             dispatch(createRepair(_data));
         } else {
+            const _data = Object.assign(data, newData);
+            const _updateData = {
+                data: {
+                    customer_firstname: _data.customer_firstname,
+                    customer_lastname: _data.customer_lastname,
+                    customer_tel: _data.customer_tel,
+                    customer_house_no: _data.customer_house_no,
+                    customer_subdistrict: _data.customer_subdistrict,
+                    customer_district: _data.customer_district,
+                    customer_province: _data.customer_province,
+                    customer_zipcode: _data.customer_zipcode,
+                    brand_id: _data.brand_id,
+                    product_name: _data.product_name,
+                    description: _data.description,
+                    return_date: _data.return_date.toISOString().split("T")[0],
+                    remark: _data.remark,
+                },
+                status: {
+                    status_id: _data.status_id,
+                    user_id: _data.user_id,
+                },
+            };
             dispatch(updateRepair(id, _updateData));
         }
     };
@@ -228,8 +243,12 @@ const RepairDetail = () => {
     const handleMenuItemClick = (event, index, option) => {
         if (option.name === "Edit") {
             setOnEdit(true);
+            setSelectedIndex(index);
+        } else if (option.name === "Delete") {
+            setOpenConfirmRemoveRepair(true);
+        } else {
+            return;
         }
-        setSelectedIndex(index);
         setOpen(false);
     };
 
@@ -243,6 +262,10 @@ const RepairDetail = () => {
         }
 
         setOpen(false);
+    };
+
+    const handleRemoveRepair = () => {
+        dispatch(deleteRepair(id));
     };
 
     return (
@@ -304,6 +327,7 @@ const RepairDetail = () => {
                                 role={undefined}
                                 transition
                                 disablePortal
+                                sx={{ zIndex: 2 }}
                             >
                                 {({ TransitionProps, placement }) => (
                                     <Grow
@@ -380,7 +404,6 @@ const RepairDetail = () => {
                         </Grid>
                     )}
                 </Grid>
-
                 <CustomerDetail
                     onEdit={onEdit}
                     register={register}
@@ -398,6 +421,7 @@ const RepairDetail = () => {
                     setError={setError}
                     onSelect={onSelect}
                 />
+                )
                 <ProductDetail
                     id={id}
                     onEdit={onEdit}
@@ -448,6 +472,21 @@ const RepairDetail = () => {
                         Submit
                     </LoadingButton>
                 </Stack>
+                <ConfirmDialog
+                    open={openConfirmRemoveRepair}
+                    onClose={() => setOpenConfirmRemoveRepair(false)}
+                    title={`ยืนยันการลบข้อมูล!`}
+                    description={`ลบข้อมูลฟอร์มรับซ่อม`}
+                    buttonConfirmText={"ยืนยันการลบ"}
+                    buttonConfirmStyle={{
+                        backgroundColor: "error.main",
+                        "&:hover": { backgroundColor: "error.main" },
+                    }}
+                    onConfirmed={() => {
+                        handleRemoveRepair();
+                        setOpenConfirmRemoveRepair(false);
+                    }}
+                />
             </Box>
         </>
     );

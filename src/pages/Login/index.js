@@ -5,7 +5,6 @@ import { Navigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import LoadingButton from "@mui/lab/LoadingButton";
 import TextField from "@mui/material/TextField";
-// import { ToastContainer, toast } from "react-toastify";
 import { Link } from "@mui/material";
 
 import { useForm, Controller } from "react-hook-form";
@@ -53,10 +52,6 @@ const LogIn = () => {
         password: "",
         showPassword: false,
     });
-
-    const handleChange = (prop) => (event) => {
-        setValues({ ...values, [prop]: event.target.value });
-    };
 
     const handleClickShowPassword = () => {
         setValues({

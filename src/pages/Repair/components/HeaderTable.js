@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-import { Grid, FormControl, InputLabel, MenuItem, Button } from "@mui/material";
+import { Grid, Button } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 import  Input from "../../../components/Input";
@@ -20,28 +20,6 @@ const HeaderTable = (props) => {
     return (
         <Grid container spacing={2} sx={{ my: 2 }}>
             <Grid item xs={12} md={3}>
-                {/* <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-required-label">
-                        สถานะการซ่อม
-                    </InputLabel>
-                    <Select
-                        size="small"
-                        value={status}
-                        label="Status"
-                        onChange={onChangeStatus}
-                    >
-                        {statusDropdow?.map((item) => {
-                            return (
-                                <MenuItem
-                                    key={item.status_id}
-                                    value={item.status_id}
-                                >
-                                    {item.status_name}
-                                </MenuItem>
-                            );
-                        })}
-                    </Select>
-                </FormControl> */}
                 <SelectMenu
                     list={statusDropdown}
                     value={status}

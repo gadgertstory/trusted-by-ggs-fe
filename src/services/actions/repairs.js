@@ -4,7 +4,7 @@ import {
     FETCH_ALL_REPAIR_SUCCESS,
     FETCH_ALL_REPAIR_ERROR,
     REQUEST_REPAIR_SEARCH_SUCCESS,
-    REQUEST_REPAIR_SEARCH_ERROR
+    REQUEST_REPAIR_SEARCH_ERROR,
 } from "./types";
 
 import Repair from "../../middleware/repair";
@@ -40,7 +40,12 @@ export const getAllRepair = () => async (dispatch) => {
                 payload: message,
             });
 
-            return Promise.reject(), actionHandler({ error: message });
+            return (
+                Promise.reject(),
+                actionHandler({
+                    error: message,
+                })
+            );
         });
 };
 

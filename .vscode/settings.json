@@ -3,6 +3,7 @@
         "test",
         "redesign dashboard page and custom mui theme",
         "feature repair",
-        "search table"
+        "search table",
+        "delete form repair"
     ]
 }
