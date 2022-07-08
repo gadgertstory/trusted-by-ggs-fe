@@ -33,12 +33,14 @@ import {
     updateRepair,
     getRepair,
     deleteRepair,
+    getRepairPDF
 } from "../../../services/actions/repair";
 
 import Repair from "../../../middleware/repair";
 import { convertISOtoGMT } from "../../../utils/ConvertDate";
 import HistoryTableDetail from "../components/HistoryTableDetail";
 import ConfirmDialog from "../../../components/Dialog/ConfirmDialog";
+import PreviewPDF from "../../../utils/PreviewPDF"
 
 const options = [
     { name: "Edit", icon: <Edit /> },
@@ -53,6 +55,7 @@ const RepairDetail = () => {
     const { user: currentUser } = useSelector((state) => state.auth);
     const { brandList = [] } = useSelector((state) => state.brand);
     const { statusList = [] } = useSelector((state) => state.status);
+    const { dataRepairPDF } = useSelector((state) => state.repair);
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -135,6 +138,7 @@ const RepairDetail = () => {
         dispatch(getAllStatus());
         if (id !== "new") {
             dispatch(getRepair(id));
+            dispatch(getRepairPDF(id))
             fetch();
         } else {
             setOnEdit(true);
@@ -247,7 +251,8 @@ const RepairDetail = () => {
         } else if (option.name === "Delete") {
             setOpenConfirmRemoveRepair(true);
         } else {
-            return;
+            
+            PreviewPDF(dataRepairPDF);
         }
         setOpen(false);
     };
@@ -421,7 +426,6 @@ const RepairDetail = () => {
                     setError={setError}
                     onSelect={onSelect}
                 />
-                )
                 <ProductDetail
                     id={id}
                     onEdit={onEdit}
@@ -443,7 +447,6 @@ const RepairDetail = () => {
                     direction="row"
                     justifyContent="space-between"
                     alignItems="center"
-                    // spacing={2}
                 >
                     <Button
                         sx={{

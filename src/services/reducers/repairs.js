@@ -1,9 +1,9 @@
 import {
     FETCH_ALL_REPAIR_REQUEST,
     FETCH_ALL_REPAIR_SUCCESS,
-    FETCH_ALL_REPAIR_ERROR,
+    FETCH_ALL_REPAIR_FAIL,
     REQUEST_REPAIR_SEARCH_SUCCESS,
-    REQUEST_REPAIR_SEARCH_ERROR
+    REQUEST_REPAIR_SEARCH_FAIL
 } from "../actions/types";
 
 const initialState = {
@@ -24,7 +24,7 @@ const repair = (state = initialState, action) => {
                 dataAllRepair: action.payload,
                 isLoading: true,
             };
-        case FETCH_ALL_REPAIR_ERROR:
+        case FETCH_ALL_REPAIR_FAIL:
             return {
                 ...state,
                 isLoading: false,
@@ -34,7 +34,7 @@ const repair = (state = initialState, action) => {
                 dataAllRepair: action.payload,
                 isLoading: true,
             };
-        case REQUEST_REPAIR_SEARCH_ERROR:
+        case REQUEST_REPAIR_SEARCH_FAIL:
             return {
                 ...state,
                 isLoading: false,

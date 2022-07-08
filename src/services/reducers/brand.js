@@ -1,7 +1,7 @@
 import {
     FETCH_BRAND_REQUEST,
     FETCH_BRAND_SUCCESS,
-    FETCH_BRAND_ERROR,
+    FETCH_BRAND_FAIL,
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -18,7 +18,7 @@ const master = (state = INITIAL_STATE, action) => {
                 brandList: action.payload,
                 isLoading: true,
             };
-        case FETCH_BRAND_ERROR:
+        case FETCH_BRAND_FAIL:
             return {
                 ...state,
                 isLoading: false,

@@ -1,7 +1,7 @@
 import {
     FETCH_BRAND_REQUEST,
     FETCH_BRAND_SUCCESS,
-    FETCH_BRAND_ERROR,
+    FETCH_BRAND_FAIL,
 
 } from "./types";
 
@@ -20,7 +20,7 @@ export const getAllBrand = () => async (dispatch) => {
             });
         })
         .catch((error) =>
-            dispatch({ type: FETCH_BRAND_ERROR, error: error.message })
+            dispatch({ type: FETCH_BRAND_FAIL, error: error.message })
         );
 };
 
