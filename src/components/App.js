@@ -128,7 +128,7 @@ const App = () => {
                             <Route path="/mod" component={BoardModerator} />
                         <Route path="/admin" component={BoardAdmin} /> */}
                 </Routes>
-                {/* <AuthVerify logOut={logOut}/> */}
+                <AuthVerify logOut={logOut}/>
             </Router>
         </ThemeProvider>
     );

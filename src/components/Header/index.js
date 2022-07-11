@@ -222,13 +222,14 @@ const ResponsiveAppBar = (currentUser) => {
                     {/* ============================Setting==========================      */}
 
                     <Box sx={{ flexGrow: 0 }}>
+                            {dataUser.currentUser.data.name.toUpperCase()}
                         <Tooltip title="Open settings">
                             <IconButton
                                 onClick={handleOpenUserMenu}
-                                sx={{ p: 0 }}
+                                sx={{ pl: 1 }}
                             >
                                 <Avatar
-                                    // alt={dataUser.name.toUpperCase()}
+                                    alt={dataUser.currentUser.data.name.toUpperCase()}
                                     src="/static/images/avatar/2.jpg"
                                 />
                             </IconButton>
