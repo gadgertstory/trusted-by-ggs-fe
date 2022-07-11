@@ -8,7 +8,9 @@ const fetchAllRepair = () => {
 };
 
 const requestRepairSearch = (body) => {
-    return axios.post(`${API_URL}/repair-request-search`,body, { headers: authHeader() });
+    return axios.post(`${API_URL}/repair-request-search`, body, {
+        headers: authHeader(),
+    });
 };
 
 const createRepair = (data) => {
@@ -19,9 +21,11 @@ const createRepair = (data) => {
         });
 };
 
-const updateRepair = (id,data) => {
+const updateRepair = (id, data) => {
     return axios
-        .patch(`${API_URL}/repair-request/${id}`, data, { headers: authHeader() })
+        .patch(`${API_URL}/repair-request/${id}`, data, {
+            headers: authHeader(),
+        })
         .then((response) => {
             return response.data;
         });
@@ -40,7 +44,13 @@ const fetchRepairPDF = (id) => {
 };
 
 const deleteRepair = (id) => {
-    return axios.delete(`${API_URL}/repair-request/${id}`,{ headers: authHeader() });
+    return axios.delete(`${API_URL}/repair-request/${id}`, {
+        headers: authHeader(),
+    });
+};
+
+const fetchRepairPDFForCustomer = (id) => {
+    return axios.get(`${API_URL}/repair-pdf/detail/${id}`);
 };
 
 const exportedFunction = {
@@ -50,7 +60,8 @@ const exportedFunction = {
     fetchRepair,
     deleteRepair,
     requestRepairSearch,
-    fetchRepairPDF
+    fetchRepairPDF,
+    fetchRepairPDFForCustomer
 };
 
 export default exportedFunction;
