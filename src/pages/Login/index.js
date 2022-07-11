@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { useDispatch, /* useSelector */ } from "react-redux";
+// import { Navigate } from "react-router-dom";
 
 import Avatar from "@mui/material/Avatar";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -46,7 +46,7 @@ const LogIn = () => {
     const [loading, setLoading] = useState(false);
     const { handleSubmit, control } = useForm();
 
-    const { isLoggedIn } = useSelector((state) => state.auth);
+    // const { isLoggedIn } = useSelector((state) => state.auth);
     // const { message } = useSelector((state) => state.message);
     const [values, setValues] = React.useState({
         password: "",
@@ -81,9 +81,9 @@ const LogIn = () => {
         }
     };
 
-    if (isLoggedIn) {
-        return <Navigate to="/profile" />;
-    }
+    // if (isLoggedIn) {
+    //     return <Navigate to="/profile" />;
+    // }
 
     return (
         <Container component="main" maxWidth="xs">

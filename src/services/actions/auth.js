@@ -8,6 +8,7 @@ import {
 } from "./types";
 
 import AuthService from "../../middleware/auth";
+import actionHandler from "../../middleware/action_handler";
 
 // export const register = (username, email, password) => (dispatch) => {
 //   return AuthService.register(username, email, password).then(
@@ -72,7 +73,13 @@ export const login = (loginUser) => (dispatch) => {
         payload: message,
       });
 
-      return Promise.reject();
+      
+      return (
+        Promise.reject(),
+        actionHandler({
+            error: message,
+        })
+    );
     }
   );
 };
