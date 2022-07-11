@@ -68,7 +68,7 @@ const BadgeStatus = (props) => {
                 return setColorCustom(classes.statusId9);
             }
         }
-    }, [badgeContent]);
+    }, [badgeContent,classes]);
 
     return (
         <Badge
