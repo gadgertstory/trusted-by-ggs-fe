@@ -1,23 +1,22 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import { useSelector } from "react-redux";
 
 import MaterialTable from "material-table";
 import { Stack, Typography } from "@mui/material";
 
+import BadgeStatus from "../../../components/Badge";
+
 const HistoryTableDetail = () => {
     const { dataRepair } = useSelector((state) => state.repair);
+    const [dataHistory, setDataHistory] = useState([]);
 
     useEffect(() => {
         const _newData = dataRepair.histories;
-        _newData?.map((index) => {
-            const processDate = index.process_date;
-            const process_date = new Date(processDate).toLocaleString();
-            if (processDate) {
-                return Object.assign(..._newData, { process_date });
-            } else {
-                return "";
-            }
-        });
+        const _newDataDate = _newData?.map((index) => ({
+            ...index,
+            process_date: new Date(index.process_date).toLocaleString("th-TH",{ timeZone: "UTC" }), // just for example
+        }));
+        setDataHistory(_newDataDate)
     }, [dataRepair]);
 
     return (
@@ -46,7 +45,15 @@ const HistoryTableDetail = () => {
                     { title: "ผู้ปฏิบัติงาน", field: "user.user_name" },
                     {
                         title: "สถานะการซ่อม",
-                        field: "status.status_name",
+                        align: "center",
+                        cellStyle: {
+                            textAlign: "center",
+                        },
+                        render: (rowData) => (
+                            <BadgeStatus
+                                badgeContent={rowData.status.status_name}
+                            ></BadgeStatus>
+                        ),
                         textOverflow: "ellipsis",
                     },
                     {
@@ -60,7 +67,7 @@ const HistoryTableDetail = () => {
                         textOverflow: "ellipsis",
                     },
                 ]}
-                data={dataRepair.histories}
+                data={dataHistory}
                 localization={{
                     body: {
                         emptyDataSourceMessage: (

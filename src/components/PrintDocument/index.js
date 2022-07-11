@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../../assets/theme";
-import Badge from '@mui/material/Badge';
+import BadgeStatus from "../../components/Badge";
 import {
     CssBaseline,
     Container,
@@ -19,6 +19,7 @@ import Repair from "../../middleware/repair";
 const PrintDocument = () => {
     const id = useParams();
     const [dataRepair, setDataRepair] = useState({});
+    const [dataHistory, setDataHistory] = useState([]);
 
     useEffect(() => {
         Repair.fetchRepairPDFForCustomer(id.id)
@@ -26,29 +27,23 @@ const PrintDocument = () => {
             .then((data) => {
                 setDataRepair(data);
             });
-
-        console.log(dataRepair.histories);
     }, [id]);
 
     useEffect(() => {
-      const _newData = dataRepair.histories;
-      _newData?.map((index) => {
-          const processDate = index.process_date;
-          const process_date = new Date(processDate).toLocaleString();
-          if (processDate) {
-              return Object.assign(..._newData, { process_date });
-          } else {
-              return "";
-          }
-      });
-  }, [dataRepair]);
+        const _newData = dataRepair.histories;
+        const _newDataDate = _newData?.map((index) => ({
+            ...index,
+            process_date: new Date(index.process_date).toLocaleString("th-TH",{ timeZone: "UTC" }), // just for example
+        }));
+        setDataHistory(_newDataDate)
+    }, [dataRepair]);
 
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <Box
                 sx={{
-                    backgroundColor: theme.palette.grey[100],
+                    backgroundColor: theme.palette.grey[200],
                     height: "100vh",
                     overflow: "auto",
                 }}
@@ -204,49 +199,57 @@ const PrintDocument = () => {
                         </Grid>
                     </Paper>
                     <MaterialTable
-                options={{
-                    search: false,
-                    actionsColumnIndex: -1,
-                    pageSize: 5,
-                    toolbar: false,
-                    // maxBodyHeight: "50vh",
-                    // headerStyle: { position: 'sticky', top: 0 }
-                }}
-                title=""
-                columns={[
-                    { title: "ผู้ปฏิบัติงาน", field: "user.user_name" },
-                    {
-                        title: "สถานะการซ่อม",
-                        field: "status.status_name",
-                        textOverflow: "ellipsis",
-                    },
-                    {
-                        title: "วันที่ทำรายการ",
-                        field: "process_date",
-                        textOverflow: "ellipsis",
-                    },
-                    {
-                        title: "รายละเอียดการซ่อม",
-                        field: "description",
-                        textOverflow: "ellipsis",
-                    },
-                ]}
-                data={dataRepair.histories}
-                localization={{
-                    body: {
-                        emptyDataSourceMessage: (
-                            <h1
-                                style={{
-                                    top: "50%",
+                        options={{
+                            search: false,
+                            actionsColumnIndex: -1,
+                            pageSize: 5,
+                            toolbar: false,
+                        }}
+                        title=""
+                        columns={[
+                            { title: "ผู้ปฏิบัติงาน", field: "user.user_name" },
+                            {
+                                title: "สถานะการซ่อม",
+                                align: "center",
+                                cellStyle: {
                                     textAlign: "center",
-                                }}
-                            >
-                                ไม่พบข้อมูล
-                            </h1>
-                        ),
-                    },
-                }}
-            />
+                                },
+                                render: (rowData) => (
+                                    <BadgeStatus
+                                        badgeContent={
+                                            rowData.status.status_name
+                                        }
+                                    ></BadgeStatus>
+                                ),
+                                textOverflow: "ellipsis",
+                            },
+                            {
+                                title: "วันที่ทำรายการ",
+                                field: "process_date",
+                                textOverflow: "ellipsis",
+                            },
+                            {
+                                title: "รายละเอียดการซ่อม",
+                                field: "description",
+                                textOverflow: "ellipsis",
+                            },
+                        ]}
+                        data={dataHistory}
+                        localization={{
+                            body: {
+                                emptyDataSourceMessage: (
+                                    <h1
+                                        style={{
+                                            top: "50%",
+                                            textAlign: "center",
+                                        }}
+                                    >
+                                        ไม่พบข้อมูล
+                                    </h1>
+                                ),
+                            },
+                        }}
+                    />
                 </Container>
             </Box>
         </ThemeProvider>

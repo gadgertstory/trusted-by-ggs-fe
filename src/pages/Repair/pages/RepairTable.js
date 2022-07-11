@@ -13,6 +13,7 @@ import {
 } from "../../../services/actions/repairs";
 import { getAllStatus } from "../../../services/actions/status";
 import HeaderTable from "../components/HeaderTable";
+import BadgeStatus from "../../../components/Badge";
 
 const RepairTable = () => {
     const dispatch = useDispatch();
@@ -147,7 +148,17 @@ const RepairTable = () => {
                     },
                     {
                         title: "สถานะการซ่อม",
-                        field: "status_name",
+                        align:'center',
+                                cellStyle: {
+                                    textAlign: "center",
+                                },
+                                render: (rowData) => (
+                                    <BadgeStatus
+                                        badgeContent={
+                                            rowData.status_name
+                                        }
+                                    ></BadgeStatus>
+                                ),
                     },
                 ]}
                 data={dataAllRepair}
