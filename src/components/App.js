@@ -72,7 +72,7 @@ const App = () => {
                             <Route exact path="/login" element={<LogIn />} />
                             <Route
                                 exact
-                                path="/repair-document"
+                                path={`/repair-document/:id`}
                                 element={<PrintDocument />}
                             />
                             <Route path="*" element={<NotFound />} />

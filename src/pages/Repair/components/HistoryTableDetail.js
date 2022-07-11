@@ -11,11 +11,11 @@ const HistoryTableDetail = () => {
         const _newData = dataRepair.histories;
         _newData?.map((index) => {
             const processDate = index.process_date;
-            const process_date = new Date(processDate).toLocaleString()
+            const process_date = new Date(processDate).toLocaleString();
             if (processDate) {
-               return Object.assign(..._newData,{process_date})
-            }else{
-                return ''
+                return Object.assign(..._newData, { process_date });
+            } else {
+                return "";
             }
         });
     }, [dataRepair]);
@@ -56,11 +56,25 @@ const HistoryTableDetail = () => {
                     },
                     {
                         title: "รายละเอียดการซ่อม",
-                        field: "remark",
+                        field: "description",
                         textOverflow: "ellipsis",
                     },
                 ]}
                 data={dataRepair.histories}
+                localization={{
+                    body: {
+                        emptyDataSourceMessage: (
+                            <h1
+                                style={{
+                                    top: "50%",
+                                    textAlign: "center",
+                                }}
+                            >
+                                ไม่พบข้อมูล
+                            </h1>
+                        ),
+                    },
+                }}
             />
         </>
     );
