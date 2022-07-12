@@ -1,74 +1,71 @@
-import * as React from "react";
+import React from "react";
+import { useSelector } from "react-redux";
+
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-import Chart from "../../components/Chart";
-// import Deposits from "./Deposits";
-import Orders from "../../components/Orders";
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
 
-// import UserService from "../../middleware/user";
+import { theme } from "../../assets/theme";
 
 const Dashboard = () => {
-    // const [content, setContent] = useState("");
-
-    // useEffect(() => {
-    //   UserService.getPublicContent().then(
-    //     (response) => {
-    //       setContent(response.data);
-    //     },
-    //     (error) => {
-    //       const _content =
-    //         (error.response && error.response.data) ||
-    //         error.message ||
-    //         error.toString();
-
-    //       setContent(_content);
-    //     }
-    //   );
-    // }, []);
+    const { user: currentUser } = useSelector((state) => state.auth);
+    const { countRepair } = useSelector((state) => state.dashboard);
 
     return (
-        <>
+        <React.Fragment>
+            <Typography variant="h3" component="h3" sx={{ mb: 2 }}>
+                สวัสดี, {currentUser.data.name.toUpperCase()}
+            </Typography>
             <Grid container spacing={3}>
-                {/* Chart */}
-                <Grid item xs={12} md={8} lg={9}>
-                    <Paper
-                        sx={{
-                            p: 2,
-                            display: "flex",
-                            flexDirection: "column",
-                            height: 240,
-                        }}
-                    >
-                        <Chart />
-                    </Paper>
+                <Grid item xs={12} md={6}>
+                    <Link href="/repair" underline="none">
+                        <Paper
+                            elevation={3}
+                            sx={{
+                                p: 2,
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                height: 240,
+                                borderTop: `solid ${theme.palette.teal[400]} 4px`,
+                            }}
+                        >
+                            <Typography variant="h5" sx={{ mb: 2 }}>
+                                จำนวนใบแจ้งซ่อมทั้งหมด
+                            </Typography>
+                            <Typography variant="h1" sx={{ mb: 2 }}>
+                                {countRepair?.count_all}
+                            </Typography>
+                        </Paper>
+                    </Link>
                 </Grid>
-                {/* Recent Deposits */}
-                <Grid item xs={12} md={4} lg={3}>
-                    <Paper
-                        sx={{
-                            p: 2,
-                            display: "flex",
-                            flexDirection: "column",
-                            height: 240,
-                        }}
-                    >
-                        {/* <Deposits /> */}
-                    </Paper>
-                </Grid>
-                {/* Recent Orders */}
-                <Grid item xs={12}>
-                    <Paper
-                        sx={{
-                            p: 2,
-                            display: "flex",
-                            flexDirection: "column",
-                        }}
-                    >
-                        <Orders />
-                    </Paper>
-                </Grid>
+                {/* <Grid item xs={12} md={6}>
+                    <Link href="/repair" underline="none">
+                        <Paper
+                            elevation={3}
+                            sx={{
+                                p: 2,
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                height: 240,
+                                borderTop: `solid ${theme.palette.amber[400]} 4px`,
+                            }}
+                        >
+                            <Typography variant="h5" sx={{ mb: 2 }}>
+                                จำนวนใบแจ้งซ่อมวันนี้
+                            </Typography>
+                            <Typography variant="h1" sx={{ mb: 2 }}>
+                            {countRepair?.count_today}
+                            </Typography>
+                        </Paper>
+                    </Link>
+                </Grid> */}
             </Grid>
-        </>
+        </React.Fragment>
     );
 };
 

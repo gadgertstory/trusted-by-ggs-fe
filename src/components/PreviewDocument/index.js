@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../../assets/theme";
-import BadgeStatus from "../../components/Badge";
+import BadgeStatus from "../Badge";
 import {
     CssBaseline,
     Container,
@@ -16,7 +16,7 @@ import MaterialTable from "material-table";
 
 import Repair from "../../middleware/repair";
 
-const PrintDocument = () => {
+const PreviewDocument = () => {
     const id = useParams();
     const [dataRepair, setDataRepair] = useState({});
     const [dataHistory, setDataHistory] = useState([]);
@@ -256,4 +256,4 @@ const PrintDocument = () => {
     );
 };
 
-export default PrintDocument;
+export default PreviewDocument;
