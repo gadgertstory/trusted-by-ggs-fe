@@ -35,13 +35,14 @@
     "redux-logger": "^3.0.6",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.1",
+    "serve": "^13.0.4",
     "thai-address-database": "^0.0.29",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "env-cmd -f .env react-scripts start",
-    "start:prod": "env-cmd -f .env.prod react-scripts start",
-    "build:prod": "env-cmd -f .env.prod react-scripts build",
+    "start:prod": "react-scripts start",
+    "build:prod": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
