@@ -32,4 +32,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: itgadgetstory/ggs-repair-system-frontend:${{ env.RELEASE_VERSION }}
+          tags: |
+            itgadgetstory/ggs-repair-system-frontend:latest
+            itgadgetstory/ggs-repair-system-frontend:${{ env.RELEASE_VERSION }}
