@@ -1,9 +1,7 @@
 import { createTheme } from "@mui/material/styles";
 import {
-    blue,
-    yellow,
-    green,
     lightBlue,
+    amber,
     grey,
     red,
     teal,
@@ -13,9 +11,9 @@ export const theme = createTheme({
     palette: {
         mode: "light",
         primary: {
-            main: blue[500],
-            light: blue[400],
-            dark: blue[800],
+            main: lightBlue[500],
+            light: lightBlue[400],
+            dark: lightBlue[800],
             contrastText: grey[50],
         },
         secondary: {
@@ -31,10 +29,10 @@ export const theme = createTheme({
             contrastText: grey[700],
         },
         success: {
-            main: green[500],
+            main: teal[500],
         },
         warning: {
-            main: yellow[500],
+            main: amber[500],
             contrastText: grey[800],
         },
         info: {
@@ -65,6 +63,11 @@ export const theme = createTheme({
             black: grey[900],
             white: grey[200],
         },
+        amber,
+        lightBlue,
+        grey,
+        red,
+        teal,
         tonalOffset: 0.2,
     },
 });
