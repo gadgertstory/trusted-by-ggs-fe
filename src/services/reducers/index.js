@@ -5,6 +5,7 @@ import repairs from "./repairs";
 import repair from "./repair";
 import brand from "./brand";
 import status from "./status";
+import dashboard from "./dashboard";
 
 import message from "./message";
 
@@ -15,5 +16,6 @@ export default combineReducers({
   repairs,
   repair,
   brand,
-  status
+  status,
+  dashboard
 });

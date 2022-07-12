@@ -21,8 +21,9 @@ import LogIn from "../pages/Login";
 import NotFound from "../pages/NotFound";
 
 import { clearMessage } from "../services/actions/message";
+import { getDashboard } from "../services/actions/dashboard";
 import { history } from "../helpers/history";
-import PrintDocument from "./PrintDocument";
+import PreviewDocument from "./PreviewDocument";
 
 import { logout } from "../services/actions/auth";
 import AuthVerify from "../common/AuthVerify";
@@ -32,6 +33,7 @@ const App = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        dispatch(getDashboard());
         history.listen((location) => {
             dispatch(clearMessage()); // clear message when changing location
         });
@@ -73,7 +75,7 @@ const App = () => {
                             <Route
                                 exact
                                 path={`/repair-document/:id`}
-                                element={<PrintDocument />}
+                                element={<PreviewDocument />}
                             />
                             <Route path="*" element={<NotFound />} />
                         </>
