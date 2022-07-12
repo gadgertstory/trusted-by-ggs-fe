@@ -1,16 +1,23 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React,{useEffect} from "react";
+import { useSelector,useDispatch } from "react-redux";
 
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 
+import { getDashboard } from "../../services/actions/dashboard";
+
 import { theme } from "../../assets/theme";
 
 const Dashboard = () => {
+    const dispatch = useDispatch();
     const { user: currentUser } = useSelector((state) => state.auth);
     const { countRepair } = useSelector((state) => state.dashboard);
+
+    useEffect(() => {
+        dispatch(getDashboard());
+    }, [dispatch]);
 
     return (
         <React.Fragment>
