@@ -2,7 +2,12 @@
     "conventionalCommits.scopes": [
         "test",
         "redesign dashboard page and custom mui theme",
+        "feature repair",
+        "search table",
+        "delete form repair",
+        "preview pdf"
         "update dockerignore ",
         "Update Dockerfile "
+
     ]
 }

@@ -1,57 +1,71 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Navigate } from 'react-router-dom';
+import { useDispatch, /* useSelector */ } from "react-redux";
+// import { Navigate } from "react-router-dom";
 
 import Avatar from "@mui/material/Avatar";
-import LoadingButton from '@mui/lab/LoadingButton';
+import LoadingButton from "@mui/lab/LoadingButton";
 import TextField from "@mui/material/TextField";
-// import { ToastContainer, toast } from "react-toastify";
+import { Link } from "@mui/material";
 
 import { useForm, Controller } from "react-hook-form";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import { FormControl, IconButton, InputAdornment,FormHelperText } from "@mui/material";
 
 import { login } from "../../services/actions/auth";
 import { history } from "../../helpers/history";
 
-// function Copyright(props) {
-//   return (
-//     <Typography variant="body2" color="text.secondary" align="center" {...props}>
-//       {'Copyright © '}
-//       <Link color="inherit" href="https://mui.com/">
-//         Your Website
-//       </Link>{' '}
-//       {new Date().getFullYear()}
-//       {'.'}
-//     </Typography>
-//   );
-// }
+//button
 
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+
+function Copyright(props) {
+    return (
+        <Typography
+            variant="body2"
+            color="text.secondary"
+            align="center"
+            {...props}
+        >
+            {"Copyright © "}
+            <Link color="inherit" href="https://gadgetstory.co.th/">
+                Gadgetstory
+            </Link>{" "}
+            {new Date().getFullYear()}
+            {"."}
+        </Typography>
+    );
+}
 
 const LogIn = () => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const { handleSubmit, control } = useForm();
 
-    const { isLoggedIn } = useSelector((state) => state.auth);
+    // const { isLoggedIn } = useSelector((state) => state.auth);
     // const { message } = useSelector((state) => state.message);
+    const [values, setValues] = React.useState({
+        password: "",
+        showPassword: false,
+    });
 
-    // const notify = (message) =>
-    //     toast.error(`${message}`, {
-    //         position: "top-right",
-    //         autoClose: 1000,
-    //         hideProgressBar: false,
-    //         closeOnClick: true,
-    //         pauseOnHover: true,
-    //         draggable: true,
-    //         progress: undefined,
-    //     });
+    const handleClickShowPassword = () => {
+        setValues({
+            ...values,
+            showPassword: !values.showPassword,
+        });
+    };
+
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    };
 
     const onSubmit = (data) => {
         const loginUser = data;
-        console.log(loginUser);
 
         setLoading(true);
 
@@ -67,9 +81,9 @@ const LogIn = () => {
         }
     };
 
-    if (isLoggedIn) {
-        return <Navigate to="/profile" />;
-      }
+    // if (isLoggedIn) {
+    //     return <Navigate to="/profile" />;
+    // }
 
     return (
         <Container component="main" maxWidth="xs">
@@ -109,7 +123,6 @@ const LogIn = () => {
                                 label="Email Address"
                                 autoComplete="email"
                                 autoFocus
-                                size="small"
                                 value={value}
                                 onChange={onChange}
                                 error={!!error}
@@ -127,22 +140,52 @@ const LogIn = () => {
                             field: { onChange, value },
                             fieldState: { error },
                         }) => (
-                            <TextField
-                                margin="normal"
-                                required
+                            <FormControl
                                 fullWidth
-                                label="Password"
-                                size="small"
-                                value={value}
-                                onChange={onChange}
-                                error={!!error}
-                                helperText={error ? error.message : null}
-                                type="password"
-                            />
+                                variant="outlined"
+                                error={error}
+                                sx={{mt:2}}
+                            >
+                                <InputLabel htmlFor="outlined-adornment-password">
+                                    Password *
+                                </InputLabel>
+                                <OutlinedInput
+                                    id="outlined-adornment-password"
+                                    type={
+                                        values.showPassword
+                                            ? "text"
+                                            : "password"
+                                    }
+                                    value={value}
+                                    fullWidth={true}
+                                    onChange={onChange}
+                                    endAdornment={
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={
+                                                    handleClickShowPassword
+                                                }
+                                                onMouseDown={
+                                                    handleMouseDownPassword
+                                                }
+                                                edge="end"
+                                            >
+                                                {values.showPassword ? (
+                                                    <VisibilityOff />
+                                                ) : (
+                                                    <Visibility />
+                                                )}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    }
+                                    label="Password *"
+                                />
+                            <FormHelperText id="filled-weight-helper-text">{error ? error.message : null}</FormHelperText>
+                            </FormControl>
                         )}
                         rules={{ required: "Password required" }}
                     />
-                    
                     <LoadingButton
                         type="submit"
                         fullWidth
@@ -152,21 +195,9 @@ const LogIn = () => {
                     >
                         Sign In
                     </LoadingButton>
-                    {/* <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid> */}
                 </Box>
+                <Copyright sx={{ mt: 5, mb: 4 }} />
             </Box>
-            {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
         </Container>
     );
 };

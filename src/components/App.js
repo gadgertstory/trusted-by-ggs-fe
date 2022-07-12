@@ -1,6 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+} from "react-router-dom";
 
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../assets/theme";
@@ -12,11 +16,16 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "./Header";
 import Dashboard from "../pages/Dashboard";
 import Profile from "../pages/Profile";
-import Repairs from "../pages/Repairs";
+import Repair from "../pages/Repair";
 import LogIn from "../pages/Login";
+import NotFound from "../pages/NotFound";
 
 import { clearMessage } from "../services/actions/message";
 import { history } from "../helpers/history";
+import PrintDocument from "./PrintDocument";
+
+import { logout } from "../services/actions/auth";
+import AuthVerify from "../common/AuthVerify";
 
 const App = () => {
     const { user: currentUser } = useSelector((state) => state.auth);
@@ -26,6 +35,10 @@ const App = () => {
         history.listen((location) => {
             dispatch(clearMessage()); // clear message when changing location
         });
+    }, [dispatch]);
+
+    const logOut = useCallback(() => {
+        dispatch(logout());
     }, [dispatch]);
 
     const routeMapping = [
@@ -38,8 +51,12 @@ const App = () => {
             element: <Profile />,
         },
         {
-            pathname: "/repairs",
-            element: <Repairs />,
+            pathname: `/repair/*`,
+            element: <Repair />,
+        },
+        {
+            pathname: "*",
+            element: <NotFound />,
         },
     ];
 
@@ -47,12 +64,18 @@ const App = () => {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <Router history={history}>
-                {currentUser ? <Header currentUser={currentUser} /> : ""}
+                {currentUser ? <Header logOut={logOut} currentUser={currentUser} /> : ""}
                 <Routes>
                     {currentUser === null ? (
                         <>
+                            <Route exact path="/" element={<LogIn />} />
                             <Route exact path="/login" element={<LogIn />} />
-                            <Route exact path="*" element={<LogIn />} />
+                            <Route
+                                exact
+                                path={`/repair-document/:id`}
+                                element={<PrintDocument />}
+                            />
+                            <Route path="*" element={<NotFound />} />
                         </>
                     ) : (
                         <>
@@ -83,7 +106,12 @@ const App = () => {
                                                     }}
                                                 >
                                                     <Container
-                                                        maxWidth="lg"
+                                                        maxWidth={
+                                                            index.pathname ===
+                                                            "*"
+                                                                ? "xl"
+                                                                : "lg"
+                                                        }
                                                         sx={{ mt: 4, mb: 4 }}
                                                     >
                                                         {index.element}
@@ -100,7 +128,7 @@ const App = () => {
                             <Route path="/mod" component={BoardModerator} />
                         <Route path="/admin" component={BoardAdmin} /> */}
                 </Routes>
-                {/* <AuthVerify logOut={logOut}/> */}
+                <AuthVerify logOut={logOut}/>
             </Router>
         </ThemeProvider>
     );

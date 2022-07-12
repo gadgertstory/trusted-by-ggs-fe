@@ -21,13 +21,13 @@ import { logout } from "../../services/actions/auth";
 // import AuthVerify from "./common/AuthVerify";
 import EventBus from "../../common/EventBus";
 
-const pages = [
+const pagesList = [
     {
         pathname: "/",
         name: "หน้าหลัก",
     },
     {
-        pathname: "/repairs",
+        pathname: "/repair",
         name: "งานซ่อม",
     },
 ];
@@ -77,7 +77,6 @@ const ResponsiveAppBar = (currentUser) => {
     }, [dispatch]);
 
     useEffect(() => {
-        console.log("dataUser in Header", dataUser);
         // if (dataUser) {
         //     setShowModeratorBoard(currentUser.roles.includes("ROLE_MODERATOR"));
         //     setShowAdminBoard(currentUser.roles.includes("ROLE_ADMIN"));
@@ -154,7 +153,7 @@ const ResponsiveAppBar = (currentUser) => {
                                 display: { xs: "block", md: "none" },
                             }}
                         >
-                            {pages.map((page) => (
+                            {pagesList.map((page) => (
                                 <Link
                                     key={`${page.pathname}`}
                                     href={`${page.pathname}`}
@@ -200,7 +199,7 @@ const ResponsiveAppBar = (currentUser) => {
                             display: { xs: "none", md: "flex" },
                         }}
                     >
-                        {pages.map((page) => (
+                        {pagesList.map((page) => (
                             <Link
                                 underline="none"
                                 key={page.pathname}
@@ -223,13 +222,14 @@ const ResponsiveAppBar = (currentUser) => {
                     {/* ============================Setting==========================      */}
 
                     <Box sx={{ flexGrow: 0 }}>
+                            {dataUser.currentUser.data.name.toUpperCase()}
                         <Tooltip title="Open settings">
                             <IconButton
                                 onClick={handleOpenUserMenu}
-                                sx={{ p: 0 }}
+                                sx={{ pl: 1 }}
                             >
                                 <Avatar
-                                    // alt={dataUser.name.toUpperCase()}
+                                    alt={dataUser.currentUser.data.name.toUpperCase()}
                                     src="/static/images/avatar/2.jpg"
                                 />
                             </IconButton>
