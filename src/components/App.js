@@ -21,7 +21,7 @@ import LogIn from "../pages/Login";
 import NotFound from "../pages/NotFound";
 
 import { clearMessage } from "../services/actions/message";
-import { getDashboard } from "../services/actions/dashboard";
+
 import { history } from "../helpers/history";
 import PreviewDocument from "./PreviewDocument";
 
@@ -33,7 +33,6 @@ const App = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getDashboard());
         history.listen((location) => {
             dispatch(clearMessage()); // clear message when changing location
         });
