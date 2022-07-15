@@ -130,6 +130,7 @@ class ThailandAddress extends Component {
                             },
                             this.props.style
                         ),
+                        maxLength:100
                     }}
                     value={this.props.value}
                     onChange={(e) => this.handleChange(e)}

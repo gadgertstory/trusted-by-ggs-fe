@@ -33,14 +33,14 @@ import {
     updateRepair,
     getRepair,
     deleteRepair,
-    getRepairPDF
+    getRepairPDF,
 } from "../../../services/actions/repair";
 
 import Repair from "../../../middleware/repair";
 import { convertISOtoGMT } from "../../../utils/ConvertDate";
 import HistoryTableDetail from "../components/HistoryTableDetail";
 import ConfirmDialog from "../../../components/Dialog/ConfirmDialog";
-import PreviewPDF from "../../../utils/PreviewPDF"
+import PreviewPDF from "../../../utils/PreviewPDF";
 
 const options = [
     { name: "Edit", icon: <Edit /> },
@@ -138,7 +138,7 @@ const RepairDetail = () => {
         dispatch(getAllStatus());
         if (id !== "new") {
             dispatch(getRepair(id));
-            dispatch(getRepairPDF(id))
+            dispatch(getRepairPDF(id));
             fetch();
         } else {
             setOnEdit(true);
@@ -176,7 +176,6 @@ const RepairDetail = () => {
             setError("กรุณากรอกข้อมูลให้ครบ");
             return;
         }
-        setLoading(true);
 
         if (id === "new") {
             const _data = Object.assign(data, newData);
@@ -196,7 +195,7 @@ const RepairDetail = () => {
                     brand_id: _data.brand_id,
                     product_name: _data.product_name,
                     description: _data.description,
-                    return_date: _data.return_date.toISOString().split("T")[0],
+                    return_date: _data.return_date,
                     remark: _data.remark,
                 },
                 status: {
@@ -251,7 +250,6 @@ const RepairDetail = () => {
         } else if (option.name === "Delete") {
             setOpenConfirmRemoveRepair(true);
         } else {
-            
             PreviewPDF(dataRepairPDF);
         }
         setOpen(false);
@@ -465,15 +463,17 @@ const RepairDetail = () => {
                     >
                         Cancel
                     </Button>
-                    <LoadingButton
-                        sx={{ my: 2 }}
-                        variant="contained"
-                        color="primary"
-                        type="submit"
-                        loading={loading}
-                    >
-                        Submit
-                    </LoadingButton>
+                    {onEdit ? (
+                        <LoadingButton
+                            sx={{ my: 2 }}
+                            variant="contained"
+                            color="primary"
+                            type="submit"
+                            loading={loading}
+                        >
+                            Submit
+                        </LoadingButton>
+                    ):''}
                 </Stack>
                 <ConfirmDialog
                     open={openConfirmRemoveRepair}
