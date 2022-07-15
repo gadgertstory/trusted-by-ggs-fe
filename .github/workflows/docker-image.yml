@@ -46,6 +46,7 @@ jobs:
           script: |
             whoami
             pwd
+            kubectl get po -A
       - 
         name: PROD deploy command
         if: env.ENVIRONMENT == 'Production'
