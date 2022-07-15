@@ -14,16 +14,26 @@ jobs:
         name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - 
-        name: Set env
+        name: Set env for Development
         run: |
           echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-          echo ${{ env }}
+          echo "BRANCH_NAME=${{ github.event.release.target_commitish }}" >> $GITHUB_ENV
+          echo "DEPLOY_KEY=${{ secrets.KEY_TEST }}" >> $GITHUB_ENV
+          echo ${{ env.RELEASE_VERSION }}
+          echo ${{ env.BRANCH_NAME }}
+          echo ${{ env.DEPLOY_KEY}}
       - 
-        name: Get branch name
-        id: branch-name
-        uses: tj-actions/branch-names@v5.4
+        name: Set env for Production
+        if: github.event.release.target_commitish == 'feature/CICD-Proen'
+        run: |
+          echo "BRANCH_NAME=${{ github.event.release.target_commitish }}" >> $GITHUB_ENV
+          echo "DEPLOY_KEY=${{ secrets.KEY_DEV_TEST }}" >> $GITHUB_ENV
+          echo ${{ env.RELEASE_VERSION }}
+          echo ${{ env.BRANCH_NAME }}
+          echo ${{ env.DEPLOY_KEY}}
       -
         name: Get env
+        if: github.event.release.target_commitish == ''
         run: |
           echo "Running on default: ${{ steps.branch-name.outputs.base_ref_branch }}"
           echo "Running on default: ${{ steps.branch-name.outputs.current_branch }}"
@@ -33,7 +43,7 @@ jobs:
           echo "Running on default: ${{ steps.branch-name.outputs.is_tag }}"
           echo "Running on default: ${{ steps.branch-name.outputs.ref_branch }}"
           echo "Running on default: ${{ steps.branch-name.outputs.tag }}"
-          echo "Running on default: ${{ github.event.release.target_commitish }}"
+          echo "BRANCH=${{ github.event.release.target_commitish }}" 
       # -
       #   name: Set up Docker Buildx
       #   uses: docker/setup-buildx-action@v2
