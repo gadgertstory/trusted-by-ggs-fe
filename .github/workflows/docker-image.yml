@@ -35,13 +35,26 @@ jobs:
           echo ${{ env.RELEASE_VERSION }}
           echo ${{ env.BRANCH_NAME }}
       - 
-        name: multiple command
+        name: DEV deploy command
+        if: env.ENVIRONMENT == 'Development'
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.K8S_HOST_${PRE} }}
-          username: ${{ secrets.K8S_USER_${PRE} }}
+          host: ${{ secrets.K8S_HOST_DEV }}
+          username: ${{ secrets.K8S_USER_DEV }}
           key: ${{ secrets.PROEN_KEY }}
-          port: ${{ secrets.K8S_PORT_${PRE} }}
+          port: ${{ secrets.K8S_PORT_DEV }}
+          script: |
+            whoami
+            pwd
+      - 
+        name: PROD deploy command
+        if: env.ENVIRONMENT == 'Production'
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.K8S_HOST_PROD }}
+          username: ${{ secrets.K8S_USER_PROD }}
+          key: ${{ secrets.PROEN_KEY }}
+          port: ${{ secrets.K8S_PORT_PROD }}
           script: |
             whoami
             pwd
