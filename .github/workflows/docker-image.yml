@@ -56,8 +56,6 @@ jobs:
           key: ${{ secrets.PROEN_KEY }}
           port: ${{ secrets.K8S_PORT_PROD }}
           script: |
-            whoami
-            pwd
             kubectl get pod -A
       # -
       #   name: Set up Docker Buildx
