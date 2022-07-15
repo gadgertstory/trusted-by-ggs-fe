@@ -33,6 +33,7 @@ jobs:
           echo "Running on default: ${{ steps.branch-name.outputs.is_tag }}"
           echo "Running on default: ${{ steps.branch-name.outputs.ref_branch }}"
           echo "Running on default: ${{ steps.branch-name.outputs.tag }}"
+          echo "Running on default: ${{ github.event.release.target_commitish }}"
       # -
       #   name: Set up Docker Buildx
       #   uses: docker/setup-buildx-action@v2
