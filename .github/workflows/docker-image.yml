@@ -16,21 +16,44 @@ jobs:
       - 
         name: Set env for Development
         run: |
+          echo "ENVIRONMENT=Development" >> $GITHUB_ENV
           echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
           echo "BRANCH_NAME=${{ github.event.release.target_commitish }}" >> $GITHUB_ENV
-          echo "DEPLOY_KEY=${{ secrets.KEY_TEST }}" >> $GITHUB_ENV
+          echo "DEPLOY_KEY=${{ secrets.PROEN_KEY }}" >> $GITHUB_ENV
+          echo "K8S_HOST=${{ secrets.K8S_HOST }}" >> $GITHUB_ENV
+          echo "K8S_USER=${{ secrets.K8S_USER }}" >> $GITHUB_ENV
+          echo "K8S_PORT=${{ secrets.K8S_PORT }}" >> $GITHUB_ENV
       - 
         name: Replace env IF Production
-        if: github.event.release.target_commitish == 'feature/CICD-Proen'
+        if: github.event.release.target_commitish == 'main'
         run: |
+          echo "ENVIRONMENT=Production" >> $GITHUB_ENV
           echo "BRANCH_NAME=${{ github.event.release.target_commitish }}" >> $GITHUB_ENV
-          echo "DEPLOY_KEY=${{ secrets.KEY_DEV_TEST }}" >> $GITHUB_ENV
+          echo "DEPLOY_KEY=${{ secrets.PROEN_KEY }}" >> $GITHUB_ENV
+          echo "K8S_HOST=${{ secrets.K8S_HOST }}" >> $GITHUB_ENV
+          echo "K8S_USER=${{ secrets.K8S_USER }}" >> $GITHUB_ENV
+          echo "K8S_PORT=${{ secrets.K8S_PORT }}" >> $GITHUB_ENV
       -
         name: Show ENV
         run: |
+          echo ${{ env.ENVIRONMENT}}
           echo ${{ env.RELEASE_VERSION }}
           echo ${{ env.BRANCH_NAME }}
           echo ${{ env.DEPLOY_KEY}}
+          echo ${{ env.K8S_HOST }}
+          echo ${{ env.K8S_USER }}
+          echo ${{ env.K8S_PORT }}
+      - 
+        name: multiple command
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ env.K8S_HOST }}
+          username: ${{ env.K8S_USER }}
+          key: ${{ env.DEPLOY_KEY}}
+          port: ${{ env.K8S_PORT }}
+          script: |
+            whoami
+            pwd
       # -
       #   name: Set up Docker Buildx
       #   uses: docker/setup-buildx-action@v2
