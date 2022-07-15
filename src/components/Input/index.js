@@ -19,11 +19,16 @@ const Input = (props) => {
         autoComplete,
         error,
         fullWidth,
+        rows,
+        helperText,
+        multiline,
+        inputProps,
+        pattern
     } = props;
     return (
-        <FormControl fullWidth={fullWidth} sx={sx}>
+        <FormControl fullWidth={fullWidth} sx={sx} style={{backgroundColor:'white'}}>
             <TextField
-                error={!!error}
+                error={error}
                 label={label}
                 variant="outlined"
                 type={type}
@@ -35,8 +40,13 @@ const Input = (props) => {
                 disabled={disabled}
                 required={required}
                 defaultValue={defaultValue}
-                helperText={error ? error.message : null }
+                helperText={helperText}
                 size="small"
+                rows={rows}
+                autoComplete={autoComplete}
+                multiline={multiline}
+                inputProps={inputProps}
+                pattern={pattern}
             />
         </FormControl>
     );
@@ -54,7 +64,11 @@ Input.propTypes = {
     className: PropTypes.string,
     defaultValue: PropTypes.node,
     error:PropTypes.bool,
-    autoComplete:PropTypes.string
+    autoComplete:PropTypes.string,
+    fullWidth:PropTypes.bool,
+    rows:PropTypes.number,
+    inputProps:PropTypes.object,
+    pattern:PropTypes.string,
   };
 
 export default Input;

@@ -1,9 +1,7 @@
 import { createTheme } from "@mui/material/styles";
 import {
-    blue,
-    yellow,
-    green,
     lightBlue,
+    amber,
     grey,
     red,
     teal,
@@ -13,9 +11,9 @@ export const theme = createTheme({
     palette: {
         mode: "light",
         primary: {
-            main: blue[500],
-            light: blue[400],
-            dark: blue[800],
+            main: lightBlue[500],
+            light: lightBlue[400],
+            dark: lightBlue[800],
             contrastText: grey[50],
         },
         secondary: {
@@ -31,10 +29,10 @@ export const theme = createTheme({
             contrastText: grey[700],
         },
         success: {
-            main: green[500],
+            main: teal[500],
         },
         warning: {
-            main: yellow[500],
+            main: amber[500],
             contrastText: grey[800],
         },
         info: {
@@ -45,26 +43,31 @@ export const theme = createTheme({
             secondary: grey[700],
             disabled: grey[500],
         },
-        // action: {
-        //     active: teal[200],
-        //     activeOpacity: 1,
-        //     disabled: grey[700],
-        //     disabledBackground: grey[200],
-        //     hover: teal[100],
-        //     hoverOpacity: 0.7,
-        //     focus: teal[600],
-        //     focusOpacity: 1,
-        //     selected: teal[300],
-        //     selectedOpacity: 1,
-        // },
+        action: {
+            active: teal[200],
+            activeOpacity: 1,
+            // disabled: grey[700],
+            // disabledBackground: grey[200],
+            hover: grey[300],
+            hoverOpacity: 0.7,
+            // focus: teal[600],
+            // focusOpacity: 1,
+            // selected: teal[300],
+            // selectedOpacity: 1,
+        },
         background: {
             default: "white",
-            paper: grey[100],
+            paper: "white",
         },
         common: {
             black: grey[900],
             white: grey[200],
         },
+        amber,
+        lightBlue,
+        grey,
+        red,
+        teal,
         tonalOffset: 0.2,
     },
 });

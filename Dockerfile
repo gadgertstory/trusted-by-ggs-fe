@@ -1,8 +1,13 @@
-FROM node:16-alpine 
+FROM node:16-alpine
 WORKDIR /app
-COPY package.json ./
-COPY ./ ./
-RUN npm config set legacy-peer-deps true
-RUN npm install
+COPY --chown=node:node . . 
+RUN npm install --force
+RUN mkdir -p /app/node_modules/pdfmake/examples
+COPY ./examples ./node_modules/pdfmake/examples
+WORKDIR /app/node_modules/pdfmake
+RUN npm install --force 
+RUN npm run build:vfs
+WORKDIR /app
+
 EXPOSE 3000
-CMD ["npm", "run", "start:prod"]
+CMD ["npm", "run", "start:prod"] 
