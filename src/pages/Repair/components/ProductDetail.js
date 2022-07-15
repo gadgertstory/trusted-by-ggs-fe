@@ -1,7 +1,7 @@
 import React from "react";
 import { Controller } from "react-hook-form";
 
-import { LocalizationProvider, MobileDatePicker } from "@mui/x-date-pickers";
+import { LocalizationProvider, DesktopDatePicker } from "@mui/x-date-pickers";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 
 import {
@@ -73,6 +73,9 @@ const ProductDetail = (props) => {
                                 label="ชื่ออุปกรกรณ์"
                                 error={!!error}
                                 helperText={error ? error.message : null}
+                                inputProps={{
+                                    maxLength: 100,
+                                }}
                             />
                         )}
                         rules={{ required: "กรุณากรอกชื่ออุปกรกรณ์" }}
@@ -96,6 +99,9 @@ const ProductDetail = (props) => {
                                 label="หมายเลขเครื่อง/Serial Number"
                                 error={!!error}
                                 helperText={error ? error.message : null}
+                                inputProps={{
+                                    maxLength: 50,
+                                }}
                             />
                         )}
                         rules={{
@@ -160,6 +166,9 @@ const ProductDetail = (props) => {
                                 label="รายละเอียดการซ่อม/ปัญหา"
                                 multiline
                                 rows={5}
+                                inputProps={{
+                                    maxLength: 1000,
+                                }}
                             />
                         )}
                     />
@@ -176,6 +185,9 @@ const ProductDetail = (props) => {
                                 value={value}
                                 fullWidth={true}
                                 label="หมายเหตุ"
+                                inputProps={{
+                                    maxLength: 200,
+                                }}
                             />
                         )}
                     />
@@ -222,7 +234,7 @@ const ProductDetail = (props) => {
                 )}
                 <Grid item xs={12} md={4}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <MobileDatePicker
+                        <DesktopDatePicker
                             label="วันที่รับซ่อม"
                             inputFormat="dd/MM/yyyy"
                             value={receivedDate}
@@ -239,7 +251,7 @@ const ProductDetail = (props) => {
                 </Grid>
                 <Grid item xs={12} md={4}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <MobileDatePicker
+                        <DesktopDatePicker
                             label="วันที่นัดรับ"
                             inputFormat="dd/MM/yyyy"
                             value={returnDate}

@@ -52,6 +52,9 @@ const CustomerDetail = (props) => {
                                 onChange={onChange}
                                 error={!!error}
                                 helperText={error ? error.message : null}
+                                inputProps={{
+                                    maxLength: 150,
+                                }}
                             />
                         )}
                         rules={{ required: "กรุณากรอกชื่อ" }}
@@ -75,6 +78,9 @@ const CustomerDetail = (props) => {
                                 onChange={onChange}
                                 error={!!error}
                                 helperText={error ? error.message : null}
+                                inputProps={{
+                                    maxLength: 150,
+                                }}
                             />
                         )}
                         rules={{ required: "กรุณากรอกนามสุกล" }}
@@ -125,7 +131,7 @@ const CustomerDetail = (props) => {
                                 error={!!error}
                                 helperText={error ? error.message : null}
                                 inputProps={{
-                                    maxLength: 150,
+                                    maxLength: 250,
                                 }}
                             />
                         )}
