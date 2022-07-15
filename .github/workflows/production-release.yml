@@ -1,27 +1,17 @@
-name: Auto Deploy k8s
-
+name: Auto Deploy k8s when release main branch
 on:
   release:
     types:
       - created
-
-
 jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
       -
         name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@
 
       # Set environment
-      - 
-        name: Set env FOR Development
-        if: github.event.release.target_commitish != 'main'
-        run: |
-          echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-          echo "ENVIRONMENT=Development" >> $GITHUB_ENV
-          echo "BRANCH_NAME=${{ github.event.release.target_commitish }}" >> $GITHUB_ENV
       - 
         name: Set env FOR Production
         if: github.event.release.target_commitish == 'main'
@@ -54,17 +44,6 @@ jobs:
             itgadgetstory/ggs-repair-system-frontend:latest
             itgadgetstory/ggs-repair-system-frontend:${{ env.RELEASE_VERSION }}
       # Auto Deploy Code
-      - 
-        name: DEV deploy command
-        if: env.ENVIRONMENT == 'Development'
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.K8S_HOST_DEV }}
-          username: ${{ secrets.K8S_USER_DEV }}
-          key: ${{ secrets.PROEN_KEY }}
-          port: ${{ secrets.K8S_PORT_DEV }}
-          script: |
-            kubectl delete -f /root/ggs/repairSystem/ggs-frontend.yaml && kubectl apply -f /root/ggs/repairSystem/ggs-frontend.yaml
       - 
         name: PROD deploy command
         if: env.ENVIRONMENT == 'Production'
