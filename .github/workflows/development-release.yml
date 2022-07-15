@@ -1,4 +1,4 @@
-name: Auto Deploy k8s when release
+name: Auto Deploy k8s when push Develop branch
 on:
   push:
     branches:
