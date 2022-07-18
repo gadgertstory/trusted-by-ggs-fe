@@ -4,8 +4,8 @@ import { useSelector } from "react-redux";
 import { Grid, Button } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
-import  Input from "../../../components/Input";
-import  SelectMenu from "../../../components/SelectMenu";
+import Input from "../../../components/Input";
+import SelectMenu from "../../../components/SelectMenu";
 
 const HeaderTable = (props) => {
     const { statusList = [] } = useSelector((state) => state.status);
@@ -35,8 +35,15 @@ const HeaderTable = (props) => {
                     fullWidth={true}
                     label="ค้นหา Serial Number"
                     type="search"
+                    onKeyDown={(event) => {
+                        if (event.code === "Enter") {
+                            onSearch(false);
+                        }
+                    }}
                     onInput={(e) => {
-                        if (e.target.value === "") onSearch(true);
+                        if (e.target.value === "") {
+                            onSearch(true);
+                        }
                     }}
                 />
             </Grid>

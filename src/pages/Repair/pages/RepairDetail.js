@@ -18,6 +18,7 @@ import {
     Popper,
     Grow,
     ClickAwayListener,
+    Skeleton,
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { MoreVert, Edit, Print, Delete, Feed } from "@mui/icons-material";
@@ -48,7 +49,7 @@ const options = [
     { name: "Delete", icon: <Delete /> },
 ];
 
-const RepairDetail = () => {
+const RepairDetail = (roleUser) => {
     const { handleSubmit, control, setValue, register } = useForm();
     const { id } = useParams();
     const dispatch = useDispatch();
@@ -134,6 +135,7 @@ const RepairDetail = () => {
     }, [district, province, setValue, subdistrict, zipcode, id]);
 
     useEffect(() => {
+        console.log("error", error);
         dispatch(getAllBrand());
         dispatch(getAllStatus());
         if (id !== "new") {
@@ -175,6 +177,9 @@ const RepairDetail = () => {
         if (!subdistrict || !district || !province || !zipcode) {
             setError("กรุณากรอกข้อมูลให้ครบ");
             return;
+        }
+        if (!error) {
+            setLoading(true);
         }
 
         if (id === "new") {
@@ -407,40 +412,67 @@ const RepairDetail = () => {
                         </Grid>
                     )}
                 </Grid>
-                <CustomerDetail
-                    onEdit={onEdit}
-                    register={register}
-                    setSubDistrict={setSubDistrict}
-                    setDistrict={setDistrict}
-                    setProvince={setProvince}
-                    setZipcode={setZipcode}
-                    subdistrict={subdistrict}
-                    zipcode={zipcode}
-                    district={district}
-                    province={province}
-                    onError={onError}
-                    control={control}
-                    error={error}
-                    setError={setError}
-                    onSelect={onSelect}
-                />
-                <ProductDetail
-                    id={id}
-                    onEdit={onEdit}
-                    onError={onError}
-                    control={control}
-                    error={error}
-                    setError={setError}
-                    onSelectReturnDate={onSelectReturnDate}
-                    onSelectReceivedDate={onSelectReceivedDate}
-                    brandList={brandList}
-                    statusList={statusList}
-                    receivedDate={receivedDate}
-                    setReceivedDate={setReceivedDate}
-                    returnDate={returnDate}
-                    setReturnDate={setReturnDate}
-                />
-                {id === "new" ? "" : <HistoryTableDetail id={id} />}
+                {loading ? (
+                    <Stack spacing={1}>
+                        <Skeleton variant="text" height={30} width={150} />
+                        <Skeleton
+                            variant="rectangular"
+                            width={"100%"}
+                            height={300}
+                        />
+                       <Skeleton variant="text" height={30} width={150} />
+                        <Skeleton
+                            variant="rectangular"
+                            width={"100%"}
+                            height={300}
+                        />
+                       <Skeleton variant="text" height={30} width={150} />
+                        <Skeleton
+                            variant="rectangular"
+                            width={"100%"}
+                            height={300}
+                        />
+                    </Stack>
+                ) : (
+                    <>
+                        <CustomerDetail
+                            roleUser={roleUser}
+                            onEdit={onEdit}
+                            register={register}
+                            setSubDistrict={setSubDistrict}
+                            setDistrict={setDistrict}
+                            setProvince={setProvince}
+                            setZipcode={setZipcode}
+                            subdistrict={subdistrict}
+                            zipcode={zipcode}
+                            district={district}
+                            province={province}
+                            onError={onError}
+                            control={control}
+                            error={error}
+                            setError={setError}
+                            onSelect={onSelect}
+                        />
+                        <ProductDetail
+                            roleUser={roleUser}
+                            id={id}
+                            onEdit={onEdit}
+                            onError={onError}
+                            control={control}
+                            error={error}
+                            setError={setError}
+                            onSelectReturnDate={onSelectReturnDate}
+                            onSelectReceivedDate={onSelectReceivedDate}
+                            brandList={brandList}
+                            statusList={statusList}
+                            receivedDate={receivedDate}
+                            setReceivedDate={setReceivedDate}
+                            returnDate={returnDate}
+                            setReturnDate={setReturnDate}
+                        />
+                        {id === "new" ? "" : <HistoryTableDetail id={id} />}
+                    </>
+                )}
                 <Stack
                     direction="row"
                     justifyContent="space-between"
@@ -473,7 +505,9 @@ const RepairDetail = () => {
                         >
                             Submit
                         </LoadingButton>
-                    ):''}
+                    ) : (
+                        ""
+                    )}
                 </Stack>
                 <ConfirmDialog
                     open={openConfirmRemoveRepair}

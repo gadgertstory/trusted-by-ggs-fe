@@ -22,6 +22,7 @@ const CustomerDetail = (props) => {
         setError,
         onSelect,
         onEdit,
+        roleUser
     } = props;
     return (
         <Paper
@@ -44,7 +45,7 @@ const CustomerDetail = (props) => {
                             fieldState: { error },
                         }) => (
                             <Input
-                                disabled={!onEdit}
+                                disabled={!onEdit || roleUser.roleUser.role ==='user'}
                                 required={true}
                                 fullWidth
                                 label="ชื่อ"
@@ -70,7 +71,7 @@ const CustomerDetail = (props) => {
                             fieldState: { error },
                         }) => (
                             <Input
-                                disabled={!onEdit}
+                                disabled={!onEdit || roleUser.roleUser.role ==='user'}
                                 required={true}
                                 fullWidth
                                 label="นามสกุล"
@@ -96,19 +97,26 @@ const CustomerDetail = (props) => {
                             fieldState: { error },
                         }) => (
                             <Input
-                                disabled={!onEdit}
+                                disabled={!onEdit || roleUser.roleUser.role ==='user'}
                                 required={true}
                                 fullWidth
                                 label="เบอร์โทรศัพท์"
                                 value={value}
                                 onChange={onChange}
                                 error={!!error}
-                                type="number"
+                                type="string"
+                                inputProps={{
+                                    maxLength: 10,
+                                }}
                                 helperText={error ? error.message : null}
                             />
                         )}
                         rules={{
                             required: "กรุณากรอกเบอร์โทรศัพท์",
+                            pattern: {
+                                value: /^[0-9]+$/,
+                                message: 'กรุณาใส่ตัวเลขเท่านั้น',
+                              },
                         }}
                     />
                 </Grid>
@@ -122,7 +130,7 @@ const CustomerDetail = (props) => {
                             fieldState: { error },
                         }) => (
                             <Input
-                                disabled={!onEdit}
+                                disabled={!onEdit || roleUser.roleUser.role ==='user'}
                                 onChange={onChange}
                                 value={value}
                                 required
@@ -145,7 +153,7 @@ const CustomerDetail = (props) => {
                         แขวง / ตำบล*
                     </Typography>
                     <ThailandAddress
-                        disabled={!onEdit}
+                        disabled={!onEdit || roleUser.roleUser.role ==='user'}
                         style={{ width: "100%" }}
                         address="subdistrict"
                         value={subdistrict}

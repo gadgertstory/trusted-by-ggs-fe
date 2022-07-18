@@ -37,6 +37,7 @@ const HistoryTableDetail = () => {
                     actionsColumnIndex: -1,
                     pageSize: 5,
                     toolbar: false,
+                    sorting: false
                     // maxBodyHeight: "50vh",
                     // headerStyle: { position: 'sticky', top: 0 }
                 }}
