@@ -17,8 +17,8 @@ import Repair from "../../middleware/repair";
 import actionHandler from "../../middleware/action_handler";
 import { history } from "../../helpers/history";
 
-export const createRepair = (data) => (dispatch) => {
-    return Repair.createRepair(data)
+export const createRepair = (data) => async (dispatch) => {
+   await Repair.createRepair(data)
         .then((data) => {
             dispatch({
                 type: CREATE_REPAIR_SUCCESS,
@@ -32,7 +32,7 @@ export const createRepair = (data) => (dispatch) => {
                 history.push("/repair"),
                 setTimeout(function () {
                     window.location.reload();
-                }, 1000 * 2)
+                }, 1000 * 1.5)
             );
         })
         .catch((error) => {
@@ -72,10 +72,10 @@ export const updateRepair = (id, data) => async (dispatch) => {
                 actionHandler({
                     successMessage: "Update Repair Success",
                 }),
-                history.push("/repair"),
+                // history.push("/repair"),
                 setTimeout(function () {
                     window.location.reload();
-                }, 1000 * 2)
+                }, 1000 * 1.5)
             );
         })
         .catch((error) => {
@@ -166,7 +166,7 @@ export const deleteRepair = (id) => async (dispatch) => {
                 history.push("/repair"),
                 setTimeout(function () {
                     window.location.reload();
-                }, 1000 * 2)
+                }, 1000 * 1.5)
             );
         })
         .catch((error) => {

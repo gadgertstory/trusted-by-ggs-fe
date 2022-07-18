@@ -31,6 +31,7 @@ const ProductDetail = (props) => {
         onEdit,
         brandList,
         statusList,
+        roleUser
     } = props;
 
     const handleReceivedDateChange = (receivedDate) => {
@@ -65,7 +66,7 @@ const ProductDetail = (props) => {
                             fieldState: { error },
                         }) => (
                             <Input
-                                disabled={!onEdit}
+                                disabled={!onEdit || roleUser.roleUser.role ==='user'}
                                 onChange={onChange}
                                 value={value}
                                 required
@@ -124,7 +125,7 @@ const ProductDetail = (props) => {
                                     Brand
                                 </InputLabel>
                                 <Select
-                                    disabled={!onEdit}
+                                    disabled={!onEdit || roleUser.roleUser.role ==='user'}
                                     size="small"
                                     value={value}
                                     label="Brand"
@@ -256,7 +257,7 @@ const ProductDetail = (props) => {
                             inputFormat="dd/MM/yyyy"
                             value={returnDate}
                             onChange={handleReturnDateChange}
-                            disabled={!onEdit}
+                            disabled={!onEdit || roleUser.roleUser.role ==='user'}
                             renderInput={(params) => (
                                 <TextField fullWidth size="small" {...params} />
                             )}

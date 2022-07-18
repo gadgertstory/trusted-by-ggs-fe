@@ -109,9 +109,7 @@ const App = () => {
                                                     <Container
                                                         maxWidth={
                                                             index.pathname ===
-                                                            "*"
-                                                                ? "xl"
-                                                                : "lg"
+                                                            "xl"
                                                         }
                                                         sx={{ mt: 4, mb: 4 }}
                                                     >

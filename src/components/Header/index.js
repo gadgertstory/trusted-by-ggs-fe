@@ -96,7 +96,7 @@ const ResponsiveAppBar = (currentUser) => {
 
     return (
         <AppBar position="static">
-            <Container maxWidth="lg">
+            <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <ConstructionIcon
                         sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
@@ -172,7 +172,7 @@ const ResponsiveAppBar = (currentUser) => {
                     {/* ==========================Menu Responsive=========================== */}
 
                     <ConstructionIcon
-                        sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
+                        sx={{ display: { xs: "flex", md: "none" },fontSize:40, mr: 1 }}
                     />
 
                     <Typography
@@ -183,12 +183,14 @@ const ResponsiveAppBar = (currentUser) => {
                         sx={{
                             mr: 2,
                             display: { xs: "flex", md: "none" },
+                            direction:  "flex-wrap",
                             flexGrow: 1,
                             fontFamily: "monospace",
                             fontWeight: 700,
-                            letterSpacing: ".3rem",
+                            letterSpacing: ".2rem",
                             color: "inherit",
                             textDecoration: "none",
+                            whiteSpace:'pre-wrap'
                         }}
                     >
                         Repair System
@@ -221,7 +223,7 @@ const ResponsiveAppBar = (currentUser) => {
 
                     {/* ============================Setting==========================      */}
 
-                    <Box sx={{ flexGrow: 0 }}>
+                    <Box sx={{ flexGrow: 0,display:'flex',justifyContent:'center', alignItems:'center' }}>
                             {dataUser.currentUser.data.name.toUpperCase()}
                         <Tooltip title="Open settings">
                             <IconButton
