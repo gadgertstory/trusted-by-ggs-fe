@@ -56,7 +56,7 @@ const RepairTable = (roleUser) => {
             const _keyword = isClear ? "" : keyword;
             const params = {
                 status_no: status,
-                customer_firstname: _keyword,
+                customer_name: _keyword,
             };
 
             if (status === 0 && _keyword === "") {
@@ -127,69 +127,32 @@ const RepairTable = (roleUser) => {
                     },
                     { title: "เลขที่ใบแจ้งซ่อม", field: "repair_no" },
                     {
-                        title: "Serial number",
+                        title: "ชื่อ - นามสกุล",
                         render: (rowData) => (
                             <Box
                                 sx={{
                                     textOverflow: "ellipsis",
                                     whiteSpace: "nowrap",
                                     overflow: "hidden",
-                                    maxWidth: 100,
+                                    maxWidth: 150,
                                 }}
                             >
-                                {rowData.product_serial_no}
+                                {rowData.customer_firstname} {rowData.customer_lastname}
                             </Box>
                         ),
                     },
                     {
-                        title: "ชื่อ",
-                        // field: "customer_firstname",
+                        title: "Brand",
                         render: (rowData) => (
                             <Box
                                 sx={{
                                     textOverflow: "ellipsis",
                                     whiteSpace: "nowrap",
                                     overflow: "hidden",
-                                    maxWidth: 100,
+                                    maxWidth: 150,
                                 }}
                             >
-                                {rowData.customer_firstname}
-                            </Box>
-                        ),
-                    },
-                    {
-                        title: "นามสกุล",
-                        render: (rowData) => (
-                            <Box
-                                sx={{
-                                    textOverflow: "ellipsis",
-                                    whiteSpace: "nowrap",
-                                    overflow: "hidden",
-                                    maxWidth: 100,
-                                }}
-                            >
-                                {rowData.customer_lastname}
-                            </Box>
-                        ),
-                    },
-                    {
-                        title: "โทรศัพท์",
-                        field: "customer_tel",
-                        type: "numeric",
-                    },
-                    {
-                        title: "อุปกรณ์",
-                        // field: "product_name",
-                        render: (rowData) => (
-                            <Box
-                                sx={{
-                                    textOverflow: "ellipsis",
-                                    whiteSpace: "nowrap",
-                                    overflow: "hidden",
-                                    maxWidth: 100,
-                                }}
-                            >
-                                {rowData.product_name}
+                                {rowData.brand_name}
                             </Box>
                         ),
                     },
