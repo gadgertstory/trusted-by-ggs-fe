@@ -42,6 +42,7 @@ import { convertISOtoGMT } from "../../../utils/ConvertDate";
 import HistoryTableDetail from "../components/HistoryTableDetail";
 import ConfirmDialog from "../../../components/Dialog/ConfirmDialog";
 import PreviewPDF from "../../../utils/PreviewPDF";
+import Logo from "../../../assets/Logo/GadgetStory_logo.png";
 
 const options = [
     { name: "Edit", icon: <Edit /> },
@@ -83,6 +84,8 @@ const RepairDetail = (roleUser) => {
     const anchorRef = React.useRef(null);
     const [onEdit, setOnEdit] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(null);
+
+    const [dataUrl, setDataUrl] = useState();
 
     const fetch = useCallback(() => {
         Repair.fetchRepair(id).then((res) => {
@@ -135,9 +138,11 @@ const RepairDetail = (roleUser) => {
     }, [district, province, setValue, subdistrict, zipcode, id]);
 
     useEffect(() => {
-        console.log("error", error);
         dispatch(getAllBrand());
         dispatch(getAllStatus());
+        toDataURL(Logo, function (dataUrl) {
+            setDataUrl(dataUrl);
+        });
         if (id !== "new") {
             dispatch(getRepair(id));
             dispatch(getRepairPDF(id));
@@ -248,6 +253,20 @@ const RepairDetail = (roleUser) => {
         );
     };
 
+    const toDataURL = (url, callback) => {
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                callback(reader.result);
+            };
+            reader.readAsDataURL(xhr.response);
+        };
+        xhr.open("GET", url);
+        xhr.responseType = "blob";
+        xhr.send();
+    };
+
     const handleMenuItemClick = (event, index, option) => {
         if (option.name === "Edit") {
             setOnEdit(true);
@@ -255,7 +274,7 @@ const RepairDetail = (roleUser) => {
         } else if (option.name === "Delete") {
             setOpenConfirmRemoveRepair(true);
         } else {
-            PreviewPDF(dataRepairPDF);
+            PreviewPDF(dataRepairPDF, dataUrl);
         }
         setOpen(false);
     };
@@ -420,13 +439,13 @@ const RepairDetail = (roleUser) => {
                             width={"100%"}
                             height={300}
                         />
-                       <Skeleton variant="text" height={30} width={150} />
+                        <Skeleton variant="text" height={30} width={150} />
                         <Skeleton
                             variant="rectangular"
                             width={"100%"}
                             height={300}
                         />
-                       <Skeleton variant="text" height={30} width={150} />
+                        <Skeleton variant="text" height={30} width={150} />
                         <Skeleton
                             variant="rectangular"
                             width={"100%"}

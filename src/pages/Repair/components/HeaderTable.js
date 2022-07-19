@@ -33,7 +33,7 @@ const HeaderTable = (props) => {
                     onChange={onChangeKeyword}
                     value={keyword}
                     fullWidth={true}
-                    label="ค้นหา Serial Number"
+                    label="ค้นหาจาก ชื่อ"
                     type="search"
                     onKeyDown={(event) => {
                         if (event.code === "Enter") {

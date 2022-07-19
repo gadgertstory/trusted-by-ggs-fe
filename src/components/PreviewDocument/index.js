@@ -15,6 +15,7 @@ import {
 import MaterialTable from "material-table";
 
 import Repair from "../../middleware/repair";
+import Logo from "../../assets/Logo/GadgetStory_logo.png";
 
 const PreviewDocument = () => {
     const id = useParams();
@@ -33,9 +34,11 @@ const PreviewDocument = () => {
         const _newData = dataRepair.histories;
         const _newDataDate = _newData?.map((index) => ({
             ...index,
-            process_date: new Date(index.process_date).toLocaleString("th-TH",{ timeZone: "UTC" }), // just for example
+            process_date: new Date(index.process_date).toLocaleString("th-TH", {
+                timeZone: "UTC",
+            }), // just for example
         }));
-        setDataHistory(_newDataDate)
+        setDataHistory(_newDataDate);
     }, [dataRepair]);
 
     return (
@@ -55,11 +58,22 @@ const PreviewDocument = () => {
                             display: "flex",
                             flexDirection: "column",
                             mb: 3,
+                            borderLeft:`solid .25rem ${theme.palette.lightBlue[800]}`
                         }}
                     >
+                        <Box
+                            component="img"
+                            sx={{ width: 150, mb: 2 }}
+                            src={Logo}
+                            alt={Logo}
+                        ></Box>
                         <Typography
                             variant="h5"
-                            sx={{ mb: 2, fontWeight: 600 }}
+                            sx={{
+                                mb: 2,
+                                fontWeight: 600,
+                                color: theme.palette.lightBlue[800],
+                            }}
                         >
                             รายละเอียดลูกค้า
                         </Typography>
@@ -110,11 +124,16 @@ const PreviewDocument = () => {
                             display: "flex",
                             flexDirection: "column",
                             mb: 3,
+                            borderLeft:`solid .25rem ${theme.palette.lightBlue[800]}`
                         }}
                     >
                         <Typography
                             variant="h5"
-                            sx={{ mb: 2, fontWeight: 600 }}
+                            sx={{
+                                mb: 2,
+                                fontWeight: 600,
+                                color: theme.palette.lightBlue[800],
+                            }}
                         >
                             รายละเอียดการซ่อม
                         </Typography>

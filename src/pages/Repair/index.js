@@ -14,7 +14,6 @@ const Repair = () => {
         <Routes>
             <Route path=":id" element={<RepairDetail roleUser={roleUser} />} />
             <Route path="/" element={<RepairTable roleUser={roleUser} />} />
-            {/* <Route path=":id*" element={<NotFound />} /> */}
             <Route path="*" element={<NotFound />} />
         </Routes>
     );
