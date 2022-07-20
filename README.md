@@ -1,5 +1,5 @@
 # ggsrepair-frontend
 Gadgetstory Repair system
 
-DEV Environment
-http://frontend-dev.ggs-dev.th1.proen.cloud
+🔗 <a href="https://repair-frontend-dev.gadgetstory.co.th/">DEV Environment<a/>
+
