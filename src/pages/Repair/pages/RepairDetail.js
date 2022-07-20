@@ -43,6 +43,7 @@ import HistoryTableDetail from "../components/HistoryTableDetail";
 import ConfirmDialog from "../../../components/Dialog/ConfirmDialog";
 import PreviewPDF from "../../../utils/PreviewPDF";
 import Logo from "../../../assets/Logo/GadgetStory_logo.png";
+import ConvertBase64 from '../../../utils/ConvertBase64'
 
 const options = [
     { name: "Edit", icon: <Edit /> },
@@ -140,7 +141,7 @@ const RepairDetail = (roleUser) => {
     useEffect(() => {
         dispatch(getAllBrand());
         dispatch(getAllStatus());
-        toDataURL(Logo, function (dataUrl) {
+        ConvertBase64(Logo, function (dataUrl) {
             setDataUrl(dataUrl);
         });
         if (id !== "new") {
@@ -251,20 +252,6 @@ const RepairDetail = (roleUser) => {
                 )}
             </>
         );
-    };
-
-    const toDataURL = (url, callback) => {
-        var xhr = new XMLHttpRequest();
-        xhr.onload = function () {
-            var reader = new FileReader();
-            reader.onloadend = function () {
-                callback(reader.result);
-            };
-            reader.readAsDataURL(xhr.response);
-        };
-        xhr.open("GET", url);
-        xhr.responseType = "blob";
-        xhr.send();
     };
 
     const handleMenuItemClick = (event, index, option) => {

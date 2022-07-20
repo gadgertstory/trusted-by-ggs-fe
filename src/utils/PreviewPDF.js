@@ -68,7 +68,7 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
                         โทรศัพท์: ${ObjData.customer_tel}`,
                     },
                     {
-                        text: `เลขที่ใบแจ้งซ่อม: ${ObjData.repair_id}
+                        text: `เลขที่ใบแจ้งซ่อม: ${ObjData.repair_no}
                         วันที่ทำรายการ : ${ThaiReceivedDate}`,
                     },
                 ],

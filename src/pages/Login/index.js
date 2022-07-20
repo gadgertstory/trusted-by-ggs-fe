@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch, /* useSelector */ } from "react-redux";
+import { useDispatch } from "react-redux";
 // import { Navigate } from "react-router-dom";
 
 import Avatar from "@mui/material/Avatar";
@@ -14,10 +14,14 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
-import { FormControl, IconButton, InputAdornment,FormHelperText } from "@mui/material";
+import {
+    FormControl,
+    IconButton,
+    InputAdornment,
+    FormHelperText,
+} from "@mui/material";
 
 import { login } from "../../services/actions/auth";
-import { history } from "../../helpers/history";
 
 //button
 
@@ -43,7 +47,7 @@ function Copyright(props) {
 
 const LogIn = () => {
     const dispatch = useDispatch();
-    const [loading, setLoading] = useState(false);
+    const [loading] = useState(false);
     const { handleSubmit, control } = useForm();
 
     // const { isLoggedIn } = useSelector((state) => state.auth);
@@ -67,17 +71,8 @@ const LogIn = () => {
     const onSubmit = (data) => {
         const loginUser = data;
 
-        setLoading(true);
-
         if (loginUser) {
-            dispatch(login(loginUser))
-                .then(() => {
-                    history.push("/");
-                    window.location.reload();
-                })
-                .catch(() => {
-                    setLoading(false);
-                });
+            dispatch(login(loginUser));
         }
     };
 
@@ -143,8 +138,8 @@ const LogIn = () => {
                             <FormControl
                                 fullWidth
                                 variant="outlined"
-                                error={error}
-                                sx={{mt:2}}
+                                error={!!error}
+                                sx={{ mt: 2 }}
                             >
                                 <InputLabel htmlFor="outlined-adornment-password">
                                     Password *
@@ -181,7 +176,9 @@ const LogIn = () => {
                                     }
                                     label="Password *"
                                 />
-                            <FormHelperText id="filled-weight-helper-text">{error ? error.message : null}</FormHelperText>
+                                <FormHelperText id="filled-weight-helper-text">
+                                    {error ? error.message : null}
+                                </FormHelperText>
                             </FormControl>
                         )}
                         rules={{ required: "Password required" }}
