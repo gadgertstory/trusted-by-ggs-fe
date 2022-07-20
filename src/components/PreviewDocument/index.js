@@ -78,6 +78,17 @@ const PreviewDocument = () => {
                             รายละเอียดลูกค้า
                         </Typography>
                         <Grid container spacing={2}>
+                        <Grid item xs={12} md={6}>
+                                <Typography
+                                    variant="h6"
+                                    sx={{ fontWeight: 600 }}
+                                >
+                                    เลขที่ใบแจ้งซ่อม
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                {dataRepair.repair_no}
+                            </Grid>
                             <Grid item xs={12} md={6}>
                                 <Typography
                                     variant="h6"
@@ -110,11 +121,11 @@ const PreviewDocument = () => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                {dataRepair.customer_house_no} ,
-                                {dataRepair.customer_subdistrict} ,
-                                {dataRepair.customer_district} ,
-                                {dataRepair.customer_province} ,
-                                {dataRepair.customer_zipcode}
+                                {dataRepair.customer_house_no}{" "}
+                                ,{dataRepair.customer_subdistrict}{" "}
+                                ,{dataRepair.customer_district}{" "}
+                                ,{dataRepair.customer_province}{" "}
+                                ,{dataRepair.customer_zipcode}
                             </Grid>
                         </Grid>
                     </Paper>
@@ -202,7 +213,9 @@ const PreviewDocument = () => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                {dataRepair.received_date}
+                                {dataRepair.received_date.split("-")
+                                    .reverse()
+                                    .join("/")}
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <Typography
@@ -213,7 +226,9 @@ const PreviewDocument = () => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                {dataRepair.return_date}
+                                {dataRepair.return_date.split("-")
+                                    .reverse()
+                                    .join("/")}
                             </Grid>
                         </Grid>
                     </Paper>

@@ -1,6 +1,11 @@
 import React, { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    Navigate,
+} from "react-router-dom";
 
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../assets/theme";
@@ -52,8 +57,12 @@ const App = () => {
             element: <Repair />,
         },
         {
-            pathname: "*",
+            pathname: "/404",
             element: <NotFound />,
+        },
+        {
+            pathname: "*",
+            element: <Navigate replace to="/404" />,
         },
     ];
 
@@ -76,7 +85,11 @@ const App = () => {
                                 path={`/repair-document/:id`}
                                 element={<PreviewDocument />}
                             />
-                            <Route path="*" element={<NotFound />} />
+                            <Route path="/404" element={<NotFound />} />
+                            <Route
+                                path="*"
+                                element={<Navigate replace to="/404" />}
+                            />
                         </>
                     ) : (
                         <>
@@ -85,7 +98,6 @@ const App = () => {
                                     <React.Fragment key={index.pathname}>
                                         {index.pathname === "*" ? (
                                             <Route
-                                                exact
                                                 path={index.pathname}
                                                 element={index.element}
                                             />
