@@ -213,7 +213,7 @@ const PreviewDocument = () => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                {dataRepair.received_date.split("-")
+                                {dataRepair.received_date?.split("-")
                                     .reverse()
                                     .join("/")}
                             </Grid>
@@ -226,7 +226,7 @@ const PreviewDocument = () => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                {dataRepair.return_date.split("-")
+                                {dataRepair.return_date?.split("-")
                                     .reverse()
                                     .join("/")}
                             </Grid>
