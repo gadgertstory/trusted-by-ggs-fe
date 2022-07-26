@@ -476,7 +476,7 @@ const RepairDetail = (roleUser) => {
                             returnDate={returnDate}
                             setReturnDate={setReturnDate}
                         />
-                        {id === "new" ? "" : <HistoryTableDetail id={id} />}
+                        {id === "new" ? "" : <HistoryTableDetail dataRepair={dataRepairPDF} />}
                     </>
                 )}
                 <Stack

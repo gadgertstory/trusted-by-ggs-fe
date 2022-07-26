@@ -1,22 +1,23 @@
-import React, { useEffect,useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+// import { useSelector } from "react-redux";
 
 import MaterialTable from "material-table";
 import { Stack, Typography } from "@mui/material";
 
 import BadgeStatus from "../../../components/Badge";
 
-const HistoryTableDetail = () => {
-    const { dataRepair } = useSelector((state) => state.repair);
+const HistoryTableDetail = ({ dataRepair }) => {
     const [dataHistory, setDataHistory] = useState([]);
 
     useEffect(() => {
         const _newData = dataRepair.histories;
         const _newDataDate = _newData?.map((index) => ({
             ...index,
-            process_date: new Date(index.process_date).toLocaleString("en-GB",{ timeZone: "UTC" }), // just for example
+            process_date: new Date(index.process_date).toLocaleString("en-GB", {
+                timeZone: "UTC",
+            }), 
         }));
-        setDataHistory(_newDataDate)
+        setDataHistory(_newDataDate);
     }, [dataRepair]);
 
     return (
@@ -37,9 +38,7 @@ const HistoryTableDetail = () => {
                     actionsColumnIndex: -1,
                     pageSize: 5,
                     toolbar: false,
-                    sorting: false
-                    // maxBodyHeight: "50vh",
-                    // headerStyle: { position: 'sticky', top: 0 }
+                    sorting: false,
                 }}
                 title=""
                 columns={[
@@ -47,7 +46,9 @@ const HistoryTableDetail = () => {
                         title: "ลำดับ",
                         textAlign: "center",
                         render: (rowData) => (
-                            <Typography component="p" variant="p">{rowData.tableData.id + 1}</Typography>
+                            <Typography component="p" variant="p">
+                                {rowData.tableData.id + 1}
+                            </Typography>
                         ),
                     },
                     { title: "ผู้ปฏิบัติงาน", field: "user.user_name" },
