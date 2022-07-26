@@ -14,7 +14,7 @@ const HistoryTableDetail = () => {
         const _newData = dataRepair.histories;
         const _newDataDate = _newData?.map((index) => ({
             ...index,
-            process_date: new Date(index.process_date).toLocaleString("th-TH",{ timeZone: "UTC" }), // just for example
+            process_date: new Date(index.process_date).toLocaleString("en-GB",{ timeZone: "UTC" }), // just for example
         }));
         setDataHistory(_newDataDate)
     }, [dataRepair]);
