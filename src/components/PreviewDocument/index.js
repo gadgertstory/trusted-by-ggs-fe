@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../../assets/theme";
-// import BadgeStatus from "../Badge";
 import {
     CssBaseline,
     Container,
@@ -12,7 +11,6 @@ import {
     Paper,
     Box,
 } from "@mui/material";
-// import MaterialTable from "material-table";
 
 import Repair from "../../middleware/repair";
 import Logo from "../../assets/Logo/GadgetStory_logo.png";
