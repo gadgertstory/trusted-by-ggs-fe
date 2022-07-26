@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../../assets/theme";
-import BadgeStatus from "../Badge";
 import {
     CssBaseline,
     Container,
@@ -12,15 +11,14 @@ import {
     Paper,
     Box,
 } from "@mui/material";
-import MaterialTable from "material-table";
 
 import Repair from "../../middleware/repair";
 import Logo from "../../assets/Logo/GadgetStory_logo.png";
+import HistoryTableDetail from "../../pages/Repair/components/HistoryTableDetail";
 
 const PreviewDocument = () => {
     const id = useParams();
     const [dataRepair, setDataRepair] = useState({});
-    const [dataHistory, setDataHistory] = useState([]);
 
     useEffect(() => {
         Repair.fetchRepairPDFForCustomer(id.id)
@@ -29,17 +27,6 @@ const PreviewDocument = () => {
                 setDataRepair(data);
             });
     }, [id]);
-
-    useEffect(() => {
-        const _newData = dataRepair.histories;
-        const _newDataDate = _newData?.map((index) => ({
-            ...index,
-            process_date: new Date(index.process_date).toLocaleString("th-TH", {
-                timeZone: "UTC",
-            }), // just for example
-        }));
-        setDataHistory(_newDataDate);
-    }, [dataRepair]);
 
     return (
         <ThemeProvider theme={theme}>
@@ -232,58 +219,7 @@ const PreviewDocument = () => {
                             </Grid>
                         </Grid>
                     </Paper>
-                    <MaterialTable
-                        options={{
-                            search: false,
-                            actionsColumnIndex: -1,
-                            pageSize: 5,
-                            toolbar: false,
-                        }}
-                        title=""
-                        columns={[
-                            { title: "ผู้ปฏิบัติงาน", field: "user.user_name" },
-                            {
-                                title: "สถานะการซ่อม",
-                                align: "center",
-                                cellStyle: {
-                                    textAlign: "center",
-                                },
-                                render: (rowData) => (
-                                    <BadgeStatus
-                                        badgeContent={
-                                            rowData.status.status_name
-                                        }
-                                    ></BadgeStatus>
-                                ),
-                                textOverflow: "ellipsis",
-                            },
-                            {
-                                title: "วันที่ทำรายการ",
-                                field: "process_date",
-                                textOverflow: "ellipsis",
-                            },
-                            {
-                                title: "รายละเอียดการซ่อม",
-                                field: "description",
-                                textOverflow: "ellipsis",
-                            },
-                        ]}
-                        data={dataHistory}
-                        localization={{
-                            body: {
-                                emptyDataSourceMessage: (
-                                    <h1
-                                        style={{
-                                            top: "50%",
-                                            textAlign: "center",
-                                        }}
-                                    >
-                                        ไม่พบข้อมูล
-                                    </h1>
-                                ),
-                            },
-                        }}
-                    />
+                  <HistoryTableDetail dataRepair={dataRepair}/>
                 </Container>
             </Box>
         </ThemeProvider>
