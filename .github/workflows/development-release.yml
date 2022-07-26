@@ -50,7 +50,7 @@ jobs:
         with:
           host: ${{ secrets.K8S_HOST_DEV }}
           username: ${{ secrets.K8S_USER_DEV }}
-          key: ${{ secrets.PROEN_KEY }}
+          key: ${{ secrets.PROEN_KEY_DEV }}
           port: ${{ secrets.K8S_PORT_DEV }}
           script: |
             kubectl delete -f /root/ggs/repairSystem/ggs-frontend.yaml && kubectl apply -f /root/ggs/repairSystem/ggs-frontend.yaml
