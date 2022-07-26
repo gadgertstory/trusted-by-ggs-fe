@@ -18,17 +18,18 @@ pdfMake.fonts = {
     },
 };
 
-const PreviewPDF = (dataRepairPDF) => {
+const PreviewPDF = (dataRepairPDF, dataUrl) => {
     const ObjData = dataRepairPDF;
-    // const received_date = new Date(ObjData.received_date);
+
+    const received_date = new Date(ObjData.received_date);
     const return_date = new Date(ObjData.return_date);
 
-    // const ThaiReceivedDate = received_date.toLocaleDateString("th-TH", {
-    //     year: "numeric",
-    //     month: "long",
-    //     day: "numeric",
-    //     weekday: "long",
-    // });
+    const ThaiReceivedDate = received_date.toLocaleDateString("th-TH", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        weekday: "long",
+    });
 
     const ThaiReturnDate = return_date.toLocaleDateString("th-TH", {
         year: "numeric",
@@ -36,11 +37,25 @@ const PreviewPDF = (dataRepairPDF) => {
         day: "numeric",
         weekday: "long",
     });
+
     var docDefinition = {
         content: [
             {
-                text: "ใบรับซ่อมสินค้า",
-                style: ["FontSize20", "Bold", "AlignCenter"],
+                columns: [
+                    {
+                        image: `${dataUrl}`,
+                        width: 100,
+                    },
+                    {
+                        text: "ใบรับซ่อมสินค้า",
+                        style: ["FontSize20", "Bold", "AlignCenter"],
+                    },
+                    {
+                        image: `${ObjData.QRCode}`,
+                        width: 100,
+                        // margin: [left, top, right, bottom]
+                    },
+                ],
             },
             {
                 text: `${ObjData.customer_firstname} ${ObjData.customer_lastname}`,
@@ -49,27 +64,16 @@ const PreviewPDF = (dataRepairPDF) => {
             {
                 columns: [
                     {
-                        text: `${ObjData.customer_house_no} ${ObjData.customer_subdistrict} ${ObjData.customer_district}
-                ${ObjData.customer_province} ${ObjData.customer_zipcode}
-                โทรศัพท์ ${ObjData.customer_tel}`,
-                        margin: [0, 5],
+                        text: `${ObjData.customer_house_no} ${ObjData.customer_subdistrict} ${ObjData.customer_district} ${ObjData.customer_province} ${ObjData.customer_zipcode}
+                        โทรศัพท์: ${ObjData.customer_tel}`,
                     },
                     {
-                        image: `${ObjData.QRCode}`,
-                        width: 100,
-                        // margin: [left, top, right, bottom]
-                        margin: [0, -40],
+                        text: `เลขที่ใบแจ้งซ่อม: ${ObjData.repair_no}
+                        วันที่ทำรายการ : ${ThaiReceivedDate}`,
                     },
                 ],
             },
-            // `\n`,
-            // `\n`,
-            // {
-            //     columns: [
-            //         `วันที่ทำรายการ : ${ThaiReceivedDate}`,
-            //         `http://192.168.1.107:8080/qr-code/detail/${ObjData.repair_no} (เปลี่ยนเป็นหน้าfrontendรายละเอียดทีหลัง)`,
-            //     ],
-            // },
+            `\n`,
             {
                 table: {
                     headerRows: 1,

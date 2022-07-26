@@ -37,11 +37,19 @@ const HistoryTableDetail = () => {
                     actionsColumnIndex: -1,
                     pageSize: 5,
                     toolbar: false,
+                    sorting: false
                     // maxBodyHeight: "50vh",
                     // headerStyle: { position: 'sticky', top: 0 }
                 }}
                 title=""
                 columns={[
+                    {
+                        title: "ลำดับ",
+                        textAlign: "center",
+                        render: (rowData) => (
+                            <Typography component="p" variant="p">{rowData.tableData.id + 1}</Typography>
+                        ),
+                    },
                     { title: "ผู้ปฏิบัติงาน", field: "user.user_name" },
                     {
                         title: "สถานะการซ่อม",

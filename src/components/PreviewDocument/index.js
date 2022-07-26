@@ -15,6 +15,7 @@ import {
 import MaterialTable from "material-table";
 
 import Repair from "../../middleware/repair";
+import Logo from "../../assets/Logo/GadgetStory_logo.png";
 
 const PreviewDocument = () => {
     const id = useParams();
@@ -33,9 +34,11 @@ const PreviewDocument = () => {
         const _newData = dataRepair.histories;
         const _newDataDate = _newData?.map((index) => ({
             ...index,
-            process_date: new Date(index.process_date).toLocaleString("th-TH",{ timeZone: "UTC" }), // just for example
+            process_date: new Date(index.process_date).toLocaleString("th-TH", {
+                timeZone: "UTC",
+            }), // just for example
         }));
-        setDataHistory(_newDataDate)
+        setDataHistory(_newDataDate);
     }, [dataRepair]);
 
     return (
@@ -55,15 +58,37 @@ const PreviewDocument = () => {
                             display: "flex",
                             flexDirection: "column",
                             mb: 3,
+                            borderLeft:`solid .25rem ${theme.palette.lightBlue[800]}`
                         }}
                     >
+                        <Box
+                            component="img"
+                            sx={{ width: 150, mb: 2 }}
+                            src={Logo}
+                            alt={Logo}
+                        ></Box>
                         <Typography
                             variant="h5"
-                            sx={{ mb: 2, fontWeight: 600 }}
+                            sx={{
+                                mb: 2,
+                                fontWeight: 600,
+                                color: theme.palette.lightBlue[800],
+                            }}
                         >
                             รายละเอียดลูกค้า
                         </Typography>
                         <Grid container spacing={2}>
+                        <Grid item xs={12} md={6}>
+                                <Typography
+                                    variant="h6"
+                                    sx={{ fontWeight: 600 }}
+                                >
+                                    เลขที่ใบแจ้งซ่อม
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                {dataRepair.repair_no}
+                            </Grid>
                             <Grid item xs={12} md={6}>
                                 <Typography
                                     variant="h6"
@@ -96,11 +121,11 @@ const PreviewDocument = () => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                {dataRepair.customer_house_no} ,
-                                {dataRepair.customer_subdistrict} ,
-                                {dataRepair.customer_district} ,
-                                {dataRepair.customer_province} ,
-                                {dataRepair.customer_zipcode}
+                                {dataRepair.customer_house_no}{" "}
+                                ,{dataRepair.customer_subdistrict}{" "}
+                                ,{dataRepair.customer_district}{" "}
+                                ,{dataRepair.customer_province}{" "}
+                                ,{dataRepair.customer_zipcode}
                             </Grid>
                         </Grid>
                     </Paper>
@@ -110,11 +135,16 @@ const PreviewDocument = () => {
                             display: "flex",
                             flexDirection: "column",
                             mb: 3,
+                            borderLeft:`solid .25rem ${theme.palette.lightBlue[800]}`
                         }}
                     >
                         <Typography
                             variant="h5"
-                            sx={{ mb: 2, fontWeight: 600 }}
+                            sx={{
+                                mb: 2,
+                                fontWeight: 600,
+                                color: theme.palette.lightBlue[800],
+                            }}
                         >
                             รายละเอียดการซ่อม
                         </Typography>
@@ -183,7 +213,9 @@ const PreviewDocument = () => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                {dataRepair.received_date}
+                                {dataRepair.received_date?.split("-")
+                                    .reverse()
+                                    .join("/")}
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <Typography
@@ -194,7 +226,9 @@ const PreviewDocument = () => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                {dataRepair.return_date}
+                                {dataRepair.return_date?.split("-")
+                                    .reverse()
+                                    .join("/")}
                             </Grid>
                         </Grid>
                     </Paper>

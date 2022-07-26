@@ -23,7 +23,9 @@ const Input = (props) => {
         helperText,
         multiline,
         inputProps,
-        pattern
+        pattern,
+        onKeyDown,
+        onInput
     } = props;
     return (
         <FormControl fullWidth={fullWidth} sx={sx} style={{backgroundColor:'white'}}>
@@ -47,6 +49,8 @@ const Input = (props) => {
                 multiline={multiline}
                 inputProps={inputProps}
                 pattern={pattern}
+                onKeyDown={onKeyDown}
+                onInput={onInput}
             />
         </FormControl>
     );
@@ -60,6 +64,7 @@ Input.propTypes = {
     name:PropTypes.string,
     placeholder: PropTypes.string,
     onChange: PropTypes.func,
+    onKeyDown: PropTypes.func,
     required: PropTypes.bool,
     className: PropTypes.string,
     defaultValue: PropTypes.node,

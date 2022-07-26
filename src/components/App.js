@@ -1,9 +1,10 @@
-import React, { useEffect,useCallback } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     BrowserRouter as Router,
     Routes,
     Route,
+    Navigate,
 } from "react-router-dom";
 
 import { ThemeProvider } from "@mui/material/styles";
@@ -56,8 +57,12 @@ const App = () => {
             element: <Repair />,
         },
         {
-            pathname: "*",
+            pathname: "/404",
             element: <NotFound />,
+        },
+        {
+            pathname: "*",
+            element: <Navigate replace to="/404" />,
         },
     ];
 
@@ -65,7 +70,11 @@ const App = () => {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <Router history={history}>
-                {currentUser ? <Header logOut={logOut} currentUser={currentUser} /> : ""}
+                {currentUser ? (
+                    <Header logOut={logOut} currentUser={currentUser} />
+                ) : (
+                    ""
+                )}
                 <Routes>
                     {currentUser === null ? (
                         <>
@@ -76,51 +85,69 @@ const App = () => {
                                 path={`/repair-document/:id`}
                                 element={<PreviewDocument />}
                             />
-                            <Route path="*" element={<NotFound />} />
+                            <Route path="/404" element={<NotFound />} />
+                            <Route
+                                path="*"
+                                element={<Navigate replace to="/404" />}
+                            />
                         </>
                     ) : (
                         <>
                             {routeMapping.map((index) => {
                                 return (
-                                    <Route
-                                        key={index.pathname}
-                                        exact
-                                        path={index.pathname}
-                                        element={
-                                            <Box sx={{ display: "flex" }}>
-                                                <Box
-                                                    component="main"
-                                                    sx={{
-                                                        backgroundColor: (
-                                                            theme
-                                                        ) =>
-                                                            theme.palette
-                                                                .mode ===
-                                                            "light"
-                                                                ? theme.palette
-                                                                      .grey[100]
-                                                                : theme.palette
-                                                                      .grey[900],
-                                                        flexGrow: 1,
-                                                        height: "100vh",
-                                                        overflow: "auto",
-                                                    }}
-                                                >
-                                                    <Container
-                                                        maxWidth={
-                                                            index.pathname ===
-                                                            "*"
-                                                                ? "xl"
-                                                                : "lg"
-                                                        }
-                                                        sx={{ mt: 4, mb: 4 }}
+                                    <React.Fragment key={index.pathname}>
+                                        {index.pathname === "*" ? (
+                                            <Route
+                                                path={index.pathname}
+                                                element={index.element}
+                                            />
+                                        ) : (
+                                            <Route
+                                                exact
+                                                path={index.pathname}
+                                                element={
+                                                    <Box
+                                                        sx={{ display: "flex" }}
                                                     >
-                                                        {index.element}
-                                                    </Container>
-                                                </Box>
-                                            </Box>
-                                        }
-                                    />
+                                                        <Box
+                                                            component="main"
+                                                            sx={{
+                                                                backgroundColor:
+                                                                    (theme) =>
+                                                                        theme
+                                                                            .palette
+                                                                            .mode ===
+                                                                        "light"
+                                                                            ? theme
+                                                                                  .palette
+                                                                                  .grey[100]
+                                                                            : theme
+                                                                                  .palette
+                                                                                  .grey[900],
+                                                                flexGrow: 1,
+                                                                height: "100vh",
+                                                                overflow:
+                                                                    "auto",
+                                                            }}
+                                                        >
+                                                            <Container
+                                                                maxWidth={
+                                                                    index.pathname ===
+                                                                    "xl"
+                                                                }
+                                                                sx={{
+                                                                    mt: 4,
+                                                                    mb: 4,
+                                                                }}
+                                                            >
+                                                                {index.element}
+                                                            </Container>
+                                                        </Box>
+                                                    </Box>
+                                                }
+                                            />
+                                        )}
+                                    </React.Fragment>
                                 );
                             })}
                         </>
@@ -129,7 +156,7 @@ const App = () => {
                             <Route path="/mod" component={BoardModerator} />
                         <Route path="/admin" component={BoardAdmin} /> */}
                 </Routes>
-                <AuthVerify logOut={logOut}/>
+                <AuthVerify logOut={logOut} />
             </Router>
         </ThemeProvider>
     );

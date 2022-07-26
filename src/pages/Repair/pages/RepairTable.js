@@ -1,10 +1,10 @@
-import React, { useEffect,useCallback } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 
 import MaterialTable from "material-table";
 import { history } from "../../../helpers/history";
-import { Button, Stack, Typography } from "@mui/material";
+import { Button, Stack, Typography, Box } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import {
@@ -15,19 +15,19 @@ import { getAllStatus } from "../../../services/actions/status";
 import HeaderTable from "../components/HeaderTable";
 import BadgeStatus from "../../../components/Badge";
 
-const RepairTable = () => {
+const RepairTable = (roleUser) => {
     const dispatch = useDispatch();
     const { control } = useForm();
     const { dataAllRepair = [] } = useSelector((state) => state.repairs);
 
-    const [status, setStatus] = React.useState(0);
-    const [keyword, setKeyword] = React.useState("");
+    const [status, setStatus] = useState(0);
+    const [keyword, setKeyword] = useState("");
 
     useEffect(() => {
         dispatch(getAllStatus());
     }, [dispatch]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         handleSearch();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -56,7 +56,7 @@ const RepairTable = () => {
             const _keyword = isClear ? "" : keyword;
             const params = {
                 status_no: status,
-                serial_no: _keyword,
+                customer_name: _keyword,
             };
 
             if (status === 0 && _keyword === "") {
@@ -65,7 +65,7 @@ const RepairTable = () => {
                 dispatch(requestRepairSearch(params));
             }
         },
-        [keyword,status,dispatch]
+        [keyword, status, dispatch]
     );
 
     return (
@@ -78,20 +78,24 @@ const RepairTable = () => {
                 <Typography variant="h5" component="h1">
                     RepairTable
                 </Typography>
-                <Button
-                    sx={{
-                        bgcolor: "secondary.light",
-                        color: "background.default",
-                        ":hover": {
-                            bgcolor: "secondary.main",
-                        },
-                    }}
-                    variant="contained"
-                    startIcon={<AddCircleOutlineIcon />}
-                    onClick={handleCreateRepair}
-                >
-                    เพิ่มใบแจ้งซ่อม
-                </Button>
+                {roleUser.roleUser.role === "admin" ? (
+                    <Button
+                        sx={{
+                            bgcolor: "secondary.light",
+                            color: "background.default",
+                            ":hover": {
+                                bgcolor: "secondary.main",
+                            },
+                        }}
+                        variant="contained"
+                        startIcon={<AddCircleOutlineIcon />}
+                        onClick={handleCreateRepair}
+                    >
+                        เพิ่มใบแจ้งซ่อม
+                    </Button>
+                ) : (
+                    ""
+                )}
             </Stack>
             <HeaderTable
                 status={status}
@@ -105,65 +109,106 @@ const RepairTable = () => {
                 options={{
                     search: false,
                     actionsColumnIndex: -1,
-                    pageSize: 5,
+                    pageSize: 20,
+                    pageSizeOptions: [20, 40, 60, 80, 100],
                     toolbar: false,
+                    sorting:false
                     // maxBodyHeight: "50vh",
                     // headerStyle: { position: 'sticky', top: 0 }
                 }}
                 title=""
                 columns={[
-                    { title: "เลขที่ใบรับ", field: "repair_no" },
                     {
-                        title: "Serial number",
-                        field: "product_serial_no",
-                        textOverflow: "ellipsis",
+                        title: "ลำดับ",
+                        textAlign: "center",
+                        render: (rowData) => (
+                            <Typography component="p" variant="p">{rowData.tableData.id + 1}</Typography>
+                        ),
+                    },
+                    { title: "เลขที่ใบแจ้งซ่อม", field: "repair_no" },
+                    {
+                        title: "ชื่อ - นามสกุล",
+                        render: (rowData) => (
+                            <Box
+                                sx={{
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap",
+                                    overflow: "hidden",
+                                    maxWidth: 150,
+                                }}
+                            >
+                                {rowData.customer_firstname} {rowData.customer_lastname}
+                            </Box>
+                        ),
                     },
                     {
-                        title: "ชื่อ",
-                        field: "customer_firstname",
-                        textOverflow: "ellipsis",
-                    },
-                    {
-                        title: "นามสกุล",
-                        field: "customer_lastname",
-                        textOverflow: "ellipsis",
-                    },
-                    {
-                        title: "โทรศัพท์",
-                        field: "customer_tel",
-                        type: "numeric",
-                    },
-                    {
-                        title: "อุปกรณ์",
-                        field: "product_name",
-                        textOverflow: "ellipsis",
+                        title: "Brand",
+                        render: (rowData) => (
+                            <Box
+                                sx={{
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap",
+                                    overflow: "hidden",
+                                    maxWidth: 150,
+                                }}
+                            >
+                                {rowData.brand_name}
+                            </Box>
+                        ),
                     },
                     {
                         title: "วันที่รับซ่อม",
-                        field: "received_date",
+                        render: (rowData) => (
+                            <Box
+                                sx={{
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap",
+                                    overflow: "hidden",
+                                    maxWidth: 100,
+                                }}
+                            >
+                                {rowData.received_date
+                                    .split("-")
+                                    .reverse()
+                                    .join("/")}
+                            </Box>
+                        ),
                     },
                     {
                         title: "วันที่นัดรับ",
-                        field: "return_date",
+                        render: (rowData) => (
+                            <Box
+                                sx={{
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap",
+                                    overflow: "hidden",
+                                    maxWidth: 100,
+                                }}
+                            >
+                                {rowData.return_date
+                                    .split("-")
+                                    .reverse()
+                                    .join("/")}
+                            </Box>
+                        ),
                     },
                     {
                         title: "สถานะการซ่อม",
-                        align:'center',
-                                cellStyle: {
-                                    textAlign: "center",
-                                },
-                                render: (rowData) => (
-                                    <BadgeStatus
-                                        badgeContent={
-                                            rowData.status_name
-                                        }
-                                    ></BadgeStatus>
-                                ),
+                        align: "center",
+                        cellStyle: {
+                            textAlign: "center",
+                        },
+                        render: (rowData) => (
+                            <BadgeStatus
+                                badgeContent={rowData.status_name}
+                            ></BadgeStatus>
+                        ),
                     },
                 ]}
                 data={dataAllRepair}
                 actions={[
                     {
+                        title: " ",
                         icon: "visibility",
                         tooltip: "View Detail",
                         onClick: (e, rowData) => {
@@ -172,6 +217,9 @@ const RepairTable = () => {
                     },
                 ]}
                 localization={{
+                    header: {
+                        actions: " ",
+                    },
                     body: {
                         emptyDataSourceMessage: (
                             <h1

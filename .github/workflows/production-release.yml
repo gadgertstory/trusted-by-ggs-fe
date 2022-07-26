@@ -1,0 +1,57 @@
+name: Auto Deploy k8s when release main branch
+on:
+  release:
+    types:
+      - created
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@
+
+      # Set environment
+      - 
+        name: Set env FOR Production
+        if: github.event.release.target_commitish == 'main'
+        run: |
+          echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+          echo "ENVIRONMENT=Production" >> $GITHUB_ENV
+          echo "BRANCH_NAME=${{ github.event.release.target_commitish }}" >> $GITHUB_ENV
+      -
+        name: Show ENV
+        run: |
+          echo "ENVIRONMENT : ${{ env.ENVIRONMENT }}"
+          echo "TAG VERSION : ${{ env.RELEASE_VERSION }}"
+          echo "BRANCH NAME : ${{ env.BRANCH_NAME }}"
+      # Build & Push images
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          tags: |
+            itgadgetstory/ggs-repair-system-frontend:latest
+            itgadgetstory/ggs-repair-system-frontend:${{ env.RELEASE_VERSION }}
+      # Auto Deploy Code
+      - 
+        name: PROD deploy command
+        if: env.ENVIRONMENT == 'Production'
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.K8S_HOST_PROD }}
+          username: ${{ secrets.K8S_USER_PROD }}
+          key: ${{ secrets.PROEN_KEY }}
+          port: ${{ secrets.K8S_PORT_PROD }}
+          script: |
+            kubectl delete -f /root/ggs/repairSystem/ggs-frontend.yaml && kubectl apply -f /root/ggs/repairSystem/ggs-frontend.yaml
