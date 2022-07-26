@@ -9,7 +9,7 @@ jobs:
     steps:
       -
         name: Set up QEMU
-        uses: docker/setup-qemu-action@
+        uses: docker/setup-qemu-action@v2
 
       # Set environment
       - 
