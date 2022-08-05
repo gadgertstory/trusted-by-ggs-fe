@@ -9,7 +9,7 @@ const INITIAL_STATE = {
     isLoading: false,
 };
 
-const master = (state = INITIAL_STATE, action) => {
+const dashboard = (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case FETCH_DASHBOARD_REQUEST:
             return FETCH_DASHBOARD_REQUEST;
@@ -24,8 +24,8 @@ const master = (state = INITIAL_STATE, action) => {
                 isLoading: false,
             };
         default:
-            return state;
+            return { ...state };
     }
 };
 
-export default master;
+export default dashboard;

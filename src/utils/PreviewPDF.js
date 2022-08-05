@@ -18,9 +18,11 @@ pdfMake.fonts = {
     },
 };
 
+
+
 const PreviewPDF = (dataRepairPDF, dataUrl) => {
     const ObjData = dataRepairPDF;
-
+    
     const received_date = new Date(ObjData.received_date);
     const return_date = new Date(ObjData.return_date);
 
@@ -39,6 +41,9 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
     });
 
     var docDefinition = {
+        info: {
+            title: `${ObjData.repair_no}`,
+          },
         content: [
             {
                 columns: [

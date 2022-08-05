@@ -5,6 +5,7 @@ import {
     grey,
     red,
     teal,
+    indigo
 } from "@mui/material/colors";
 
 export const theme = createTheme({
@@ -68,6 +69,7 @@ export const theme = createTheme({
         grey,
         red,
         teal,
+        indigo,
         tonalOffset: 0.2,
     },
 });
