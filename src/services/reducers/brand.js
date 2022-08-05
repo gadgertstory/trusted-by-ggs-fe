@@ -9,7 +9,7 @@ const INITIAL_STATE = {
     isLoading: false,
 };
 
-const master = (state = INITIAL_STATE, action) => {
+const brand = (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case FETCH_BRAND_REQUEST:
             return FETCH_BRAND_REQUEST;
@@ -28,4 +28,4 @@ const master = (state = INITIAL_STATE, action) => {
     }
 };
 
-export default master;
+export default brand;

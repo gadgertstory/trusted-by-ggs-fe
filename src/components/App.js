@@ -90,10 +90,14 @@ const App = () => {
                                 path="*"
                                 element={<Navigate replace to="/404" />}
                             />
+                            <Route
+                                path={`/repair-document/*`}
+                                element={<Navigate replace to="/404" />}
+                            />
                         </>
                     ) : (
                         <>
-                            {routeMapping.map((index) => {
+                            {routeMapping?.map((index) => {
                                 return (
                                     <React.Fragment key={index.pathname}>
                                         {index.pathname === "*" ? (

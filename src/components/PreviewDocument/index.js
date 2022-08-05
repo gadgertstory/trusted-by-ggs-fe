@@ -15,6 +15,7 @@ import {
 import Repair from "../../middleware/repair";
 import Logo from "../../assets/Logo/GadgetStory_logo.png";
 import HistoryTableDetail from "../../pages/Repair/components/HistoryTableDetail";
+import { formatPhoneNumber } from "../../utils/FormatPhoneNumber";
 
 const PreviewDocument = () => {
     const id = useParams();
@@ -45,7 +46,7 @@ const PreviewDocument = () => {
                             display: "flex",
                             flexDirection: "column",
                             mb: 3,
-                            borderLeft:`solid .25rem ${theme.palette.lightBlue[800]}`
+                            borderLeft: `solid .25rem ${theme.palette.lightBlue[800]}`,
                         }}
                     >
                         <Box
@@ -65,7 +66,7 @@ const PreviewDocument = () => {
                             รายละเอียดลูกค้า
                         </Typography>
                         <Grid container spacing={2}>
-                        <Grid item xs={12} md={6}>
+                            <Grid item xs={12} md={6}>
                                 <Typography
                                     variant="h6"
                                     sx={{ fontWeight: 600 }}
@@ -74,7 +75,7 @@ const PreviewDocument = () => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                {dataRepair.repair_no}
+                                {dataRepair?.repair_no}
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <Typography
@@ -85,8 +86,7 @@ const PreviewDocument = () => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                {dataRepair.customer_firstname}{" "}
-                                {dataRepair.customer_lastname}
+                                {`${dataRepair?.customer_firstname} XXXXXXX`}
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <Typography
@@ -97,7 +97,9 @@ const PreviewDocument = () => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                {dataRepair.customer_tel}
+                                {formatPhoneNumber(
+                                    dataRepair.customer_tel
+                                )?.slice(0, 8) + "XXXX"}
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <Typography
@@ -108,11 +110,11 @@ const PreviewDocument = () => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                {dataRepair.customer_house_no}{" "}
-                                ,{dataRepair.customer_subdistrict}{" "}
-                                ,{dataRepair.customer_district}{" "}
-                                ,{dataRepair.customer_province}{" "}
-                                ,{dataRepair.customer_zipcode}
+                                {dataRepair?.customer_house_no} ,
+                                {dataRepair?.customer_subdistrict} ,
+                                {dataRepair?.customer_district} ,
+                                {dataRepair?.customer_province} ,
+                                {dataRepair?.customer_zipcode}
                             </Grid>
                         </Grid>
                     </Paper>
@@ -122,7 +124,7 @@ const PreviewDocument = () => {
                             display: "flex",
                             flexDirection: "column",
                             mb: 3,
-                            borderLeft:`solid .25rem ${theme.palette.lightBlue[800]}`
+                            borderLeft: `solid .25rem ${theme.palette.lightBlue[800]}`,
                         }}
                     >
                         <Typography
@@ -145,7 +147,7 @@ const PreviewDocument = () => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                {dataRepair.product_name}
+                                {dataRepair?.product_name}
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <Typography
@@ -156,7 +158,7 @@ const PreviewDocument = () => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                {dataRepair.product_serial_no}
+                                {dataRepair?.product_serial_no}
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <Typography
@@ -167,18 +169,18 @@ const PreviewDocument = () => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                {dataRepair.brand?.brand_name}
+                                {dataRepair?.brand?.brand_name}
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <Typography
                                     variant="h6"
                                     sx={{ fontWeight: 600 }}
                                 >
-                                    description
+                                    รายละเอียดการซ่อม
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                {dataRepair.description}
+                                {dataRepair?.description}
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <Typography
@@ -189,7 +191,7 @@ const PreviewDocument = () => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                {dataRepair.remark}
+                                {dataRepair?.remark}
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <Typography
@@ -200,7 +202,8 @@ const PreviewDocument = () => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                {dataRepair.received_date?.split("-")
+                                {dataRepair?.received_date
+                                    ?.split("-")
                                     .reverse()
                                     .join("/")}
                             </Grid>
@@ -213,13 +216,14 @@ const PreviewDocument = () => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                {dataRepair.return_date?.split("-")
+                                {dataRepair?.return_date
+                                    ?.split("-")
                                     .reverse()
                                     .join("/")}
                             </Grid>
                         </Grid>
                     </Paper>
-                  <HistoryTableDetail dataRepair={dataRepair}/>
+                    <HistoryTableDetail dataRepair={dataRepair} />
                 </Container>
             </Box>
         </ThemeProvider>
