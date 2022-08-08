@@ -43,7 +43,7 @@ import HistoryTableDetail from "../components/HistoryTableDetail";
 import ConfirmDialog from "../../../components/Dialog/ConfirmDialog";
 import PreviewPDF from "../../../utils/PreviewPDF";
 import Logo from "../../../assets/Logo/GadgetStory_logo.png";
-import ConvertBase64 from '../../../utils/ConvertBase64'
+import ConvertBase64 from "../../../utils/ConvertBase64";
 
 const options = [
     { name: "Edit", icon: <Edit /> },
@@ -79,6 +79,7 @@ const RepairDetail = (roleUser) => {
     //Date
     const [receivedDate, setReceivedDate] = useState("");
     const [returnDate, setReturnDate] = useState("");
+    const [notifiedDate, setNotifiedDate] = useState("");
 
     //Dropdown
     const [open, setOpen] = useState(false);
@@ -104,6 +105,7 @@ const RepairDetail = (roleUser) => {
                 });
                 setReceivedDate(convertISOtoGMT(dataRepair.received_date));
                 setReturnDate(convertISOtoGMT(dataRepair.return_date));
+                setNotifiedDate(convertISOtoGMT(dataRepair.notified_date));
                 setValue(
                     "customer_firstname",
                     dataRepair.customer_firstname || ""
@@ -134,6 +136,12 @@ const RepairDetail = (roleUser) => {
                     "status_id",
                     dataRepair.status[0].status.status_id || ""
                 );
+                setValue("receive_method", dataRepair.receive_method || "");
+                if (dataRepair.waranty_status === true) {
+                    setValue("waranty_status", (dataRepair.waranty_status = 0));
+                } else {
+                    setValue("waranty_status", (dataRepair.waranty_status = 1));
+                }
             }
         });
     }, [district, province, setValue, subdistrict, zipcode, id]);
@@ -163,6 +171,7 @@ const RepairDetail = (roleUser) => {
         setNewData({
             received_date: receivedDate,
             return_date: returnDate,
+            notified_date: notifiedDate,
             customer_subdistrict: subdistrict,
             customer_district: district,
             customer_province: province,
@@ -176,6 +185,7 @@ const RepairDetail = (roleUser) => {
         zipcode,
         receivedDate,
         returnDate,
+        notifiedDate,
         currentUser,
     ]);
 
@@ -190,7 +200,16 @@ const RepairDetail = (roleUser) => {
 
         if (id === "new") {
             const _data = Object.assign(data, newData);
-            dispatch(createRepair(_data));
+            if (_data.waranty_status === 0) {
+                return (
+                    (_data.waranty_status = true), dispatch(createRepair(_data))
+                );
+            } else {
+                return (
+                    (_data.waranty_status = false),
+                    dispatch(createRepair(_data))
+                );
+            }
         } else {
             const _data = Object.assign(data, newData);
             const _updateData = {
@@ -237,6 +256,11 @@ const RepairDetail = (roleUser) => {
 
     const onSelectReturnDate = (returnDate) => {
         setReturnDate(returnDate?.toISOString().split("T")[0]);
+        setError("");
+    };
+
+    const onSelectNotifiedDate = (notifiedDate) => {
+        setNotifiedDate(notifiedDate?.toISOString().split("T")[0]);
         setError("");
     };
 
@@ -469,14 +493,21 @@ const RepairDetail = (roleUser) => {
                             setError={setError}
                             onSelectReturnDate={onSelectReturnDate}
                             onSelectReceivedDate={onSelectReceivedDate}
+                            onSelectNotifiedDate={onSelectNotifiedDate}
                             brandList={brandList}
                             statusList={statusList}
                             receivedDate={receivedDate}
                             setReceivedDate={setReceivedDate}
                             returnDate={returnDate}
                             setReturnDate={setReturnDate}
+                            notifiedDate={notifiedDate}
+                            setNotifiedDate={setNotifiedDate}
                         />
-                        {id === "new" ? "" : <HistoryTableDetail dataRepair={dataRepairPDF} />}
+                        {id === "new" ? (
+                            ""
+                        ) : (
+                            <HistoryTableDetail dataRepair={dataRepairPDF} />
+                        )}
                     </>
                 )}
                 <Stack

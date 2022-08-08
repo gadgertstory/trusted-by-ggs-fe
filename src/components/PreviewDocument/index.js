@@ -110,11 +110,11 @@ const PreviewDocument = () => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                {dataRepair?.customer_house_no} ,
+                                XXXXX ,
                                 {dataRepair?.customer_subdistrict} ,
                                 {dataRepair?.customer_district} ,
                                 {dataRepair?.customer_province} ,
-                                {dataRepair?.customer_zipcode}
+                                XXXXX
                             </Grid>
                         </Grid>
                     </Paper>
