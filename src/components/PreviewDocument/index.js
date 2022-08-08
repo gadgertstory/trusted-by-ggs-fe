@@ -14,7 +14,8 @@ import {
 
 import Repair from "../../middleware/repair";
 import Logo from "../../assets/Logo/GadgetStory_logo.png";
-import HistoryTableDetail from "../../pages/Repair/components/HistoryTableDetail";
+import CustomizedTimeline from '../Timeline'
+// import HistoryTableDetail from "../../pages/Repair/components/HistoryTableDetail";
 import { formatPhoneNumber } from "../../utils/FormatPhoneNumber";
 
 const PreviewDocument = () => {
@@ -223,7 +224,8 @@ const PreviewDocument = () => {
                             </Grid>
                         </Grid>
                     </Paper>
-                    <HistoryTableDetail dataRepair={dataRepair} />
+                    <CustomizedTimeline dataRepair={dataRepair}/>
+                    {/* <HistoryTableDetail dataRepair={dataRepair} /> */}
                 </Container>
             </Box>
         </ThemeProvider>

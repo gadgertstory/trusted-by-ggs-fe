@@ -40,10 +40,13 @@ const styles = (theme) => ({
         backgroundColor: "#00bfa5",
         color: "white",
     },
+    badgeSpace:{
+        whiteSpace:'nowrap'
+    }
 });
 
 const BadgeStatus = (props) => {
-    const { badgeContent, classes } = props;
+    const { badgeContent, classes, sx } = props;
     const [colorCustom, setColorCustom] = useState("");
 
     useEffect(() => {
@@ -68,12 +71,13 @@ const BadgeStatus = (props) => {
                 return setColorCustom(classes.statusId9);
             }
         }
-    }, [badgeContent,classes]);
+    }, [badgeContent, classes]);
 
     return (
         <Badge
-            sx={{ whiteSpace: "nowrap" }}
+            sx={sx}
             classes={{ badge: colorCustom }}
+            className={classes.badgeSpace}
             badgeContent={badgeContent}
         ></Badge>
     );
@@ -81,6 +85,7 @@ const BadgeStatus = (props) => {
 
 BadgeStatus.propTypes = {
     classes: PropTypes.object.isRequired,
+    sx: PropTypes.object,
 };
 
 export default withStyles(styles)(BadgeStatus);
