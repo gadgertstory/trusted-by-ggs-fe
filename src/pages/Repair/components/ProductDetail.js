@@ -23,11 +23,14 @@ const ProductDetail = (props) => {
         control,
         returnDate,
         receivedDate,
+        notifiedDate,
         setReceivedDate,
         setReturnDate,
+        setNotifiedDate,
         setError,
         onSelectReceivedDate,
         onSelectReturnDate,
+        onSelectNotifiedDate,
         onEdit,
         brandList,
         statusList,
@@ -43,6 +46,12 @@ const ProductDetail = (props) => {
     const handleReturnDateChange = (returnDate) => {
         setReturnDate(returnDate);
         onSelectReturnDate(returnDate);
+        setError("");
+    };
+    
+    const handleNotifiedDateChange = (notifiedDate) => {
+        setNotifiedDate(notifiedDate);
+        onSelectNotifiedDate(notifiedDate);
         setError("");
     };
 
@@ -149,7 +158,7 @@ const ProductDetail = (props) => {
                             </FormControl>
                         )}
                         rules={{
-                            required: "กรุณากรอกBrand",
+                            required: "กรุณาเลือก Brand",
                         }}
                     />
                 </Grid>
@@ -194,7 +203,7 @@ const ProductDetail = (props) => {
                     />
                 </Grid>
                 {id !== "new" ? (
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} md={3}>
                         <Controller
                             name="status_id"
                             required
@@ -233,7 +242,21 @@ const ProductDetail = (props) => {
                 ) : (
                     ""
                 )}
-                <Grid item xs={12} md={4}>
+                <Grid item xs={12} md={3}>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <DesktopDatePicker
+                            label="วันที่แจ้งเรื่อง"
+                            inputFormat="dd/MM/yyyy"
+                            value={notifiedDate}
+                            onChange={handleNotifiedDateChange}
+                            disabled={!onEdit || id !== "new"}
+                            renderInput={(params) => (
+                                <TextField fullWidth size="small" {...params} />
+                            )}
+                        />
+                    </LocalizationProvider>
+                </Grid>
+                <Grid item xs={12} md={3}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DesktopDatePicker
                             label="วันที่รับซ่อม"
@@ -245,12 +268,9 @@ const ProductDetail = (props) => {
                                 <TextField fullWidth size="small" {...params} />
                             )}
                         />
-                        <FormHelperText error>
-                            {/* {error ? error.message : null} */}
-                        </FormHelperText>
                     </LocalizationProvider>
                 </Grid>
-                <Grid item xs={12} md={4}>
+                <Grid item xs={12} md={3}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DesktopDatePicker
                             label="วันที่นัดรับ"
@@ -262,9 +282,6 @@ const ProductDetail = (props) => {
                                 <TextField fullWidth size="small" {...params} />
                             )}
                         />
-                        <FormHelperText error>
-                            {/* {error ? error.message : null} */}
-                        </FormHelperText>
                     </LocalizationProvider>
                 </Grid>
             </Grid>
