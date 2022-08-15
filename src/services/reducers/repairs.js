@@ -12,7 +12,7 @@ const initialState = {
     isLoading: false,
 };
 
-const repair = (state = initialState, action) => {
+const repairs = (state = initialState, action) => {
     switch (action.type) {
         case FETCH_ALL_REPAIR_REQUEST:
             return {
@@ -44,4 +44,4 @@ const repair = (state = initialState, action) => {
     }
 };
 
-export default repair;
+export default repairs;

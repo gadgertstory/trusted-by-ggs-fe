@@ -1,7 +1,16 @@
 import React from "react";
 import { Controller } from "react-hook-form";
 
-import { Grid, Paper, Typography } from "@mui/material";
+import {
+    Grid,
+    Paper,
+    Typography,
+    FormHelperText,
+    FormControl,
+    Select,
+    MenuItem,
+    InputLabel,
+} from "@mui/material";
 
 import Input from "../../../components/Input";
 
@@ -22,8 +31,41 @@ const CustomerDetail = (props) => {
         setError,
         onSelect,
         onEdit,
-        roleUser
+        roleUser,
     } = props;
+
+    const receiveMethodList = [
+        {
+            status_id: 1,
+            status_name: "Facebook",
+        },
+        {
+            status_id: 2,
+            status_name: "Shopee",
+        },
+        {
+            status_id: 3,
+            status_name: "Lazada",
+        },
+        {
+            status_id: 4,
+            status_name: "Website",
+        },
+    ];
+
+    const warantyStatusList = [
+        {
+            status_id: 1,
+            status_name: "มีประกัน",
+            status: 0,
+        },
+        {
+            status_id: 2,
+            status_name: "หมดประกัน",
+            status: 1,
+        },
+    ];
+
     return (
         <Paper
             sx={{
@@ -45,7 +87,9 @@ const CustomerDetail = (props) => {
                             fieldState: { error },
                         }) => (
                             <Input
-                                disabled={!onEdit || roleUser.roleUser.role ==='user'}
+                                disabled={
+                                    !onEdit || roleUser.roleUser.role === "user"
+                                }
                                 required={true}
                                 fullWidth
                                 label="ชื่อ"
@@ -71,7 +115,9 @@ const CustomerDetail = (props) => {
                             fieldState: { error },
                         }) => (
                             <Input
-                                disabled={!onEdit || roleUser.roleUser.role ==='user'}
+                                disabled={
+                                    !onEdit || roleUser.roleUser.role === "user"
+                                }
                                 required={true}
                                 fullWidth
                                 label="นามสกุล"
@@ -97,7 +143,9 @@ const CustomerDetail = (props) => {
                             fieldState: { error },
                         }) => (
                             <Input
-                                disabled={!onEdit || roleUser.roleUser.role ==='user'}
+                                disabled={
+                                    !onEdit || roleUser.roleUser.role === "user"
+                                }
                                 required={true}
                                 fullWidth
                                 label="เบอร์โทรศัพท์"
@@ -115,8 +163,8 @@ const CustomerDetail = (props) => {
                             required: "กรุณากรอกเบอร์โทรศัพท์",
                             pattern: {
                                 value: /^[0-9]+$/,
-                                message: 'กรุณาใส่ตัวเลขเท่านั้น',
-                              },
+                                message: "กรุณาใส่ตัวเลขเท่านั้น",
+                            },
                         }}
                     />
                 </Grid>
@@ -130,7 +178,9 @@ const CustomerDetail = (props) => {
                             fieldState: { error },
                         }) => (
                             <Input
-                                disabled={!onEdit || roleUser.roleUser.role ==='user'}
+                                disabled={
+                                    !onEdit || roleUser.roleUser.role === "user"
+                                }
                                 onChange={onChange}
                                 value={value}
                                 required
@@ -153,7 +203,7 @@ const CustomerDetail = (props) => {
                         แขวง / ตำบล*
                     </Typography>
                     <ThailandAddress
-                        disabled={!onEdit || roleUser.roleUser.role ==='user'}
+                        disabled={!onEdit || roleUser.roleUser.role === "user"}
                         style={{ width: "100%" }}
                         address="subdistrict"
                         value={subdistrict}
@@ -215,6 +265,98 @@ const CustomerDetail = (props) => {
                         onSelect={onSelect}
                     />
                     {onError()}
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <Controller
+                        name="receive_method"
+                        required
+                        control={control}
+                        defaultValue=""
+                        render={({
+                            field: { onChange, value },
+                            fieldState: { error },
+                        }) => (
+                            <FormControl fullWidth required error={!!error}>
+                                <InputLabel id="demo-simple-select-required-label">
+                                    ช่องทางรับแจ้ง
+                                </InputLabel>
+                                <Select
+                                    disabled={
+                                        !onEdit ||
+                                        roleUser.roleUser.role === "user"
+                                    }
+                                    size="small"
+                                    value={value}
+                                    label="ช่องทางรับแจ้ง"
+                                    onChange={onChange}
+                                    error={!!error}
+                                >
+                                    {receiveMethodList?.map((item) => {
+                                        return (
+                                            <MenuItem
+                                                key={item.status_id}
+                                                value={item.status_name}
+                                            >
+                                                {item.status_name}
+                                            </MenuItem>
+                                        );
+                                    })}
+                                </Select>
+                                <FormHelperText error>
+                                    {error ? error.message : null}
+                                </FormHelperText>
+                            </FormControl>
+                        )}
+                        rules={{
+                            required: "กรุณาเลือก ช่องทางรับแจ้ง",
+                        }}
+                    />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <Controller
+                        name="waranty_status"
+                        required
+                        control={control}
+                        defaultValue=""
+                        render={({
+                            field: { onChange, value },
+                            fieldState: { error },
+                        }) => (
+                            <FormControl fullWidth required error={!!error}>
+                                <InputLabel id="demo-simple-select-required-label">
+                                    ระยะเวลาประกัน
+                                </InputLabel>
+                                <Select
+                                    disabled={
+                                        !onEdit ||
+                                        roleUser.roleUser.role === "user"
+                                    }
+                                    size="small"
+                                    value={value}
+                                    label="ระยะเวลาประกัน"
+                                    onChange={onChange}
+                                    error={!!error}
+                                >
+                                    {warantyStatusList?.map((item) => {
+                                        return (
+                                            <MenuItem
+                                                key={item.status_id}
+                                                value={item.status}
+                                            >
+                                                {item.status_name}
+                                            </MenuItem>
+                                        );
+                                    })}
+                                </Select>
+                                <FormHelperText error>
+                                    {error ? error.message : null}
+                                </FormHelperText>
+                            </FormControl>
+                        )}
+                        rules={{
+                            required: "กรุณาเลือก ระยะเวลาประกัน",
+                        }}
+                    />
                 </Grid>
             </Grid>
         </Paper>

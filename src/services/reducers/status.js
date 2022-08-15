@@ -9,7 +9,7 @@ const INITIAL_STATE = {
     isLoading: false,
 };
 
-const master = (state = INITIAL_STATE, action) => {
+const status = (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case FETCH_STATUS_REQUEST:
             return FETCH_STATUS_REQUEST;
@@ -28,4 +28,4 @@ const master = (state = INITIAL_STATE, action) => {
     }
 };
 
-export default master;
+export default status;

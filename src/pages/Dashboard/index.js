@@ -1,5 +1,5 @@
-import React,{useEffect} from "react";
-import { useSelector,useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
@@ -21,11 +21,14 @@ const Dashboard = () => {
 
     return (
         <React.Fragment>
-            <Typography variant="h3" component="h3" sx={{ mb: 2 }}>
-                สวัสดี, {currentUser.data.name.toUpperCase()}
+            <Typography variant="h3" component="h3" sx={{ my: 8,fontWeight:'bold'}}>
+                สวัสดี, {currentUser.data.name.toUpperCase()} 👋🏻
+            </Typography>
+            <Typography variant="h5" sx={{ my: 2,fontWeight:'bold' }}>
+                จำนวนใบแจ้งซ่อม
             </Typography>
             <Grid container spacing={3}>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={3}>
                     <Link href="/repair" underline="none">
                         <Paper
                             elevation={3}
@@ -36,41 +39,54 @@ const Dashboard = () => {
                                 justifyContent: "center",
                                 alignItems: "center",
                                 height: 240,
-                                borderTop: `solid ${theme.palette.teal[400]} 4px`,
+                                borderTop: `solid ${theme.palette.indigo[500]} 4px`,
                             }}
                         >
-                            <Typography variant="h5" sx={{ mb: 2 }}>
-                                จำนวนใบแจ้งซ่อมทั้งหมด
+                            <Typography variant="h5" sx={{ mb: 2,color:`${theme.palette.indigo[500]}` }}>
+                                ทั้งหมด
                             </Typography>
-                            <Typography variant="h1" sx={{ mb: 2 }}>
+                            <Typography variant="h1" sx={{ mb: 2,color:`${theme.palette.indigo[500]}` }}>
                                 {countRepair?.count_all}
                             </Typography>
                         </Paper>
                     </Link>
                 </Grid>
-                {/* <Grid item xs={12} md={6}>
-                    <Link href="/repair" underline="none">
-                        <Paper
-                            elevation={3}
-                            sx={{
-                                p: 2,
-                                display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                height: 240,
-                                borderTop: `solid ${theme.palette.amber[400]} 4px`,
-                            }}
-                        >
-                            <Typography variant="h5" sx={{ mb: 2 }}>
-                                จำนวนใบแจ้งซ่อมวันนี้
-                            </Typography>
-                            <Typography variant="h1" sx={{ mb: 2 }}>
-                            {countRepair?.count_today}
-                            </Typography>
-                        </Paper>
-                    </Link>
-                </Grid> */}
+                {countRepair?.count_status?.map((item) => {
+                    const getColor = () => {
+                        if (item.status_name === "แจ้งซ่อม") {
+                            return theme.palette.amber[900];
+                        } else if (item.status_name === "กำลังดำเนินการ") {
+                            return theme.palette.lightBlue[400];
+                        } else {
+                            return theme.palette.teal[500];
+                        }
+                    };
+                    return (
+                        <Grid item xs={12} md={3} key={item.status_id}>
+                            <Link href="/repair" underline="none">
+                                <Paper
+                                    elevation={3}
+                                    sx={{
+                                        p: 2,
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        height: 240,
+                                        borderTop: `solid ${getColor()} 4px`,
+                                    }}
+                                >
+                                    <Typography variant="h5" sx={{ mb: 2 ,color:`${getColor()}`}}>
+                                        {item.status_name}
+                                    </Typography>
+                                    <Typography variant="h1" sx={{ mb: 2,color:`${getColor()}` }}>
+                                        {item.count_status}
+                                    </Typography>
+                                </Paper>
+                            </Link>
+                        </Grid>
+                    );
+                })}
             </Grid>
         </React.Fragment>
     );

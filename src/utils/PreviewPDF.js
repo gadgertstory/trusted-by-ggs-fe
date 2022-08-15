@@ -1,5 +1,6 @@
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
+import { formatPhoneNumber } from "./FormatPhoneNumber";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -39,6 +40,9 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
     });
 
     var docDefinition = {
+        info: {
+            title: `${ObjData.repair_no}`,
+        },
         content: [
             {
                 columns: [
@@ -64,8 +68,12 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
             {
                 columns: [
                     {
-                        text: `${ObjData.customer_house_no} ${ObjData.customer_subdistrict} ${ObjData.customer_district} ${ObjData.customer_province} ${ObjData.customer_zipcode}
-                        โทรศัพท์: ${ObjData.customer_tel}`,
+                        text: `${ObjData.customer_house_no} ${
+                            ObjData.customer_subdistrict
+                        } ${ObjData.customer_district} ${
+                            ObjData.customer_province
+                        } ${ObjData.customer_zipcode}
+                        โทรศัพท์: ${formatPhoneNumber(ObjData.customer_tel)}`,
                     },
                     {
                         text: `เลขที่ใบแจ้งซ่อม: ${ObjData.repair_no}
@@ -81,7 +89,9 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
                     body: [
                         [
                             `ชื่อลูกค้า: ${ObjData.customer_firstname} ${ObjData.customer_lastname}`,
-                            `โทรศัพท์:  ${ObjData.customer_tel}`,
+                            `โทรศัพท์:  ${formatPhoneNumber(
+                                ObjData.customer_tel
+                            )}`,
                         ],
                         [
                             {
