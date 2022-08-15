@@ -65,7 +65,7 @@ const ProductDetail = (props) => {
     };
 
     React.useEffect(() => {
-        console.log("dsdsd", fileObject);
+        console.log("file upload🚀", fileObject);
         onSelectFileObj(fileObject);
         onSelectImagesLastRepair(imagesLastRepair);
     }, [fileObject, imagesLastRepair]);

@@ -92,11 +92,11 @@ const RepairDetail = (roleUser) => {
     //Image File
     const [fileObject, setFileObject] = useState([]);
     const [imagesLastRepair, setImagesLastRepair] = useState([]);
-    const [meta, setMeta] = useState([]);
+    // const [meta, setMeta] = useState([]);
 
     const fetch = useCallback(() => {
         Repair.fetchRepair(id).then((res) => {
-            console.log(res.data);
+            console.log('res.data🌝',res.data);
             const dataRepair = res.data;
             if (dataRepair) {
                 setSubDistrict(dataRepair.customer_subdistrict);
@@ -161,7 +161,7 @@ const RepairDetail = (roleUser) => {
                 //       setMeta(Object.assign(_newMeta,{image}))
                 // });
                 let DropzoneArr = [];
-                for (const iterator of dataRepair.images) {
+                for (const iterator of dataRepair?.images) {
                    const obj = {
                         file: {},
                         meta: {
@@ -241,9 +241,9 @@ const RepairDetail = (roleUser) => {
             setError("กรุณากรอกข้อมูลให้ครบ");
             return;
         }
-        // if (!error) {
-        //     setLoading(true);
-        // }
+        if (!error) {
+            setLoading(true);
+        }
 
         if (id === "new") {
             const _data = Object.assign(data, newData);
