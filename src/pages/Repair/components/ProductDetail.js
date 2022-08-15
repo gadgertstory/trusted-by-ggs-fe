@@ -1,8 +1,11 @@
-import React from "react";
-import { Controller } from "react-hook-form";
+import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 
 import { LocalizationProvider, DesktopDatePicker } from "@mui/x-date-pickers";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
+
+import Dropzone from "react-dropzone-uploader";
+import { getDroppedOrSelectedFiles } from "html5-file-selector";
 
 import {
     FormHelperText,
@@ -13,6 +16,7 @@ import {
     MenuItem,
     InputLabel,
     TextField,
+    Typography,
 } from "@mui/material";
 
 import Input from "../../../components/Input";
@@ -24,17 +28,22 @@ const ProductDetail = (props) => {
         returnDate,
         receivedDate,
         notifiedDate,
+        fileObject,
+        imagesLastRepair,
         setReceivedDate,
         setReturnDate,
         setNotifiedDate,
         setError,
+        setFileObject,
         onSelectReceivedDate,
         onSelectReturnDate,
         onSelectNotifiedDate,
+        onSelectFileObj,
+        onSelectImagesLastRepair,
         onEdit,
         brandList,
         statusList,
-        roleUser
+        roleUser,
     } = props;
 
     const handleReceivedDateChange = (receivedDate) => {
@@ -48,11 +57,41 @@ const ProductDetail = (props) => {
         onSelectReturnDate(returnDate);
         setError("");
     };
-    
+
     const handleNotifiedDateChange = (notifiedDate) => {
         setNotifiedDate(notifiedDate);
         onSelectNotifiedDate(notifiedDate);
         setError("");
+    };
+
+    React.useEffect(() => {
+        console.log("file upload🚀", fileObject);
+        onSelectFileObj(fileObject);
+        onSelectImagesLastRepair(imagesLastRepair);
+    }, [fileObject, imagesLastRepair]);
+
+    const getUploadParams = ({ meta }) => {
+        const url = "https://httpbin.org/post";
+        return {
+            url,
+            meta: { fileUrl: `${url}/${encodeURIComponent(meta.name)}` },
+        };
+    };
+
+    const getFilesFromEvent = (e) => {
+        return new Promise((resolve) => {
+            getDroppedOrSelectedFiles(e).then((chosenFiles) => {
+                resolve(chosenFiles.map((f) => f.fileObject));
+            });
+        });
+    };
+
+    const handleControlledDropzonChangeStatus = (status, allFiles) => {
+        setTimeout(() => {
+            if (["done", "removed"].includes(status)) {
+                setFileObject([...allFiles]);
+            }
+        }, 0);
     };
 
     return (
@@ -75,12 +114,14 @@ const ProductDetail = (props) => {
                             fieldState: { error },
                         }) => (
                             <Input
-                                disabled={!onEdit || roleUser.roleUser.role ==='user'}
+                                disabled={
+                                    !onEdit || roleUser.roleUser.role === "user"
+                                }
                                 onChange={onChange}
                                 value={value}
                                 required
                                 fullWidth={true}
-                                label="ชื่ออุปกรกรณ์"
+                                label="ชื่ออุปกรณ์"
                                 error={!!error}
                                 helperText={error ? error.message : null}
                                 inputProps={{
@@ -134,7 +175,10 @@ const ProductDetail = (props) => {
                                     Brand
                                 </InputLabel>
                                 <Select
-                                    disabled={!onEdit || roleUser.roleUser.role ==='user'}
+                                    disabled={
+                                        !onEdit ||
+                                        roleUser.roleUser.role === "user"
+                                    }
                                     size="small"
                                     value={value}
                                     label="Brand"
@@ -161,6 +205,196 @@ const ProductDetail = (props) => {
                             required: "กรุณาเลือก Brand",
                         }}
                     />
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography
+                        component="label"
+                        variant="caption"
+                        fontWeight={"bold"}
+                    >
+                        รูปภาพจากลูกค้า
+                    </Typography>
+                    <Controller
+                        control={control}
+                        name="fileObject"
+                        render={({ onChange }) => (
+                            <Dropzone
+                                getUploadParams={getUploadParams}
+                                // onChangeStatus={handleChangeStatus}
+                                onChangeStatus={(
+                                    fileObject,
+                                    status,
+                                    allFiles
+                                ) => {
+                                    handleControlledDropzonChangeStatus(
+                                        status,
+                                        allFiles,
+                                        onChange
+                                    );
+                                }}
+                                // onSubmit={handleSubmit}
+                                dropzoneDisabled
+                                maxFiles={3}
+                                inputContent="เพิ่ม 3 รูปภาพ"
+                                inputWithFilesContent={(files) =>
+                                    `${3 - files.length} more`
+                                }
+                                accept="image/*"
+                                submitButtonDisabled={(files) =>
+                                    files.length < 3
+                                }
+                                getFilesFromEvent={getFilesFromEvent}
+                                disabled={!onEdit}
+                            />
+                        )}
+                    />
+                    <Typography
+                        component="label"
+                        variant="caption"
+                        fontWeight={"bold"}
+                    >
+                        ชื่อภาพ
+                    </Typography>
+                    {/* {id === "new" ? (
+                        <ol>
+                            {fileObject?.map((file) => (
+                                <Typography
+                                    variant="caption"
+                                    key={file.meta.id}
+                                >
+                                    <li>{file.meta.name}</li>
+                                </Typography>
+                            ))}
+                        </ol>
+                    ) : (
+                        <ol>
+                            {fileObject?.map((file) => (
+                                <Typography
+                                    variant="caption"
+                                    key={file.image_id}
+                                >
+                                    <li>{file.original_name}</li>
+                                </Typography>
+                            ))}
+                        </ol>
+                    )} */}
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography
+                        component="label"
+                        variant="caption"
+                        fontWeight={"bold"}
+                    >
+                        รูปภาพก่อนซ่อม
+                    </Typography>
+                    <Controller
+                        control={control}
+                        name="filesLastRepair"
+                        render={({ onChange }) => (
+                            <Dropzone
+                                getUploadParams={getUploadParams}
+                                // onChangeStatus={handleChangeStatus}
+                                onChangeStatus={(
+                                    filesLastRepair,
+                                    status,
+                                    allFiles
+                                ) => {
+                                    handleControlledDropzonChangeStatus(
+                                        status,
+                                        allFiles,
+                                        onChange
+                                    );
+                                }}
+                                // onSubmit={handleSubmit}
+                                dropzoneDisabled
+                                maxFiles={3}
+                                inputContent="เพิ่ม 3 รูปภาพ"
+                                inputWithFilesContent={(files) =>
+                                    `${3 - files.length} more`
+                                }
+                                accept="image/*"
+                                submitButtonDisabled={(files) =>
+                                    files.length < 3
+                                }
+                                getFilesFromEvent={getFilesFromEvent}
+                                disabled={!onEdit}
+                            />
+                        )}
+                    />
+                    <Typography
+                        component="label"
+                        variant="caption"
+                        fontWeight={"bold"}
+                    >
+                        ชื่อภาพ
+                    </Typography>
+                    {/* <ol>
+                        {fileObject?.map((file) => (
+                            <Typography
+                                variant="caption"
+                                key={file.meta.id}
+                            >
+                                <li>{file.meta.name}</li>
+                            </Typography>
+                        ))}
+                    </ol> */}
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography
+                        component="label"
+                        variant="caption"
+                        fontWeight={"bold"}
+                    >
+                        รูปภาพหลังซ่อม
+                    </Typography>
+                    <Controller
+                        control={control}
+                        name="imagesLastRepair"
+                        render={({ onChange }) => (
+                            <Dropzone
+                                getUploadParams={getUploadParams}
+                                // onChangeStatus={handleChangeStatus}
+                                onChangeStatus={(
+                                    imagesLastRepair,
+                                    status,
+                                    allFiles
+                                ) => {
+                                    handleControlledDropzonChangeStatus(
+                                        status,
+                                        allFiles,
+                                        onChange
+                                    );
+                                }}
+                                // onSubmit={handleSubmit}
+                                dropzoneDisabled
+                                maxFiles={3}
+                                inputContent="เพิ่ม 3 รูปภาพ"
+                                inputWithFilesContent={(files) =>
+                                    `${3 - files.length} more`
+                                }
+                                accept="image/*"
+                                submitButtonDisabled={(files) =>
+                                    files.length < 3
+                                }
+                                getFilesFromEvent={getFilesFromEvent}
+                                disabled={!onEdit}
+                            />
+                        )}
+                    />
+                    <Typography
+                        component="label"
+                        variant="caption"
+                        fontWeight={"bold"}
+                    >
+                        ชื่อภาพ
+                    </Typography>
+                    {/* <ol>
+                        {imagesLastRepair?.map((file) => (
+                            <Typography variant="caption" key={file.meta.id}>
+                                <li>{file.meta.name}</li>
+                            </Typography>
+                        ))}
+                    </ol> */}
                 </Grid>
                 <Grid item xs={12}>
                     <Controller
@@ -277,7 +511,9 @@ const ProductDetail = (props) => {
                             inputFormat="dd/MM/yyyy"
                             value={returnDate}
                             onChange={handleReturnDateChange}
-                            disabled={!onEdit || roleUser.roleUser.role ==='user'}
+                            disabled={
+                                !onEdit || roleUser.roleUser.role === "user"
+                            }
                             renderInput={(params) => (
                                 <TextField fullWidth size="small" {...params} />
                             )}

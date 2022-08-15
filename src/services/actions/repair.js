@@ -60,8 +60,8 @@ export const createRepair = (data) => async (dispatch) => {
         });
 };
 
-export const updateRepair = (id, data) => async (dispatch) => {
-    await Repair.updateRepair(id, data)
+export const updateRepair = (id, data,formData) => async (dispatch) => {
+    await Repair.updateRepair(id, data,formData)
         .then((id, data) => {
             dispatch({
                 type: UPDATE_REPAIR_SUCCESS,

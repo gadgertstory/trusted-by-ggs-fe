@@ -89,8 +89,14 @@ const RepairDetail = (roleUser) => {
 
     const [dataUrl, setDataUrl] = useState();
 
+    //Image File
+    const [fileObject, setFileObject] = useState([]);
+    const [imagesLastRepair, setImagesLastRepair] = useState([]);
+    // const [meta, setMeta] = useState([]);
+
     const fetch = useCallback(() => {
         Repair.fetchRepair(id).then((res) => {
+            console.log('res.data🌝',res.data);
             const dataRepair = res.data;
             if (dataRepair) {
                 setSubDistrict(dataRepair.customer_subdistrict);
@@ -142,6 +148,43 @@ const RepairDetail = (roleUser) => {
                 } else {
                     setValue("waranty_status", (dataRepair.waranty_status = 1));
                 }
+
+                // dataRepair.images?.map((image) => {
+
+                //     //   setMeta( mata: {
+                //     //         name: image.image_name,
+                //     //         id: image.image_id,
+                //     //         previewUrl: image.image_id,
+                //     //     },
+                //     //   )
+                //       const _newMeta = {meta:{}}
+                //       setMeta(Object.assign(_newMeta,{image}))
+                // });
+                let DropzoneArr = [];
+                for (const iterator of dataRepair?.images) {
+                   const obj = {
+                        file: {},
+                        meta: {
+                            name: iterator.original_name,
+                            size: iterator.size,
+                            type: 'image/png',
+                            lastModifiedDate: "2022-07-21T06:37:45.075Z",
+                            uploadedDate: "2022-08-11T11:39:01.445Z",
+                            percent: 100,
+                            id: "1660217941445-0",
+                            status: "done",
+                            previewUrl: iterator.image_url,
+                            width: 1931,
+                            height: 1080,
+                            fileUrl: iterator.image_url,
+                        },
+                        xhr: {},
+                    };
+                    DropzoneArr.push(obj);
+                }
+                // console.log(DropzoneArr)
+
+                setFileObject(DropzoneArr);
             }
         });
     }, [district, province, setValue, subdistrict, zipcode, id]);
@@ -172,6 +215,8 @@ const RepairDetail = (roleUser) => {
             received_date: receivedDate,
             return_date: returnDate,
             notified_date: notifiedDate,
+            fileObject: fileObject,
+            imagesLastRepair: imagesLastRepair,
             customer_subdistrict: subdistrict,
             customer_district: district,
             customer_province: province,
@@ -185,6 +230,8 @@ const RepairDetail = (roleUser) => {
         zipcode,
         receivedDate,
         returnDate,
+        fileObject,
+        imagesLastRepair,
         notifiedDate,
         currentUser,
     ]);
@@ -200,18 +247,29 @@ const RepairDetail = (roleUser) => {
 
         if (id === "new") {
             const _data = Object.assign(data, newData);
+
+            const formData = new FormData();
+            _data.fileObject?.forEach((file) => {
+                formData.append("file", file.file);
+            });
+
+            formData.append("data", JSON.stringify(_data));
+
             if (_data.waranty_status === 0) {
                 return (
-                    (_data.waranty_status = true), dispatch(createRepair(_data))
+                    (_data.waranty_status = true),
+                    dispatch(createRepair(formData))
                 );
             } else {
                 return (
                     (_data.waranty_status = false),
-                    dispatch(createRepair(_data))
+                    dispatch(createRepair(formData))
                 );
             }
         } else {
             const _data = Object.assign(data, newData);
+            const formData = new FormData();
+
             const _updateData = {
                 data: {
                     customer_firstname: _data.customer_firstname,
@@ -233,7 +291,16 @@ const RepairDetail = (roleUser) => {
                     user_id: _data.user_id,
                 },
             };
-            dispatch(updateRepair(id, _updateData));
+
+            _data.fileObject?.forEach((file) => {
+                formData.append("file", file.file);
+            });
+            _data.imagesLastRepair?.forEach((file) => {
+                formData.append("file", file.file);
+            });
+            // console.log(_data)
+            formData.append("data", JSON.stringify(_updateData));
+            dispatch(updateRepair(id, formData));
         }
     };
 
@@ -261,6 +328,16 @@ const RepairDetail = (roleUser) => {
 
     const onSelectNotifiedDate = (notifiedDate) => {
         setNotifiedDate(notifiedDate?.toISOString().split("T")[0]);
+        setError("");
+    };
+
+    const onSelectFileObj = (fileObj) => {
+        setFileObject(fileObj);
+        setError("");
+    };
+
+    const onSelectImagesLastRepair = (imagesLastRepair) => {
+        setImagesLastRepair(imagesLastRepair);
         setError("");
     };
 
@@ -487,13 +564,13 @@ const RepairDetail = (roleUser) => {
                             roleUser={roleUser}
                             id={id}
                             onEdit={onEdit}
-                            onError={onError}
                             control={control}
                             error={error}
                             setError={setError}
                             onSelectReturnDate={onSelectReturnDate}
                             onSelectReceivedDate={onSelectReceivedDate}
                             onSelectNotifiedDate={onSelectNotifiedDate}
+                            onSelectFileObj={onSelectFileObj}
                             brandList={brandList}
                             statusList={statusList}
                             receivedDate={receivedDate}
@@ -502,6 +579,10 @@ const RepairDetail = (roleUser) => {
                             setReturnDate={setReturnDate}
                             notifiedDate={notifiedDate}
                             setNotifiedDate={setNotifiedDate}
+                            fileObject={fileObject}
+                            setFileObject={setFileObject}
+                            onSelectImagesLastRepair={onSelectImagesLastRepair}
+                            imagesLastRepair={imagesLastRepair}
                         />
                         {id === "new" ? (
                             ""
