@@ -96,7 +96,7 @@ const RepairDetail = (roleUser) => {
 
     const fetch = useCallback(() => {
         Repair.fetchRepair(id).then((res) => {
-            console.log('res.data🌝',res.data);
+            console.log("res.data🌝", res.data);
             const dataRepair = res.data;
             if (dataRepair) {
                 setSubDistrict(dataRepair.customer_subdistrict);
@@ -143,45 +143,35 @@ const RepairDetail = (roleUser) => {
                     dataRepair.status[0].status.status_id || ""
                 );
                 setValue("receive_method", dataRepair.receive_method || "");
-                if (dataRepair.waranty_status === true) {
-                    setValue("waranty_status", (dataRepair.waranty_status = 0));
-                } else {
-                    setValue("waranty_status", (dataRepair.waranty_status = 1));
-                }
+                setValue("waranty_status", dataRepair.waranty_status || "");
 
-                // dataRepair.images?.map((image) => {
-
-                //     //   setMeta( mata: {
-                //     //         name: image.image_name,
-                //     //         id: image.image_id,
-                //     //         previewUrl: image.image_id,
-                //     //     },
-                //     //   )
-                //       const _newMeta = {meta:{}}
-                //       setMeta(Object.assign(_newMeta,{image}))
-                // });
                 let DropzoneArr = [];
                 for (const iterator of dataRepair?.images) {
-                   const obj = {
-                        file: {},
-                        meta: {
-                            name: iterator.original_name,
-                            size: iterator.size,
-                            type: 'image/png',
-                            lastModifiedDate: "2022-07-21T06:37:45.075Z",
-                            uploadedDate: "2022-08-11T11:39:01.445Z",
-                            percent: 100,
-                            id: "1660217941445-0",
-                            status: "done",
-                            previewUrl: iterator.image_url,
-                            width: 1931,
-                            height: 1080,
-                            fileUrl: iterator.image_url,
-                        },
-                        xhr: {},
-                    };
+                    const obj = iterator.image_url;
+
                     DropzoneArr.push(obj);
                 }
+                // for (const iterator of dataRepair?.images) {
+                //     const obj = {
+                //         file: {},
+                //         meta: {
+                //             name: iterator.original_name,
+                //             size: iterator.size,
+                //             type: "image/png",
+                //             lastModifiedDate: "2022-07-21T06:37:45.075Z",
+                //             uploadedDate: "2022-08-11T11:39:01.445Z",
+                //             percent: 100,
+                //             id: iterator.image_id,
+                //             status: "done",
+                //             previewUrl: iterator.image_url,
+                //             width: 1931,
+                //             height: 1080,
+                //             fileUrl: iterator.image_url,
+                //         },
+                //         xhr: {},
+                //     };
+                //     DropzoneArr.push(obj);
+                // }
                 // console.log(DropzoneArr)
 
                 setFileObject(DropzoneArr);
@@ -241,33 +231,24 @@ const RepairDetail = (roleUser) => {
             setError("กรุณากรอกข้อมูลให้ครบ");
             return;
         }
-        if (!error) {
-            setLoading(true);
-        }
+        // if (!error) {
+        //     setLoading(true);
+        // }
 
         if (id === "new") {
             const _data = Object.assign(data, newData);
 
             const formData = new FormData();
             _data.fileObject?.forEach((file) => {
-                formData.append("file", file.file);
+                formData.append("file", file);
             });
 
             formData.append("data", JSON.stringify(_data));
 
-            if (_data.waranty_status === 0) {
-                return (
-                    (_data.waranty_status = true),
-                    dispatch(createRepair(formData))
-                );
-            } else {
-                return (
-                    (_data.waranty_status = false),
-                    dispatch(createRepair(formData))
-                );
-            }
+            dispatch(createRepair(formData));
         } else {
             const _data = Object.assign(data, newData);
+
             const formData = new FormData();
 
             const _updateData = {
@@ -280,6 +261,8 @@ const RepairDetail = (roleUser) => {
                     customer_district: _data.customer_district,
                     customer_province: _data.customer_province,
                     customer_zipcode: _data.customer_zipcode,
+                    waranty_status: _data.waranty_status,
+                    receive_method: _data.receive_method,
                     brand_id: _data.brand_id,
                     product_name: _data.product_name,
                     description: _data.description,
@@ -292,14 +275,14 @@ const RepairDetail = (roleUser) => {
                 },
             };
 
+            console.log('sssssss',_data)
+
             _data.fileObject?.forEach((file) => {
-                formData.append("file", file.file);
+                console.log(file)
+                formData.append("file", file);
             });
-            _data.imagesLastRepair?.forEach((file) => {
-                formData.append("file", file.file);
-            });
-            // console.log(_data)
             formData.append("data", JSON.stringify(_updateData));
+
             dispatch(updateRepair(id, formData));
         }
     };

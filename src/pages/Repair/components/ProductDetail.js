@@ -1,11 +1,8 @@
 import React, { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller } from "react-hook-form";
 
 import { LocalizationProvider, DesktopDatePicker } from "@mui/x-date-pickers";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
-
-import Dropzone from "react-dropzone-uploader";
-import { getDroppedOrSelectedFiles } from "html5-file-selector";
 
 import {
     FormHelperText,
@@ -16,8 +13,11 @@ import {
     MenuItem,
     InputLabel,
     TextField,
+    Button,
+    IconButton,
     Typography,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 import Input from "../../../components/Input";
 
@@ -45,6 +45,7 @@ const ProductDetail = (props) => {
         statusList,
         roleUser,
     } = props;
+    const [file, setFile] = useState([]);
 
     const handleReceivedDateChange = (receivedDate) => {
         setReceivedDate(receivedDate);
@@ -66,33 +67,36 @@ const ProductDetail = (props) => {
 
     React.useEffect(() => {
         console.log("file upload🚀", fileObject);
+
         onSelectFileObj(fileObject);
         onSelectImagesLastRepair(imagesLastRepair);
-    }, [fileObject, imagesLastRepair]);
+    }, [fileObject, imagesLastRepair]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const getUploadParams = ({ meta }) => {
-        const url = "https://httpbin.org/post";
-        return {
-            url,
-            meta: { fileUrl: `${url}/${encodeURIComponent(meta.name)}` },
-        };
-    };
+    // function uploadSingleFile(e) {
+    //     setFileObject([...fileObject, URL.createObjectURL(e.target.files[0])]);
+    //     console.log("file", fileObject);
+    // }
 
-    const getFilesFromEvent = (e) => {
-        return new Promise((resolve) => {
-            getDroppedOrSelectedFiles(e).then((chosenFiles) => {
-                resolve(chosenFiles.map((f) => f.fileObject));
-            });
-        });
-    };
+    function uploadSingleFile(e) {
+        let ImagesArray = Object.entries(e.target.files).map((e) =>
+            Object.assign(
+                {},
+                { file: e[1] },
+                { previewUrl: URL.createObjectURL(e[1]) }
+            )
+        );
+        // let ImagesObjectURL = Object.entries(e.target.files).map((e) =>
+        //     URL.createObjectURL(e[1])
+        // );
+        console.log(ImagesArray);
+        // console.log(ImagesObjectURL);
+            setFileObject([...fileObject, ImagesArray]);
+    }
 
-    const handleControlledDropzonChangeStatus = (status, allFiles) => {
-        setTimeout(() => {
-            if (["done", "removed"].includes(status)) {
-                setFileObject([...allFiles]);
-            }
-        }, 0);
-    };
+    function deleteFile(e) {
+        const s = fileObject.filter((item, index) => index !== e);
+        setFileObject(s);
+    }
 
     return (
         <Paper
@@ -208,193 +212,94 @@ const ProductDetail = (props) => {
                 </Grid>
                 <Grid item xs={6}>
                     <Typography
-                        component="label"
                         variant="caption"
+                        color="initial"
                         fontWeight={"bold"}
                     >
                         รูปภาพจากลูกค้า
                     </Typography>
-                    <Controller
-                        control={control}
-                        name="fileObject"
-                        render={({ onChange }) => (
-                            <Dropzone
-                                getUploadParams={getUploadParams}
-                                // onChangeStatus={handleChangeStatus}
-                                onChangeStatus={(
-                                    fileObject,
-                                    status,
-                                    allFiles
-                                ) => {
-                                    handleControlledDropzonChangeStatus(
-                                        status,
-                                        allFiles,
-                                        onChange
-                                    );
-                                }}
-                                // onSubmit={handleSubmit}
-                                dropzoneDisabled
-                                maxFiles={3}
-                                inputContent="เพิ่ม 3 รูปภาพ"
-                                inputWithFilesContent={(files) =>
-                                    `${3 - files.length} more`
-                                }
-                                accept="image/*"
-                                submitButtonDisabled={(files) =>
-                                    files.length < 3
-                                }
-                                getFilesFromEvent={getFilesFromEvent}
-                                disabled={!onEdit}
-                            />
-                        )}
-                    />
-                    <Typography
+                    <Grid container direction={"row"} spacing={1}>
+                        {/* {id !== "new" &&
+                            fileObject?.length > 0 &&
+                            fileObject?.map((item, index) => {
+                                return (
+                                    <Grid item>
+                                        <img
+                                            src={item.meta.previewUrl}
+                                            alt=""
+                                            width={100}
+                                            height={"100%"}
+                                        />
+                                        <IconButton
+                                            aria-label="delete"
+                                            onClick={() => deleteFile(index)}
+                                            color="error"
+                                        >
+                                            <CloseIcon />
+                                        </IconButton>
+                                    </Grid>
+                                );
+                            })} */}
+
+                        {fileObject?.length > 0 &&
+                            fileObject?.map((item, index) => {
+                                return (
+                                    <Grid item key={item.previewUrl}>
+                                        <Grid container spacing={0}>
+                                            <Grid item>
+                                                <img
+                                                    src={item.previewUrl}
+                                                    alt=""
+                                                    width={100}
+                                                    height={"100%"}
+                                                />
+                                            </Grid>
+                                            <Grid item>
+                                                <IconButton
+                                                    aria-label="delete"
+                                                    onClick={() =>
+                                                        deleteFile(index)
+                                                    }
+                                                    color="error"
+                                                    sx={{
+                                                        margin: "-12px -10px 0 0",
+                                                    }}
+                                                >
+                                                    <CloseIcon />
+                                                </IconButton>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                );
+                            })}
+                    </Grid>
+
+                    <div className="form-group">
+                        <input
+                            type="file"
+                            disabled={fileObject.length === 3}
+                            className="form-control"
+                            onChange={uploadSingleFile}
+                            multiple
+                            style={{ display: "none" }}
+                        />
+                    </div>
+
+                    <Button
+                        sx={{ mt: 2 }}
+                        variant="contained"
                         component="label"
-                        variant="caption"
-                        fontWeight={"bold"}
+                        disabled={fileObject.length === 3 || !onEdit}
                     >
-                        ชื่อภาพ
-                    </Typography>
-                    {/* {id === "new" ? (
-                        <ol>
-                            {fileObject?.map((file) => (
-                                <Typography
-                                    variant="caption"
-                                    key={file.meta.id}
-                                >
-                                    <li>{file.meta.name}</li>
-                                </Typography>
-                            ))}
-                        </ol>
-                    ) : (
-                        <ol>
-                            {fileObject?.map((file) => (
-                                <Typography
-                                    variant="caption"
-                                    key={file.image_id}
-                                >
-                                    <li>{file.original_name}</li>
-                                </Typography>
-                            ))}
-                        </ol>
-                    )} */}
-                </Grid>
-                <Grid item xs={6}>
-                    <Typography
-                        component="label"
-                        variant="caption"
-                        fontWeight={"bold"}
-                    >
-                        รูปภาพก่อนซ่อม
-                    </Typography>
-                    <Controller
-                        control={control}
-                        name="filesLastRepair"
-                        render={({ onChange }) => (
-                            <Dropzone
-                                getUploadParams={getUploadParams}
-                                // onChangeStatus={handleChangeStatus}
-                                onChangeStatus={(
-                                    filesLastRepair,
-                                    status,
-                                    allFiles
-                                ) => {
-                                    handleControlledDropzonChangeStatus(
-                                        status,
-                                        allFiles,
-                                        onChange
-                                    );
-                                }}
-                                // onSubmit={handleSubmit}
-                                dropzoneDisabled
-                                maxFiles={3}
-                                inputContent="เพิ่ม 3 รูปภาพ"
-                                inputWithFilesContent={(files) =>
-                                    `${3 - files.length} more`
-                                }
-                                accept="image/*"
-                                submitButtonDisabled={(files) =>
-                                    files.length < 3
-                                }
-                                getFilesFromEvent={getFilesFromEvent}
-                                disabled={!onEdit}
-                            />
-                        )}
-                    />
-                    <Typography
-                        component="label"
-                        variant="caption"
-                        fontWeight={"bold"}
-                    >
-                        ชื่อภาพ
-                    </Typography>
-                    {/* <ol>
-                        {fileObject?.map((file) => (
-                            <Typography
-                                variant="caption"
-                                key={file.meta.id}
-                            >
-                                <li>{file.meta.name}</li>
-                            </Typography>
-                        ))}
-                    </ol> */}
-                </Grid>
-                <Grid item xs={6}>
-                    <Typography
-                        component="label"
-                        variant="caption"
-                        fontWeight={"bold"}
-                    >
-                        รูปภาพหลังซ่อม
-                    </Typography>
-                    <Controller
-                        control={control}
-                        name="imagesLastRepair"
-                        render={({ onChange }) => (
-                            <Dropzone
-                                getUploadParams={getUploadParams}
-                                // onChangeStatus={handleChangeStatus}
-                                onChangeStatus={(
-                                    imagesLastRepair,
-                                    status,
-                                    allFiles
-                                ) => {
-                                    handleControlledDropzonChangeStatus(
-                                        status,
-                                        allFiles,
-                                        onChange
-                                    );
-                                }}
-                                // onSubmit={handleSubmit}
-                                dropzoneDisabled
-                                maxFiles={3}
-                                inputContent="เพิ่ม 3 รูปภาพ"
-                                inputWithFilesContent={(files) =>
-                                    `${3 - files.length} more`
-                                }
-                                accept="image/*"
-                                submitButtonDisabled={(files) =>
-                                    files.length < 3
-                                }
-                                getFilesFromEvent={getFilesFromEvent}
-                                disabled={!onEdit}
-                            />
-                        )}
-                    />
-                    <Typography
-                        component="label"
-                        variant="caption"
-                        fontWeight={"bold"}
-                    >
-                        ชื่อภาพ
-                    </Typography>
-                    {/* <ol>
-                        {imagesLastRepair?.map((file) => (
-                            <Typography variant="caption" key={file.meta.id}>
-                                <li>{file.meta.name}</li>
-                            </Typography>
-                        ))}
-                    </ol> */}
+                        เลือกรูป
+                        <input
+                            hidden
+                            accept="image/*"
+                            multiple
+                            type="file"
+                            onChange={uploadSingleFile}
+                        />
+                    </Button>
                 </Grid>
                 <Grid item xs={12}>
                     <Controller

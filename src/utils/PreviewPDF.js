@@ -24,6 +24,14 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
 
     const received_date = new Date(ObjData.received_date);
     const return_date = new Date(ObjData.return_date);
+    const notified_date = new Date(ObjData.notified_date);
+
+    const ThaiNotifiedDate = notified_date.toLocaleDateString("th-TH", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        weekday: "long",
+    });
 
     const ThaiReceivedDate = received_date.toLocaleDateString("th-TH", {
         year: "numeric",
@@ -77,7 +85,10 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
                     },
                     {
                         text: `เลขที่ใบแจ้งซ่อม: ${ObjData.repair_no}
-                        วันที่ทำรายการ : ${ThaiReceivedDate}`,
+                        วันที่แจ้งเรื่อง : ${ThaiNotifiedDate} 
+                        วันที่รับซ่อม : ${ThaiReceivedDate}`
+                        ,
+                        
                     },
                 ],
             },
@@ -123,7 +134,7 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
                         ],
                         [
                             {
-                                text: `วันนัดรับ: ${ThaiReturnDate}`,
+                                text: `วันที่นัดรับ: ${ThaiReturnDate}`,
                                 colSpan: 2,
                             },
                         ],

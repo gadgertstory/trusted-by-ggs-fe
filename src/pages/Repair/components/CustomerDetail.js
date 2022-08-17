@@ -57,12 +57,12 @@ const CustomerDetail = (props) => {
         {
             status_id: 1,
             status_name: "มีประกัน",
-            status: 0,
+            status: 1,
         },
         {
             status_id: 2,
             status_name: "หมดประกัน",
-            status: 1,
+            status: 0,
         },
     ];
 
