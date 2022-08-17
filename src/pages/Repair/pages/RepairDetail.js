@@ -240,7 +240,7 @@ const RepairDetail = (roleUser) => {
 
             const formData = new FormData();
             _data.fileObject?.forEach((file) => {
-                formData.append("file", file);
+                formData.append("file", file.file);
             });
 
             formData.append("data", JSON.stringify(_data));
@@ -279,7 +279,7 @@ const RepairDetail = (roleUser) => {
 
             _data.fileObject?.forEach((file) => {
                 console.log(file);
-                formData.append("file", file);
+                formData.append("file", file.file);
             });
             formData.append("data", JSON.stringify(_updateData));
 

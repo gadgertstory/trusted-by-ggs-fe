@@ -90,7 +90,7 @@ const ProductDetail = (props) => {
         // );
         console.log(ImagesArray);
         // console.log(ImagesObjectURL);
-            setFileObject([...fileObject, ImagesArray]);
+            setFileObject([...fileObject, ...ImagesArray]);
     }
 
     function deleteFile(e) {
@@ -244,7 +244,7 @@ const ProductDetail = (props) => {
                         {fileObject?.length > 0 &&
                             fileObject?.map((item, index) => {
                                 return (
-                                    <Grid item key={item.previewUrl}>
+                                    <Grid item key={index}>
                                         <Grid container spacing={0}>
                                             <Grid item>
                                                 <img
