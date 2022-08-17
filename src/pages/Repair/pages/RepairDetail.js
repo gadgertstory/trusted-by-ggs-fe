@@ -147,7 +147,7 @@ const RepairDetail = (roleUser) => {
 
                 let DropzoneArr = [];
                 for (const iterator of dataRepair?.images) {
-                    const obj = iterator.image_url;
+                    const obj = { previewUrl: iterator.image_url  };
 
                     DropzoneArr.push(obj);
                 }
@@ -275,10 +275,10 @@ const RepairDetail = (roleUser) => {
                 },
             };
 
-            console.log('sssssss',_data)
+            console.log("sssssss", _data);
 
             _data.fileObject?.forEach((file) => {
-                console.log(file)
+                console.log(file);
                 formData.append("file", file);
             });
             formData.append("data", JSON.stringify(_updateData));
