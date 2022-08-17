@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Controller } from "react-hook-form";
 
 import { LocalizationProvider, DesktopDatePicker } from "@mui/x-date-pickers";
@@ -45,7 +45,6 @@ const ProductDetail = (props) => {
         statusList,
         roleUser,
     } = props;
-    const [file, setFile] = useState([]);
 
     const handleReceivedDateChange = (receivedDate) => {
         setReceivedDate(receivedDate);
@@ -72,11 +71,6 @@ const ProductDetail = (props) => {
         onSelectImagesLastRepair(imagesLastRepair);
     }, [fileObject, imagesLastRepair]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    // function uploadSingleFile(e) {
-    //     setFileObject([...fileObject, URL.createObjectURL(e.target.files[0])]);
-    //     console.log("file", fileObject);
-    // }
-
     function uploadSingleFile(e) {
         let ImagesArray = Object.entries(e.target.files).map((e) =>
             Object.assign(
@@ -85,12 +79,7 @@ const ProductDetail = (props) => {
                 { previewUrl: URL.createObjectURL(e[1]) }
             )
         );
-        // let ImagesObjectURL = Object.entries(e.target.files).map((e) =>
-        //     URL.createObjectURL(e[1])
-        // );
-        console.log(ImagesArray);
-        // console.log(ImagesObjectURL);
-            setFileObject([...fileObject, ...ImagesArray]);
+        setFileObject([...fileObject, ...ImagesArray]);
     }
 
     function deleteFile(e) {
@@ -219,28 +208,6 @@ const ProductDetail = (props) => {
                         รูปภาพจากลูกค้า
                     </Typography>
                     <Grid container direction={"row"} spacing={1}>
-                        {/* {id !== "new" &&
-                            fileObject?.length > 0 &&
-                            fileObject?.map((item, index) => {
-                                return (
-                                    <Grid item>
-                                        <img
-                                            src={item.meta.previewUrl}
-                                            alt=""
-                                            width={100}
-                                            height={"100%"}
-                                        />
-                                        <IconButton
-                                            aria-label="delete"
-                                            onClick={() => deleteFile(index)}
-                                            color="error"
-                                        >
-                                            <CloseIcon />
-                                        </IconButton>
-                                    </Grid>
-                                );
-                            })} */}
-
                         {fileObject?.length > 0 &&
                             fileObject?.map((item, index) => {
                                 return (

@@ -147,32 +147,10 @@ const RepairDetail = (roleUser) => {
 
                 let DropzoneArr = [];
                 for (const iterator of dataRepair?.images) {
-                    const obj = { previewUrl: iterator.image_url  };
+                    const obj = { previewUrl: iterator.image_url };
 
                     DropzoneArr.push(obj);
                 }
-                // for (const iterator of dataRepair?.images) {
-                //     const obj = {
-                //         file: {},
-                //         meta: {
-                //             name: iterator.original_name,
-                //             size: iterator.size,
-                //             type: "image/png",
-                //             lastModifiedDate: "2022-07-21T06:37:45.075Z",
-                //             uploadedDate: "2022-08-11T11:39:01.445Z",
-                //             percent: 100,
-                //             id: iterator.image_id,
-                //             status: "done",
-                //             previewUrl: iterator.image_url,
-                //             width: 1931,
-                //             height: 1080,
-                //             fileUrl: iterator.image_url,
-                //         },
-                //         xhr: {},
-                //     };
-                //     DropzoneArr.push(obj);
-                // }
-                // console.log(DropzoneArr)
 
                 setFileObject(DropzoneArr);
             }
@@ -231,9 +209,9 @@ const RepairDetail = (roleUser) => {
             setError("กรุณากรอกข้อมูลให้ครบ");
             return;
         }
-        // if (!error) {
-        //     setLoading(true);
-        // }
+        if (!error) {
+            setLoading(true);
+        }
 
         if (id === "new") {
             const _data = Object.assign(data, newData);
@@ -275,11 +253,9 @@ const RepairDetail = (roleUser) => {
                 },
             };
 
-            console.log("sssssss", _data);
-
             _data.fileObject?.forEach((file) => {
-                console.log(file);
                 formData.append("file", file.file);
+                formData.append("previewUrl", file.previewUrl);
             });
             formData.append("data", JSON.stringify(_updateData));
 
