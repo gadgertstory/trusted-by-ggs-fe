@@ -1,24 +1,68 @@
 import React from "react";
 
-import {
-    Grid,
-    Button,
-    IconButton,
-    Typography,
-    Box,
-} from "@mui/material";
+import { Grid, Button, IconButton, Typography, Box } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 const InputUploadImage = (props) => {
     const {
         label,
         imagesList,
-        deleteImage,
         roleUser,
         onEdit,
         onImageError,
-        uploadImage,
+        setImagesList,
+        setImageError,
     } = props;
+
+    function upload(e) {
+        if (e.target.files.length <= 3) {
+            let ImagesArray = Object.entries(e.target.files).map((e) =>
+                Object.assign(
+                    {},
+                    { file: e[1] },
+                    { previewUrl: URL.createObjectURL(e[1]) }
+                )
+            );
+            let validateImage = Object.entries(e.target.files).map((e) => e[1]);
+            validateImage?.forEach((type) => {
+                if (
+                    type.type === "image/png" ||
+                    type.type === "image/jpeg" ||
+                    type.type === "image/jpg" ||
+                    type.type === "image/webp"
+                ) {
+                    return (
+                        type.type,
+                        setImagesList([...imagesList, ...ImagesArray]),
+                        setImageError("")
+                    );
+                } else {
+                    alert(
+                        "กรุณาอัปโหลดไฟล์ .png, .jpeg, .jpg, .webp เท่านั้น!"
+                    );
+                    window.setTimeout(() => setImagesList([...imagesList]), 10)
+                }
+            });
+            validateImage?.forEach((size) => {
+                if (size.size < 10000000) {
+                    return (
+                        size.size,
+                        setImagesList([...imagesList, ...ImagesArray]),
+                        setImageError("")
+                    );
+                } else {
+                    setImageError("กรุณาอัปโหลดรูปภาพขนาดไม่เกิน 1MB");
+                }
+            });
+        } else {
+            setImageError("กรุณาอัปโหลด ไม่เกิน 3 รูป");
+        }
+    }
+
+    function deleteImage(e) {
+        const s = imagesList.filter((item, index) => index !== e);
+        setImagesList(s);
+    }
 
     return (
         <>
@@ -89,13 +133,20 @@ const InputUploadImage = (props) => {
                                 <Box noWrap>เลือกรูป</Box>
                                 <input
                                     hidden
-                                    accept="image/*"
+                                    accept="image/png,image/jpeg,image/jpg,image/webp"
                                     multiple
                                     type="file"
-                                    onChange={uploadImage}
+                                    onChange={upload}
                                 />
                             </Button>
                         </Grid>
+                        <Typography
+                            variant="caption"
+                            component="em"
+                            color="initial"
+                        >
+                            (อัปโหลดเฉพาะไฟล์ .png, .jpeg, .jpg, .webp เท่านั้น)
+                        </Typography>
                         <Grid item>{onImageError()}</Grid>
                     </Grid>
                 </Grid>
