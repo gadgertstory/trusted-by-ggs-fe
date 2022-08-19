@@ -24,6 +24,14 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
 
     const received_date = new Date(ObjData.received_date);
     const return_date = new Date(ObjData.return_date);
+    const notified_date = new Date(ObjData.notified_date);
+
+    const ThaiNotifiedDate = notified_date.toLocaleDateString("th-TH", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        weekday: "long",
+    });
 
     const ThaiReceivedDate = received_date.toLocaleDateString("th-TH", {
         year: "numeric",
@@ -73,11 +81,13 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
                         } ${ObjData.customer_district} ${
                             ObjData.customer_province
                         } ${ObjData.customer_zipcode}
-                        โทรศัพท์: ${formatPhoneNumber(ObjData.customer_tel)}`,
+                        โทรศัพท์: ${formatPhoneNumber(ObjData.customer_tel)}
+                        ช่องทางรับแจ้ง:  ${ObjData.receive_method}`,
                     },
                     {
                         text: `เลขที่ใบแจ้งซ่อม: ${ObjData.repair_no}
-                        วันที่ทำรายการ : ${ThaiReceivedDate}`,
+                        วันที่แจ้งเรื่อง : ${ThaiNotifiedDate} 
+                        วันที่รับซ่อม : ${ThaiReceivedDate}`,
                     },
                 ],
             },
@@ -90,7 +100,7 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
                         [
                             `ชื่อลูกค้า: ${ObjData.customer_firstname} ${ObjData.customer_lastname}`,
                             `โทรศัพท์:  ${formatPhoneNumber(
-                                ObjData.customer_tel
+                                ObjData.receive_method
                             )}`,
                         ],
                         [
@@ -106,7 +116,7 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
                         [
                             {
                                 text: `รายละเอียดการซ่อม/ปัญหา: ${
-                                    ObjData.description != null
+                                    ObjData.description
                                         ? ObjData.description
                                         : ""
                                 }`,
@@ -115,15 +125,26 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
                         ],
                         [
                             {
-                                text: `หมายเหตุ: ${
-                                    ObjData.remark != null ? ObjData.remark : ""
+                                text: `ระยะประกัน:  ${
+                                    ObjData.waranty_status &&
+                                    ObjData.waranty_status === 1
+                                        ? "มีประกัน"
+                                        : "หมดประกัน"
                                 }`,
                                 colSpan: 2,
                             },
                         ],
                         [
                             {
-                                text: `วันนัดรับ: ${ThaiReturnDate}`,
+                                text: `หมายเหตุ: ${
+                                    ObjData.remark ? ObjData.remark : ""
+                                }`,
+                                colSpan: 2,
+                            },
+                        ],
+                        [
+                            {
+                                text: `วันที่นัดรับ: ${ThaiReturnDate}`,
                                 colSpan: 2,
                             },
                         ],

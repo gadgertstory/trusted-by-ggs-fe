@@ -62,6 +62,8 @@ const RepairDetail = (roleUser) => {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const [imageError, setImageError] = useState("");
+    const [dateError, setDateError] = useState("");
 
     const [newData, setNewData] = useState({});
 
@@ -90,13 +92,13 @@ const RepairDetail = (roleUser) => {
     const [dataUrl, setDataUrl] = useState();
 
     //Image File
-    const [fileObject, setFileObject] = useState([]);
-    const [imagesLastRepair, setImagesLastRepair] = useState([]);
-    // const [meta, setMeta] = useState([]);
+    const [beforeRepair, setBeforeRepair] = useState([]);
+    const [betweenRepair, setBetweenRepair] = useState([]);
+    const [afterRepair, setAfterRepair] = useState([]);
 
     const fetch = useCallback(() => {
         Repair.fetchRepair(id).then((res) => {
-            console.log('res.data🌝',res.data);
+            console.log("res.data🌝", res.data);
             const dataRepair = res.data;
             if (dataRepair) {
                 setSubDistrict(dataRepair.customer_subdistrict);
@@ -143,48 +145,26 @@ const RepairDetail = (roleUser) => {
                     dataRepair.status[0].status.status_id || ""
                 );
                 setValue("receive_method", dataRepair.receive_method || "");
-                if (dataRepair.waranty_status === true) {
-                    setValue("waranty_status", (dataRepair.waranty_status = 0));
-                } else {
-                    setValue("waranty_status", (dataRepair.waranty_status = 1));
-                }
+                setValue("waranty_status", dataRepair.waranty_status || "");
 
-                // dataRepair.images?.map((image) => {
-
-                //     //   setMeta( mata: {
-                //     //         name: image.image_name,
-                //     //         id: image.image_id,
-                //     //         previewUrl: image.image_id,
-                //     //     },
-                //     //   )
-                //       const _newMeta = {meta:{}}
-                //       setMeta(Object.assign(_newMeta,{image}))
-                // });
-                let DropzoneArr = [];
+                let beforeRepairArr = [];
+                let betweenRepairArr = [];
+                let afterRepairArr = [];
                 for (const iterator of dataRepair?.images) {
-                   const obj = {
-                        file: {},
-                        meta: {
-                            name: iterator.original_name,
-                            size: iterator.size,
-                            type: 'image/png',
-                            lastModifiedDate: "2022-07-21T06:37:45.075Z",
-                            uploadedDate: "2022-08-11T11:39:01.445Z",
-                            percent: 100,
-                            id: "1660217941445-0",
-                            status: "done",
-                            previewUrl: iterator.image_url,
-                            width: 1931,
-                            height: 1080,
-                            fileUrl: iterator.image_url,
-                        },
-                        xhr: {},
-                    };
-                    DropzoneArr.push(obj);
+                    if (iterator.image_status === "before_repair") {
+                        const obj = { previewUrl: iterator.image_url };
+                        beforeRepairArr.push(obj);
+                    } else if (iterator.image_status === "between_repair") {
+                        const obj = { previewUrl: iterator.image_url };
+                        betweenRepairArr.push(obj);
+                    } else {
+                        const obj = { previewUrl: iterator.image_url };
+                        afterRepairArr.push(obj);
+                    }
                 }
-                // console.log(DropzoneArr)
-
-                setFileObject(DropzoneArr);
+                setBeforeRepair(beforeRepairArr);
+                setBetweenRepair(betweenRepairArr);
+                setAfterRepair(afterRepairArr);
             }
         });
     }, [district, province, setValue, subdistrict, zipcode, id]);
@@ -215,8 +195,9 @@ const RepairDetail = (roleUser) => {
             received_date: receivedDate,
             return_date: returnDate,
             notified_date: notifiedDate,
-            fileObject: fileObject,
-            imagesLastRepair: imagesLastRepair,
+            beforeRepair: beforeRepair,
+            betweenRepair: betweenRepair,
+            afterRepair: afterRepair,
             customer_subdistrict: subdistrict,
             customer_district: district,
             customer_province: province,
@@ -230,9 +211,10 @@ const RepairDetail = (roleUser) => {
         zipcode,
         receivedDate,
         returnDate,
-        fileObject,
-        imagesLastRepair,
         notifiedDate,
+        beforeRepair,
+        betweenRepair,
+        afterRepair,
         currentUser,
     ]);
 
@@ -241,6 +223,11 @@ const RepairDetail = (roleUser) => {
             setError("กรุณากรอกข้อมูลให้ครบ");
             return;
         }
+        if (!notifiedDate || !receivedDate || !returnDate) {
+            setDateError("กรุณากรอกข้อมูลให้ครบ");
+            return;
+        }
+
         if (!error) {
             setLoading(true);
         }
@@ -249,25 +236,23 @@ const RepairDetail = (roleUser) => {
             const _data = Object.assign(data, newData);
 
             const formData = new FormData();
-            _data.fileObject?.forEach((file) => {
-                formData.append("file", file.file);
+            _data.beforeRepair?.forEach((file) => {
+                formData.append("before_repair", file.file);
+            });
+
+            _data.betweenRepair?.forEach((file) => {
+                formData.append("between_repair", file.file);
+            });
+
+            _data.afterRepair?.forEach((file) => {
+                formData.append("after_repair", file.file);
             });
 
             formData.append("data", JSON.stringify(_data));
-
-            if (_data.waranty_status === 0) {
-                return (
-                    (_data.waranty_status = true),
-                    dispatch(createRepair(formData))
-                );
-            } else {
-                return (
-                    (_data.waranty_status = false),
-                    dispatch(createRepair(formData))
-                );
-            }
+            dispatch(createRepair(formData));
         } else {
             const _data = Object.assign(data, newData);
+
             const formData = new FormData();
 
             const _updateData = {
@@ -280,6 +265,8 @@ const RepairDetail = (roleUser) => {
                     customer_district: _data.customer_district,
                     customer_province: _data.customer_province,
                     customer_zipcode: _data.customer_zipcode,
+                    waranty_status: _data.waranty_status,
+                    receive_method: _data.receive_method,
                     brand_id: _data.brand_id,
                     product_name: _data.product_name,
                     description: _data.description,
@@ -292,13 +279,21 @@ const RepairDetail = (roleUser) => {
                 },
             };
 
-            _data.fileObject?.forEach((file) => {
-                formData.append("file", file.file);
+            _data.beforeRepair?.forEach((file) => {
+                formData.append("before_repair", file.file);
+                formData.append("previewUrl", file.previewUrl);
             });
-            _data.imagesLastRepair?.forEach((file) => {
-                formData.append("file", file.file);
+
+            _data.betweenRepair?.forEach((file) => {
+                formData.append("between_repair", file.file);
+                formData.append("previewUrl", file.previewUrl);
             });
-            // console.log(_data)
+
+            _data.afterRepair?.forEach((file) => {
+                formData.append("after_repair", file.file);
+                formData.append("previewUrl", file.previewUrl);
+            });
+
             formData.append("data", JSON.stringify(_updateData));
             dispatch(updateRepair(id, formData));
         }
@@ -318,26 +313,31 @@ const RepairDetail = (roleUser) => {
 
     const onSelectReceivedDate = (receivedDate) => {
         setReceivedDate(receivedDate?.toISOString().split("T")[0]);
-        setError("");
+        setDateError("");
     };
 
     const onSelectReturnDate = (returnDate) => {
         setReturnDate(returnDate?.toISOString().split("T")[0]);
-        setError("");
+        setDateError("");
     };
 
     const onSelectNotifiedDate = (notifiedDate) => {
         setNotifiedDate(notifiedDate?.toISOString().split("T")[0]);
+        setDateError("");
+    };
+
+    const onSelectBeforeRepair = (beforeRepair) => {
+        setBeforeRepair(beforeRepair);
         setError("");
     };
 
-    const onSelectFileObj = (fileObj) => {
-        setFileObject(fileObj);
+    const onSelectBetweenRepair = (betweenRepair) => {
+        setBetweenRepair(betweenRepair);
         setError("");
     };
 
-    const onSelectImagesLastRepair = (imagesLastRepair) => {
-        setImagesLastRepair(imagesLastRepair);
+    const onSelectAfterRepair = (afterRepair) => {
+        setAfterRepair(afterRepair);
         setError("");
     };
 
@@ -351,6 +351,37 @@ const RepairDetail = (roleUser) => {
                 ) : (
                     ""
                 )}
+               
+            </>
+        );
+    };
+
+    const onImageError = () => {
+        return (
+            <>
+                {imageError ? (
+                    <FormControl>
+                        <FormHelperText error>{imageError}</FormHelperText>
+                    </FormControl>
+                ) : (
+                    ""
+                )}
+            </>
+        );
+    };
+
+
+    const onDateError = () => {
+        return (
+            <>
+                {dateError ? (
+                    <FormControl>
+                        <FormHelperText error>{dateError}</FormHelperText>
+                    </FormControl>
+                ) : (
+                    ""
+                )}
+               
             </>
         );
     };
@@ -566,11 +597,18 @@ const RepairDetail = (roleUser) => {
                             onEdit={onEdit}
                             control={control}
                             error={error}
+                            onError={onError}
                             setError={setError}
+                            setDateError={setDateError}
+                            onImageError={onImageError}
+                            onDateError={onDateError}
+                            setImageError={setImageError}
                             onSelectReturnDate={onSelectReturnDate}
                             onSelectReceivedDate={onSelectReceivedDate}
                             onSelectNotifiedDate={onSelectNotifiedDate}
-                            onSelectFileObj={onSelectFileObj}
+                            onSelectBetweenRepair={onSelectBetweenRepair}
+                            onSelectBeforeRepair={onSelectBeforeRepair}
+                            onSelectAfterRepair={onSelectAfterRepair}
                             brandList={brandList}
                             statusList={statusList}
                             receivedDate={receivedDate}
@@ -579,10 +617,12 @@ const RepairDetail = (roleUser) => {
                             setReturnDate={setReturnDate}
                             notifiedDate={notifiedDate}
                             setNotifiedDate={setNotifiedDate}
-                            fileObject={fileObject}
-                            setFileObject={setFileObject}
-                            onSelectImagesLastRepair={onSelectImagesLastRepair}
-                            imagesLastRepair={imagesLastRepair}
+                            betweenRepair={betweenRepair}
+                            setBetweenRepair={setBetweenRepair}
+                            beforeRepair={beforeRepair}
+                            setBeforeRepair={setBeforeRepair}
+                            afterRepair={afterRepair}
+                            setAfterRepair={setAfterRepair}
                         />
                         {id === "new" ? (
                             ""

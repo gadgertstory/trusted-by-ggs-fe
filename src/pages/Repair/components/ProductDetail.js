@@ -1,11 +1,8 @@
-import React, { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import React from "react";
+import { Controller } from "react-hook-form";
 
 import { LocalizationProvider, DesktopDatePicker } from "@mui/x-date-pickers";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
-
-import Dropzone from "react-dropzone-uploader";
-import { getDroppedOrSelectedFiles } from "html5-file-selector";
 
 import {
     FormHelperText,
@@ -16,10 +13,10 @@ import {
     MenuItem,
     InputLabel,
     TextField,
-    Typography,
 } from "@mui/material";
 
 import Input from "../../../components/Input";
+import InputUploadImage from "../../../components/InputUploadImage";
 
 const ProductDetail = (props) => {
     const {
@@ -28,70 +25,124 @@ const ProductDetail = (props) => {
         returnDate,
         receivedDate,
         notifiedDate,
-        fileObject,
-        imagesLastRepair,
+        betweenRepair,
+        beforeRepair,
+        afterRepair,
+        afterCustomer,
         setReceivedDate,
         setReturnDate,
         setNotifiedDate,
-        setError,
-        setFileObject,
+        setBeforeRepair,
+        setBetweenRepair,
+        setAfterRepair,
         onSelectReceivedDate,
         onSelectReturnDate,
         onSelectNotifiedDate,
-        onSelectFileObj,
-        onSelectImagesLastRepair,
+        onSelectBetweenRepair,
+        onSelectBeforeRepair,
+        onSelectAfterRepair,
         onEdit,
         brandList,
         statusList,
         roleUser,
+        onDateError,
+        onImageError,
+        setImageError,
+        setDateError
     } = props;
 
     const handleReceivedDateChange = (receivedDate) => {
         setReceivedDate(receivedDate);
         onSelectReceivedDate(receivedDate);
-        setError("");
+        setDateError("");
     };
 
     const handleReturnDateChange = (returnDate) => {
         setReturnDate(returnDate);
         onSelectReturnDate(returnDate);
-        setError("");
+        setDateError("");
     };
 
     const handleNotifiedDateChange = (notifiedDate) => {
         setNotifiedDate(notifiedDate);
         onSelectNotifiedDate(notifiedDate);
-        setError("");
+        setDateError("");
     };
 
     React.useEffect(() => {
-        console.log("file upload🚀", fileObject);
-        onSelectFileObj(fileObject);
-        onSelectImagesLastRepair(imagesLastRepair);
-    }, [fileObject, imagesLastRepair]);
+        console.log("file beforeRepair🙀", beforeRepair);
+        console.log("file betweenRepair🚀", betweenRepair);
 
-    const getUploadParams = ({ meta }) => {
-        const url = "https://httpbin.org/post";
-        return {
-            url,
-            meta: { fileUrl: `${url}/${encodeURIComponent(meta.name)}` },
-        };
-    };
+        onSelectBeforeRepair(beforeRepair);
+        onSelectBetweenRepair(betweenRepair);
+        onSelectAfterRepair(afterRepair);
+    }, [betweenRepair, beforeRepair, afterCustomer]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const getFilesFromEvent = (e) => {
-        return new Promise((resolve) => {
-            getDroppedOrSelectedFiles(e).then((chosenFiles) => {
-                resolve(chosenFiles.map((f) => f.fileObject));
-            });
-        });
-    };
+    function uploadBeforeRepair(e) {
+        if (e.target.files.length < 4) {
+            let ImagesArray = Object.entries(e.target.files).map((e) =>
+                Object.assign(
+                    {},
+                    { file: e[1] },
+                    { previewUrl: URL.createObjectURL(e[1]) }
+                )
+            );
+            setBeforeRepair([...beforeRepair, ...ImagesArray]);
+        } else {
+            setImageError("กรุณาอัปโหลด ไม่เกิน 3 รูป");
+        }
+    }
 
-    const handleControlledDropzonChangeStatus = (status, allFiles) => {
-        setTimeout(() => {
-            if (["done", "removed"].includes(status)) {
-                setFileObject([...allFiles]);
-            }
-        }, 0);
+    function uploadBetweenRepair(e) {
+        if (e.target.files.length < 4) {
+            let ImagesArray = Object.entries(e.target.files).map((e) =>
+                Object.assign(
+                    {},
+                    { file: e[1] },
+                    { previewUrl: URL.createObjectURL(e[1]) }
+                )
+            );
+            setBetweenRepair([...betweenRepair, ...ImagesArray]);
+        } else {
+            setImageError("กรุณาอัปโหลด ไม่เกิน 3 รูป");
+        }
+    }
+
+    function uploadAfterRepair(e) {
+        if (e.target.files.length < 4) {
+            let ImagesArray = Object.entries(e.target.files).map((e) =>
+                Object.assign(
+                    {},
+                    { file: e[1] },
+                    { previewUrl: URL.createObjectURL(e[1]) }
+                )
+            );
+            setAfterRepair([...afterRepair, ...ImagesArray]);
+        } else {
+            setImageError("กรุณาอัปโหลด ไม่เกิน 3 รูป");
+        }
+    }
+
+    function deleteBeforeRepair(e) {
+        const s = beforeRepair.filter((item, index) => index !== e);
+        setBeforeRepair(s);
+    }
+
+    function deleteBetweenRepair(e) {
+        const s = betweenRepair.filter((item, index) => index !== e);
+        setBetweenRepair(s);
+    }
+
+    function deleteAfterRepair(e) {
+        const s = afterRepair.filter((item, index) => index !== e);
+        setAfterRepair(s);
+    }
+
+    const handleDateChangeRaw = (e) => {
+        const key = e.key;
+        if (key === "Backspace") {
+            e.preventDefault();
+        }
     };
 
     return (
@@ -206,195 +257,38 @@ const ProductDetail = (props) => {
                         }}
                     />
                 </Grid>
-                <Grid item xs={6}>
-                    <Typography
-                        component="label"
-                        variant="caption"
-                        fontWeight={"bold"}
-                    >
-                        รูปภาพจากลูกค้า
-                    </Typography>
-                    <Controller
-                        control={control}
-                        name="fileObject"
-                        render={({ onChange }) => (
-                            <Dropzone
-                                getUploadParams={getUploadParams}
-                                // onChangeStatus={handleChangeStatus}
-                                onChangeStatus={(
-                                    fileObject,
-                                    status,
-                                    allFiles
-                                ) => {
-                                    handleControlledDropzonChangeStatus(
-                                        status,
-                                        allFiles,
-                                        onChange
-                                    );
-                                }}
-                                // onSubmit={handleSubmit}
-                                dropzoneDisabled
-                                maxFiles={3}
-                                inputContent="เพิ่ม 3 รูปภาพ"
-                                inputWithFilesContent={(files) =>
-                                    `${3 - files.length} more`
-                                }
-                                accept="image/*"
-                                submitButtonDisabled={(files) =>
-                                    files.length < 3
-                                }
-                                getFilesFromEvent={getFilesFromEvent}
-                                disabled={!onEdit}
-                            />
-                        )}
+                <Grid item xs={12}>
+                    <InputUploadImage
+                        label={"รูปภาพก่อนซ่อม (อัปโหลด ไม่เกิน 3 รูป)"}
+                        imagesList={beforeRepair}
+                        deleteImage={deleteBeforeRepair}
+                        roleUser={roleUser}
+                        onEdit={onEdit}
+                        onImageError={onImageError}
+                        uploadImage={uploadBeforeRepair}
                     />
-                    <Typography
-                        component="label"
-                        variant="caption"
-                        fontWeight={"bold"}
-                    >
-                        ชื่อภาพ
-                    </Typography>
-                    {/* {id === "new" ? (
-                        <ol>
-                            {fileObject?.map((file) => (
-                                <Typography
-                                    variant="caption"
-                                    key={file.meta.id}
-                                >
-                                    <li>{file.meta.name}</li>
-                                </Typography>
-                            ))}
-                        </ol>
-                    ) : (
-                        <ol>
-                            {fileObject?.map((file) => (
-                                <Typography
-                                    variant="caption"
-                                    key={file.image_id}
-                                >
-                                    <li>{file.original_name}</li>
-                                </Typography>
-                            ))}
-                        </ol>
-                    )} */}
                 </Grid>
-                <Grid item xs={6}>
-                    <Typography
-                        component="label"
-                        variant="caption"
-                        fontWeight={"bold"}
-                    >
-                        รูปภาพก่อนซ่อม
-                    </Typography>
-                    <Controller
-                        control={control}
-                        name="filesLastRepair"
-                        render={({ onChange }) => (
-                            <Dropzone
-                                getUploadParams={getUploadParams}
-                                // onChangeStatus={handleChangeStatus}
-                                onChangeStatus={(
-                                    filesLastRepair,
-                                    status,
-                                    allFiles
-                                ) => {
-                                    handleControlledDropzonChangeStatus(
-                                        status,
-                                        allFiles,
-                                        onChange
-                                    );
-                                }}
-                                // onSubmit={handleSubmit}
-                                dropzoneDisabled
-                                maxFiles={3}
-                                inputContent="เพิ่ม 3 รูปภาพ"
-                                inputWithFilesContent={(files) =>
-                                    `${3 - files.length} more`
-                                }
-                                accept="image/*"
-                                submitButtonDisabled={(files) =>
-                                    files.length < 3
-                                }
-                                getFilesFromEvent={getFilesFromEvent}
-                                disabled={!onEdit}
-                            />
-                        )}
+                <Grid item xs={12}>
+                    <InputUploadImage
+                        label={"รูปภาพระหว่างซ่อม (อัปโหลด ไม่เกิน 3 รูป)"}
+                        imagesList={betweenRepair}
+                        deleteImage={deleteBetweenRepair}
+                        roleUser={roleUser}
+                        onEdit={onEdit}
+                        onImageError={onImageError}
+                        uploadImage={uploadBetweenRepair}
                     />
-                    <Typography
-                        component="label"
-                        variant="caption"
-                        fontWeight={"bold"}
-                    >
-                        ชื่อภาพ
-                    </Typography>
-                    {/* <ol>
-                        {fileObject?.map((file) => (
-                            <Typography
-                                variant="caption"
-                                key={file.meta.id}
-                            >
-                                <li>{file.meta.name}</li>
-                            </Typography>
-                        ))}
-                    </ol> */}
                 </Grid>
-                <Grid item xs={6}>
-                    <Typography
-                        component="label"
-                        variant="caption"
-                        fontWeight={"bold"}
-                    >
-                        รูปภาพหลังซ่อม
-                    </Typography>
-                    <Controller
-                        control={control}
-                        name="imagesLastRepair"
-                        render={({ onChange }) => (
-                            <Dropzone
-                                getUploadParams={getUploadParams}
-                                // onChangeStatus={handleChangeStatus}
-                                onChangeStatus={(
-                                    imagesLastRepair,
-                                    status,
-                                    allFiles
-                                ) => {
-                                    handleControlledDropzonChangeStatus(
-                                        status,
-                                        allFiles,
-                                        onChange
-                                    );
-                                }}
-                                // onSubmit={handleSubmit}
-                                dropzoneDisabled
-                                maxFiles={3}
-                                inputContent="เพิ่ม 3 รูปภาพ"
-                                inputWithFilesContent={(files) =>
-                                    `${3 - files.length} more`
-                                }
-                                accept="image/*"
-                                submitButtonDisabled={(files) =>
-                                    files.length < 3
-                                }
-                                getFilesFromEvent={getFilesFromEvent}
-                                disabled={!onEdit}
-                            />
-                        )}
+                <Grid item xs={12}>
+                    <InputUploadImage
+                        label={"รูปภาพหลังซ่อม (อัปโหลด ไม่เกิน 3 รูป)"}
+                        imagesList={afterRepair}
+                        deleteImage={deleteAfterRepair}
+                        roleUser={roleUser}
+                        onEdit={onEdit}
+                        onImageError={onImageError}
+                        uploadImage={uploadAfterRepair}
                     />
-                    <Typography
-                        component="label"
-                        variant="caption"
-                        fontWeight={"bold"}
-                    >
-                        ชื่อภาพ
-                    </Typography>
-                    {/* <ol>
-                        {imagesLastRepair?.map((file) => (
-                            <Typography variant="caption" key={file.meta.id}>
-                                <li>{file.meta.name}</li>
-                            </Typography>
-                        ))}
-                    </ol> */}
                 </Grid>
                 <Grid item xs={12}>
                     <Controller
@@ -485,10 +379,16 @@ const ProductDetail = (props) => {
                             onChange={handleNotifiedDateChange}
                             disabled={!onEdit || id !== "new"}
                             renderInput={(params) => (
-                                <TextField fullWidth size="small" {...params} />
+                                <TextField
+                                    onKeyDown={handleDateChangeRaw}
+                                    fullWidth
+                                    size="small"
+                                    {...params}
+                                />
                             )}
                         />
                     </LocalizationProvider>
+                    {onDateError()}
                 </Grid>
                 <Grid item xs={12} md={3}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -499,10 +399,16 @@ const ProductDetail = (props) => {
                             onChange={handleReceivedDateChange}
                             disabled={!onEdit || id !== "new"}
                             renderInput={(params) => (
-                                <TextField fullWidth size="small" {...params} />
+                                <TextField
+                                    onKeyDown={handleDateChangeRaw}
+                                    fullWidth
+                                    size="small"
+                                    {...params}
+                                />
                             )}
                         />
                     </LocalizationProvider>
+                    {onDateError()}
                 </Grid>
                 <Grid item xs={12} md={3}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -515,10 +421,16 @@ const ProductDetail = (props) => {
                                 !onEdit || roleUser.roleUser.role === "user"
                             }
                             renderInput={(params) => (
-                                <TextField fullWidth size="small" {...params} />
+                                <TextField
+                                    onKeyDown={handleDateChangeRaw}
+                                    fullWidth
+                                    size="small"
+                                    {...params}
+                                />
                             )}
                         />
                     </LocalizationProvider>
+                    {onDateError()}
                 </Grid>
             </Grid>
         </Paper>
