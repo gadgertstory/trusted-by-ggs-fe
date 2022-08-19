@@ -13,13 +13,10 @@ import {
     MenuItem,
     InputLabel,
     TextField,
-    Button,
-    IconButton,
-    Typography,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 
 import Input from "../../../components/Input";
+import InputUploadImage from "../../../components/InputUploadImage";
 
 const ProductDetail = (props) => {
     const {
@@ -28,64 +25,125 @@ const ProductDetail = (props) => {
         returnDate,
         receivedDate,
         notifiedDate,
-        fileObject,
-        imagesLastRepair,
+        betweenRepair,
+        beforeRepair,
+        afterRepair,
+        afterCustomer,
         setReceivedDate,
         setReturnDate,
         setNotifiedDate,
-        setError,
-        setFileObject,
+        setBeforeRepair,
+        setBetweenRepair,
+        setAfterRepair,
         onSelectReceivedDate,
         onSelectReturnDate,
         onSelectNotifiedDate,
-        onSelectFileObj,
-        onSelectImagesLastRepair,
+        onSelectBetweenRepair,
+        onSelectBeforeRepair,
+        onSelectAfterRepair,
         onEdit,
         brandList,
         statusList,
         roleUser,
+        onDateError,
+        onImageError,
+        setImageError,
+        setDateError
     } = props;
 
     const handleReceivedDateChange = (receivedDate) => {
         setReceivedDate(receivedDate);
         onSelectReceivedDate(receivedDate);
-        setError("");
+        setDateError("");
     };
 
     const handleReturnDateChange = (returnDate) => {
         setReturnDate(returnDate);
         onSelectReturnDate(returnDate);
-        setError("");
+        setDateError("");
     };
 
     const handleNotifiedDateChange = (notifiedDate) => {
         setNotifiedDate(notifiedDate);
         onSelectNotifiedDate(notifiedDate);
-        setError("");
+        setDateError("");
     };
 
     React.useEffect(() => {
-        console.log("file upload🚀", fileObject);
+        console.log("file beforeRepair🙀", beforeRepair);
+        console.log("file betweenRepair🚀", betweenRepair);
 
-        onSelectFileObj(fileObject);
-        onSelectImagesLastRepair(imagesLastRepair);
-    }, [fileObject, imagesLastRepair]); // eslint-disable-line react-hooks/exhaustive-deps
+        onSelectBeforeRepair(beforeRepair);
+        onSelectBetweenRepair(betweenRepair);
+        onSelectAfterRepair(afterRepair);
+    }, [betweenRepair, beforeRepair, afterCustomer]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    function uploadSingleFile(e) {
-        let ImagesArray = Object.entries(e.target.files).map((e) =>
-            Object.assign(
-                {},
-                { file: e[1] },
-                { previewUrl: URL.createObjectURL(e[1]) }
-            )
-        );
-        setFileObject([...fileObject, ...ImagesArray]);
+    function uploadBeforeRepair(e) {
+        if (e.target.files.length < 4) {
+            let ImagesArray = Object.entries(e.target.files).map((e) =>
+                Object.assign(
+                    {},
+                    { file: e[1] },
+                    { previewUrl: URL.createObjectURL(e[1]) }
+                )
+            );
+            setBeforeRepair([...beforeRepair, ...ImagesArray]);
+        } else {
+            setImageError("กรุณาอัปโหลด ไม่เกิน 3 รูป");
+        }
     }
 
-    function deleteFile(e) {
-        const s = fileObject.filter((item, index) => index !== e);
-        setFileObject(s);
+    function uploadBetweenRepair(e) {
+        if (e.target.files.length < 4) {
+            let ImagesArray = Object.entries(e.target.files).map((e) =>
+                Object.assign(
+                    {},
+                    { file: e[1] },
+                    { previewUrl: URL.createObjectURL(e[1]) }
+                )
+            );
+            setBetweenRepair([...betweenRepair, ...ImagesArray]);
+        } else {
+            setImageError("กรุณาอัปโหลด ไม่เกิน 3 รูป");
+        }
     }
+
+    function uploadAfterRepair(e) {
+        if (e.target.files.length < 4) {
+            let ImagesArray = Object.entries(e.target.files).map((e) =>
+                Object.assign(
+                    {},
+                    { file: e[1] },
+                    { previewUrl: URL.createObjectURL(e[1]) }
+                )
+            );
+            setAfterRepair([...afterRepair, ...ImagesArray]);
+        } else {
+            setImageError("กรุณาอัปโหลด ไม่เกิน 3 รูป");
+        }
+    }
+
+    function deleteBeforeRepair(e) {
+        const s = beforeRepair.filter((item, index) => index !== e);
+        setBeforeRepair(s);
+    }
+
+    function deleteBetweenRepair(e) {
+        const s = betweenRepair.filter((item, index) => index !== e);
+        setBetweenRepair(s);
+    }
+
+    function deleteAfterRepair(e) {
+        const s = afterRepair.filter((item, index) => index !== e);
+        setAfterRepair(s);
+    }
+
+    const handleDateChangeRaw = (e) => {
+        const key = e.key;
+        if (key === "Backspace") {
+            e.preventDefault();
+        }
+    };
 
     return (
         <Paper
@@ -199,74 +257,38 @@ const ProductDetail = (props) => {
                         }}
                     />
                 </Grid>
-                <Grid item xs={6}>
-                    <Typography
-                        variant="caption"
-                        color="initial"
-                        fontWeight={"bold"}
-                    >
-                        รูปภาพจากลูกค้า
-                    </Typography>
-                    <Grid container direction={"row"} spacing={1}>
-                        {fileObject?.length > 0 &&
-                            fileObject?.map((item, index) => {
-                                return (
-                                    <Grid item key={index}>
-                                        <Grid container spacing={0}>
-                                            <Grid item>
-                                                <img
-                                                    src={item.previewUrl}
-                                                    alt=""
-                                                    width={100}
-                                                    height={"100%"}
-                                                />
-                                            </Grid>
-                                            <Grid item>
-                                                <IconButton
-                                                    aria-label="delete"
-                                                    onClick={() =>
-                                                        deleteFile(index)
-                                                    }
-                                                    color="error"
-                                                    sx={{
-                                                        margin: "-12px -10px 0 0",
-                                                    }}
-                                                >
-                                                    <CloseIcon />
-                                                </IconButton>
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                );
-                            })}
-                    </Grid>
-
-                    <div className="form-group">
-                        <input
-                            type="file"
-                            disabled={fileObject.length === 3}
-                            className="form-control"
-                            onChange={uploadSingleFile}
-                            multiple
-                            style={{ display: "none" }}
-                        />
-                    </div>
-
-                    <Button
-                        sx={{ mt: 2 }}
-                        variant="contained"
-                        component="label"
-                        disabled={fileObject.length === 3 || !onEdit}
-                    >
-                        เลือกรูป
-                        <input
-                            hidden
-                            accept="image/*"
-                            multiple
-                            type="file"
-                            onChange={uploadSingleFile}
-                        />
-                    </Button>
+                <Grid item xs={12}>
+                    <InputUploadImage
+                        label={"รูปภาพก่อนซ่อม (อัปโหลด ไม่เกิน 3 รูป)"}
+                        imagesList={beforeRepair}
+                        deleteImage={deleteBeforeRepair}
+                        roleUser={roleUser}
+                        onEdit={onEdit}
+                        onImageError={onImageError}
+                        uploadImage={uploadBeforeRepair}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <InputUploadImage
+                        label={"รูปภาพระหว่างซ่อม (อัปโหลด ไม่เกิน 3 รูป)"}
+                        imagesList={betweenRepair}
+                        deleteImage={deleteBetweenRepair}
+                        roleUser={roleUser}
+                        onEdit={onEdit}
+                        onImageError={onImageError}
+                        uploadImage={uploadBetweenRepair}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <InputUploadImage
+                        label={"รูปภาพหลังซ่อม (อัปโหลด ไม่เกิน 3 รูป)"}
+                        imagesList={afterRepair}
+                        deleteImage={deleteAfterRepair}
+                        roleUser={roleUser}
+                        onEdit={onEdit}
+                        onImageError={onImageError}
+                        uploadImage={uploadAfterRepair}
+                    />
                 </Grid>
                 <Grid item xs={12}>
                     <Controller
@@ -357,10 +379,16 @@ const ProductDetail = (props) => {
                             onChange={handleNotifiedDateChange}
                             disabled={!onEdit || id !== "new"}
                             renderInput={(params) => (
-                                <TextField fullWidth size="small" {...params} />
+                                <TextField
+                                    onKeyDown={handleDateChangeRaw}
+                                    fullWidth
+                                    size="small"
+                                    {...params}
+                                />
                             )}
                         />
                     </LocalizationProvider>
+                    {onDateError()}
                 </Grid>
                 <Grid item xs={12} md={3}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -371,10 +399,16 @@ const ProductDetail = (props) => {
                             onChange={handleReceivedDateChange}
                             disabled={!onEdit || id !== "new"}
                             renderInput={(params) => (
-                                <TextField fullWidth size="small" {...params} />
+                                <TextField
+                                    onKeyDown={handleDateChangeRaw}
+                                    fullWidth
+                                    size="small"
+                                    {...params}
+                                />
                             )}
                         />
                     </LocalizationProvider>
+                    {onDateError()}
                 </Grid>
                 <Grid item xs={12} md={3}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -387,10 +421,16 @@ const ProductDetail = (props) => {
                                 !onEdit || roleUser.roleUser.role === "user"
                             }
                             renderInput={(params) => (
-                                <TextField fullWidth size="small" {...params} />
+                                <TextField
+                                    onKeyDown={handleDateChangeRaw}
+                                    fullWidth
+                                    size="small"
+                                    {...params}
+                                />
                             )}
                         />
                     </LocalizationProvider>
+                    {onDateError()}
                 </Grid>
             </Grid>
         </Paper>

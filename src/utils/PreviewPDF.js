@@ -81,14 +81,13 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
                         } ${ObjData.customer_district} ${
                             ObjData.customer_province
                         } ${ObjData.customer_zipcode}
-                        โทรศัพท์: ${formatPhoneNumber(ObjData.customer_tel)}`,
+                        โทรศัพท์: ${formatPhoneNumber(ObjData.customer_tel)}
+                        ช่องทางรับแจ้ง:  ${ObjData.receive_method}`,
                     },
                     {
                         text: `เลขที่ใบแจ้งซ่อม: ${ObjData.repair_no}
                         วันที่แจ้งเรื่อง : ${ThaiNotifiedDate} 
-                        วันที่รับซ่อม : ${ThaiReceivedDate}`
-                        ,
-                        
+                        วันที่รับซ่อม : ${ThaiReceivedDate}`,
                     },
                 ],
             },
@@ -101,7 +100,7 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
                         [
                             `ชื่อลูกค้า: ${ObjData.customer_firstname} ${ObjData.customer_lastname}`,
                             `โทรศัพท์:  ${formatPhoneNumber(
-                                ObjData.customer_tel
+                                ObjData.receive_method
                             )}`,
                         ],
                         [
@@ -117,7 +116,7 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
                         [
                             {
                                 text: `รายละเอียดการซ่อม/ปัญหา: ${
-                                    ObjData.description != null
+                                    ObjData.description
                                         ? ObjData.description
                                         : ""
                                 }`,
@@ -126,8 +125,19 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
                         ],
                         [
                             {
+                                text: `ระยะประกัน:  ${
+                                    ObjData.waranty_status &&
+                                    ObjData.waranty_status === 1
+                                        ? "มีประกัน"
+                                        : "หมดประกัน"
+                                }`,
+                                colSpan: 2,
+                            },
+                        ],
+                        [
+                            {
                                 text: `หมายเหตุ: ${
-                                    ObjData.remark != null ? ObjData.remark : ""
+                                    ObjData.remark ? ObjData.remark : ""
                                 }`,
                                 colSpan: 2,
                             },
