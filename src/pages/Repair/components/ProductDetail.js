@@ -48,7 +48,7 @@ const ProductDetail = (props) => {
         onDateError,
         onImageError,
         setImageError,
-        setDateError
+        setDateError,
     } = props;
 
     const handleReceivedDateChange = (receivedDate) => {
@@ -70,73 +70,10 @@ const ProductDetail = (props) => {
     };
 
     React.useEffect(() => {
-        console.log("file beforeRepair🙀", beforeRepair);
-        console.log("file betweenRepair🚀", betweenRepair);
-
         onSelectBeforeRepair(beforeRepair);
         onSelectBetweenRepair(betweenRepair);
         onSelectAfterRepair(afterRepair);
     }, [betweenRepair, beforeRepair, afterCustomer]); // eslint-disable-line react-hooks/exhaustive-deps
-
-    function uploadBeforeRepair(e) {
-        if (e.target.files.length < 4) {
-            let ImagesArray = Object.entries(e.target.files).map((e) =>
-                Object.assign(
-                    {},
-                    { file: e[1] },
-                    { previewUrl: URL.createObjectURL(e[1]) }
-                )
-            );
-            setBeforeRepair([...beforeRepair, ...ImagesArray]);
-        } else {
-            setImageError("กรุณาอัปโหลด ไม่เกิน 3 รูป");
-        }
-    }
-
-    function uploadBetweenRepair(e) {
-        if (e.target.files.length < 4) {
-            let ImagesArray = Object.entries(e.target.files).map((e) =>
-                Object.assign(
-                    {},
-                    { file: e[1] },
-                    { previewUrl: URL.createObjectURL(e[1]) }
-                )
-            );
-            setBetweenRepair([...betweenRepair, ...ImagesArray]);
-        } else {
-            setImageError("กรุณาอัปโหลด ไม่เกิน 3 รูป");
-        }
-    }
-
-    function uploadAfterRepair(e) {
-        if (e.target.files.length < 4) {
-            let ImagesArray = Object.entries(e.target.files).map((e) =>
-                Object.assign(
-                    {},
-                    { file: e[1] },
-                    { previewUrl: URL.createObjectURL(e[1]) }
-                )
-            );
-            setAfterRepair([...afterRepair, ...ImagesArray]);
-        } else {
-            setImageError("กรุณาอัปโหลด ไม่เกิน 3 รูป");
-        }
-    }
-
-    function deleteBeforeRepair(e) {
-        const s = beforeRepair.filter((item, index) => index !== e);
-        setBeforeRepair(s);
-    }
-
-    function deleteBetweenRepair(e) {
-        const s = betweenRepair.filter((item, index) => index !== e);
-        setBetweenRepair(s);
-    }
-
-    function deleteAfterRepair(e) {
-        const s = afterRepair.filter((item, index) => index !== e);
-        setAfterRepair(s);
-    }
 
     const handleDateChangeRaw = (e) => {
         const key = e.key;
@@ -261,33 +198,33 @@ const ProductDetail = (props) => {
                     <InputUploadImage
                         label={"รูปภาพก่อนซ่อม (อัปโหลด ไม่เกิน 3 รูป)"}
                         imagesList={beforeRepair}
-                        deleteImage={deleteBeforeRepair}
                         roleUser={roleUser}
                         onEdit={onEdit}
+                        setImagesList={setBeforeRepair}
                         onImageError={onImageError}
-                        uploadImage={uploadBeforeRepair}
+                        setImageError={setImageError}
                     />
                 </Grid>
                 <Grid item xs={12}>
                     <InputUploadImage
                         label={"รูปภาพระหว่างซ่อม (อัปโหลด ไม่เกิน 3 รูป)"}
                         imagesList={betweenRepair}
-                        deleteImage={deleteBetweenRepair}
                         roleUser={roleUser}
                         onEdit={onEdit}
+                        setImagesList={setBetweenRepair}
                         onImageError={onImageError}
-                        uploadImage={uploadBetweenRepair}
+                        setImageError={setImageError}
                     />
                 </Grid>
                 <Grid item xs={12}>
                     <InputUploadImage
                         label={"รูปภาพหลังซ่อม (อัปโหลด ไม่เกิน 3 รูป)"}
                         imagesList={afterRepair}
-                        deleteImage={deleteAfterRepair}
                         roleUser={roleUser}
                         onEdit={onEdit}
+                        setImagesList={setAfterRepair}
                         onImageError={onImageError}
-                        uploadImage={uploadAfterRepair}
+                        setImageError={setImageError}
                     />
                 </Grid>
                 <Grid item xs={12}>

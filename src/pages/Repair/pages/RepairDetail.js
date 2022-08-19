@@ -21,11 +21,14 @@ import {
     Skeleton,
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { MoreVert, Edit, Print, Delete, Feed } from "@mui/icons-material";
+import { MoreVert, Feed } from "@mui/icons-material";
 
 import CustomerDetail from "../components/CustomerDetail";
 import ProductDetail from "../components/ProductDetail";
+import HistoryTableDetail from "../components/HistoryTableDetail";
+import ConfirmDialog from "../../../components/Dialog/ConfirmDialog";
 
+import Repair from "../../../middleware/repair";
 import { history } from "../../../helpers/history";
 import { getAllBrand } from "../../../services/actions/brand";
 import { getAllStatus } from "../../../services/actions/status";
@@ -37,19 +40,13 @@ import {
     getRepairPDF,
 } from "../../../services/actions/repair";
 
-import Repair from "../../../middleware/repair";
 import { convertISOtoGMT } from "../../../utils/ConvertDate";
-import HistoryTableDetail from "../components/HistoryTableDetail";
-import ConfirmDialog from "../../../components/Dialog/ConfirmDialog";
 import PreviewPDF from "../../../utils/PreviewPDF";
-import Logo from "../../../assets/Logo/GadgetStory_logo.png";
 import ConvertBase64 from "../../../utils/ConvertBase64";
 
-const options = [
-    { name: "Edit", icon: <Edit /> },
-    { name: "Print", icon: <Print /> },
-    { name: "Delete", icon: <Delete /> },
-];
+import { options } from "../../../dataMock/master";
+
+import Logo from "../../../assets/Logo/GadgetStory_logo.png";
 
 const RepairDetail = (roleUser) => {
     const { handleSubmit, control, setValue, register } = useForm();
@@ -328,17 +325,17 @@ const RepairDetail = (roleUser) => {
 
     const onSelectBeforeRepair = (beforeRepair) => {
         setBeforeRepair(beforeRepair);
-        setError("");
+        setImageError("");
     };
 
     const onSelectBetweenRepair = (betweenRepair) => {
         setBetweenRepair(betweenRepair);
-        setError("");
+        setImageError("");
     };
 
     const onSelectAfterRepair = (afterRepair) => {
         setAfterRepair(afterRepair);
-        setError("");
+        setImageError("");
     };
 
     const onError = () => {
@@ -351,7 +348,6 @@ const RepairDetail = (roleUser) => {
                 ) : (
                     ""
                 )}
-               
             </>
         );
     };
@@ -370,7 +366,6 @@ const RepairDetail = (roleUser) => {
         );
     };
 
-
     const onDateError = () => {
         return (
             <>
@@ -381,7 +376,6 @@ const RepairDetail = (roleUser) => {
                 ) : (
                     ""
                 )}
-               
             </>
         );
     };
