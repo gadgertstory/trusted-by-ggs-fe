@@ -98,7 +98,6 @@ const RepairDetail = (roleUser) => {
 
     const fetch = useCallback(() => {
         Repair.fetchRepair(id).then((res) => {
-            console.log("res.data🌝", res.data);
             const dataRepair = res.data;
             if (dataRepair) {
                 setSubDistrict(dataRepair.customer_subdistrict);

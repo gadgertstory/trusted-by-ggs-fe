@@ -67,8 +67,6 @@ const InputUploadImage = (props) => {
         setImagesList(s);
     }
 
-    console.log(currentUser.data.role);
-
     return (
         <>
             <Grid item xs={12}>
