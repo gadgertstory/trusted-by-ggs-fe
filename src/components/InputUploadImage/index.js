@@ -1,5 +1,6 @@
 import React from "react";
 
+import { useSelector } from "react-redux";
 import { Grid, Button, IconButton, Typography, Box } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -7,12 +8,14 @@ const InputUploadImage = (props) => {
     const {
         label,
         imagesList,
-        roleUser,
         onEdit,
         onImageError,
         setImagesList,
         setImageError,
+        activeUpload,
     } = props;
+
+    const { user: currentUser } = useSelector((state) => state.auth);
 
     function upload(e) {
         if (e.target.files.length <= 3) {
@@ -40,11 +43,11 @@ const InputUploadImage = (props) => {
                     alert(
                         "กรุณาอัปโหลดไฟล์ .png, .jpeg, .jpg, .webp เท่านั้น!"
                     );
-                    window.setTimeout(() => setImagesList([...imagesList]), 10)
+                    window.setTimeout(() => setImagesList([...imagesList]), 10);
                 }
             });
             validateImage?.forEach((size) => {
-                if (size.size < 10000000) {
+                if (size.size < 5000000) {
                     return (
                         size.size,
                         setImagesList([...imagesList, ...ImagesArray]),
@@ -100,8 +103,9 @@ const InputUploadImage = (props) => {
                                                 }}
                                                 disabled={
                                                     !onEdit ||
-                                                    roleUser.roleUser.role ===
-                                                        "user"
+                                                    (currentUser.data.role !==
+                                                        "admin" &&
+                                                        activeUpload === "all")
                                                 }
                                             >
                                                 <CloseIcon />
@@ -127,7 +131,8 @@ const InputUploadImage = (props) => {
                                 disabled={
                                     imagesList.length === 3 ||
                                     !onEdit ||
-                                    roleUser.roleUser.role === "user"
+                                    (currentUser.data.role !== "admin" &&
+                                        activeUpload === "all")
                                 }
                             >
                                 <Box noWrap>เลือกรูป</Box>

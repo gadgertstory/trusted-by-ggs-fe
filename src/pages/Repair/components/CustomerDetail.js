@@ -313,7 +313,7 @@ const CustomerDetail = (props) => {
                                         return (
                                             <MenuItem
                                                 key={item.status_id}
-                                                value={item.status}
+                                                value={item.status_id}
                                             >
                                                 {item.status_name}
                                             </MenuItem>

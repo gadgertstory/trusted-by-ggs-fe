@@ -48,25 +48,24 @@ const ProductDetail = (props) => {
         onDateError,
         onImageError,
         setImageError,
-        setDateError,
+        notifiedDateError,
+        receivedDateError,
+        returnDateError,
     } = props;
 
     const handleReceivedDateChange = (receivedDate) => {
         setReceivedDate(receivedDate);
         onSelectReceivedDate(receivedDate);
-        setDateError("");
     };
 
     const handleReturnDateChange = (returnDate) => {
         setReturnDate(returnDate);
         onSelectReturnDate(returnDate);
-        setDateError("");
     };
 
     const handleNotifiedDateChange = (notifiedDate) => {
         setNotifiedDate(notifiedDate);
         onSelectNotifiedDate(notifiedDate);
-        setDateError("");
     };
 
     React.useEffect(() => {
@@ -76,8 +75,7 @@ const ProductDetail = (props) => {
     }, [betweenRepair, beforeRepair, afterCustomer]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleDateChangeRaw = (e) => {
-        const key = e.key;
-        if (key === "Backspace") {
+        if (e) {
             e.preventDefault();
         }
     };
@@ -196,9 +194,9 @@ const ProductDetail = (props) => {
                 </Grid>
                 <Grid item xs={12}>
                     <InputUploadImage
+                        activeUpload={'all'}
                         label={"รูปภาพก่อนซ่อม (อัปโหลด ไม่เกิน 3 รูป)"}
                         imagesList={beforeRepair}
-                        roleUser={roleUser}
                         onEdit={onEdit}
                         setImagesList={setBeforeRepair}
                         onImageError={onImageError}
@@ -209,7 +207,6 @@ const ProductDetail = (props) => {
                     <InputUploadImage
                         label={"รูปภาพระหว่างซ่อม (อัปโหลด ไม่เกิน 3 รูป)"}
                         imagesList={betweenRepair}
-                        roleUser={roleUser}
                         onEdit={onEdit}
                         setImagesList={setBetweenRepair}
                         onImageError={onImageError}
@@ -220,7 +217,6 @@ const ProductDetail = (props) => {
                     <InputUploadImage
                         label={"รูปภาพหลังซ่อม (อัปโหลด ไม่เกิน 3 รูป)"}
                         imagesList={afterRepair}
-                        roleUser={roleUser}
                         onEdit={onEdit}
                         setImagesList={setAfterRepair}
                         onImageError={onImageError}
@@ -325,7 +321,7 @@ const ProductDetail = (props) => {
                             )}
                         />
                     </LocalizationProvider>
-                    {onDateError()}
+                    {onDateError(notifiedDateError)}
                 </Grid>
                 <Grid item xs={12} md={3}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -334,7 +330,7 @@ const ProductDetail = (props) => {
                             inputFormat="dd/MM/yyyy"
                             value={receivedDate}
                             onChange={handleReceivedDateChange}
-                            disabled={!onEdit || id !== "new"}
+                            disabled={!onEdit}
                             renderInput={(params) => (
                                 <TextField
                                     onKeyDown={handleDateChangeRaw}
@@ -345,7 +341,7 @@ const ProductDetail = (props) => {
                             )}
                         />
                     </LocalizationProvider>
-                    {onDateError()}
+                    {onDateError(receivedDateError)}
                 </Grid>
                 <Grid item xs={12} md={3}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -354,9 +350,7 @@ const ProductDetail = (props) => {
                             inputFormat="dd/MM/yyyy"
                             value={returnDate}
                             onChange={handleReturnDateChange}
-                            disabled={
-                                !onEdit || roleUser.roleUser.role === "user"
-                            }
+                            disabled={!onEdit}
                             renderInput={(params) => (
                                 <TextField
                                     onKeyDown={handleDateChangeRaw}
@@ -367,7 +361,7 @@ const ProductDetail = (props) => {
                             )}
                         />
                     </LocalizationProvider>
-                    {onDateError()}
+                    {onDateError(returnDateError)}
                 </Grid>
             </Grid>
         </Paper>

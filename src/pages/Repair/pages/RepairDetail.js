@@ -60,7 +60,10 @@ const RepairDetail = (roleUser) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [imageError, setImageError] = useState("");
-    const [dateError, setDateError] = useState("");
+
+    const [receivedDateError, setReceivedDateError] = useState("");
+    const [returnDateError, setReturnDateError] = useState("");
+    const [notifiedDateError, setNotifiedDateError] = useState("");
 
     const [newData, setNewData] = useState({});
 
@@ -76,9 +79,9 @@ const RepairDetail = (roleUser) => {
     const [fullAddress, setFullAddress] = useState({});
 
     //Date
-    const [receivedDate, setReceivedDate] = useState("");
-    const [returnDate, setReturnDate] = useState("");
-    const [notifiedDate, setNotifiedDate] = useState("");
+    const [receivedDate, setReceivedDate] = useState(null);
+    const [returnDate, setReturnDate] = useState(null);
+    const [notifiedDate, setNotifiedDate] = useState(null);
 
     //Dropdown
     const [open, setOpen] = useState(false);
@@ -95,7 +98,6 @@ const RepairDetail = (roleUser) => {
 
     const fetch = useCallback(() => {
         Repair.fetchRepair(id).then((res) => {
-            console.log("res.data🌝", res.data);
             const dataRepair = res.data;
             if (dataRepair) {
                 setSubDistrict(dataRepair.customer_subdistrict);
@@ -108,9 +110,23 @@ const RepairDetail = (roleUser) => {
                     province,
                     zipcode,
                 });
-                setReceivedDate(convertISOtoGMT(dataRepair.received_date));
-                setReturnDate(convertISOtoGMT(dataRepair.return_date));
-                setNotifiedDate(convertISOtoGMT(dataRepair.notified_date));
+
+                if (dataRepair.notified_date === null) {
+                    setNotifiedDate(null);
+                } else {
+                    setNotifiedDate(convertISOtoGMT(dataRepair.notified_date));
+                }
+                if (dataRepair.received_date === null) {
+                    setReceivedDate(null);
+                } else {
+                    setReceivedDate(convertISOtoGMT(dataRepair.received_date));
+                }
+                if (dataRepair.return_date === null) {
+                    setReturnDate(null);
+                } else {
+                    setReturnDate(convertISOtoGMT(dataRepair.return_date));
+                }
+
                 setValue(
                     "customer_firstname",
                     dataRepair.customer_firstname || ""
@@ -220,9 +236,19 @@ const RepairDetail = (roleUser) => {
             setError("กรุณากรอกข้อมูลให้ครบ");
             return;
         }
-        if (!notifiedDate || !receivedDate || !returnDate) {
-            setDateError("กรุณากรอกข้อมูลให้ครบ");
-            return;
+        if (currentUser.data.role === "admin") {
+            if (!notifiedDate) {
+                setNotifiedDateError("กรุณากรอกวันที่แจ้งเรื่อง");
+                setReceivedDate(null);
+                setReturnDate(null);
+                return;
+            }
+        } else {
+            if (!receivedDate || !returnDate) {
+                setReceivedDateError("กรุณากรอกวันที่รับซ่อม");
+                setReturnDateError("กรุณากรอกวันที่นัดรับ");
+                return;
+            }
         }
 
         if (!error) {
@@ -268,6 +294,7 @@ const RepairDetail = (roleUser) => {
                     product_name: _data.product_name,
                     description: _data.description,
                     return_date: _data.return_date,
+                    received_date: _data.received_date,
                     remark: _data.remark,
                 },
                 status: {
@@ -310,17 +337,17 @@ const RepairDetail = (roleUser) => {
 
     const onSelectReceivedDate = (receivedDate) => {
         setReceivedDate(receivedDate?.toISOString().split("T")[0]);
-        setDateError("");
+        setReceivedDateError("");
     };
 
     const onSelectReturnDate = (returnDate) => {
         setReturnDate(returnDate?.toISOString().split("T")[0]);
-        setDateError("");
+        setReturnDateError("");
     };
 
     const onSelectNotifiedDate = (notifiedDate) => {
         setNotifiedDate(notifiedDate?.toISOString().split("T")[0]);
-        setDateError("");
+        setNotifiedDateError("");
     };
 
     const onSelectBeforeRepair = (beforeRepair) => {
@@ -366,12 +393,34 @@ const RepairDetail = (roleUser) => {
         );
     };
 
-    const onDateError = () => {
+    const onDateError = (
+        notifiedDateError,
+        receivedDateError,
+        returnDateError
+    ) => {
         return (
             <>
-                {dateError ? (
+                {notifiedDateError ? (
                     <FormControl>
-                        <FormHelperText error>{dateError}</FormHelperText>
+                        <FormHelperText error>
+                            {notifiedDateError}
+                        </FormHelperText>
+                    </FormControl>
+                ) : (
+                    ""
+                )}
+                {receivedDateError ? (
+                    <FormControl>
+                        <FormHelperText error>
+                            {receivedDateError}
+                        </FormHelperText>
+                    </FormControl>
+                ) : (
+                    ""
+                )}
+                {returnDateError ? (
+                    <FormControl>
+                        <FormHelperText error>{returnDateError}</FormHelperText>
                     </FormControl>
                 ) : (
                     ""
@@ -593,10 +642,12 @@ const RepairDetail = (roleUser) => {
                             error={error}
                             onError={onError}
                             setError={setError}
-                            setDateError={setDateError}
                             onImageError={onImageError}
                             onDateError={onDateError}
                             setImageError={setImageError}
+                            notifiedDateError={notifiedDateError}
+                            receivedDateError={receivedDateError}
+                            returnDateError={returnDateError}
                             onSelectReturnDate={onSelectReturnDate}
                             onSelectReceivedDate={onSelectReceivedDate}
                             onSelectNotifiedDate={onSelectNotifiedDate}
