@@ -14,10 +14,47 @@ const HistoryTableDetail = ({ dataRepair }) => {
             ...index,
             process_date: new Date(index.process_date).toLocaleString("en-GB", {
                 timeZone: "UTC",
-            }), 
+            }),
         }));
         setDataHistory(_newDataDate);
     }, [dataRepair]);
+
+    const tableColumns = [
+        {
+            title: "ลำดับ",
+            textAlign: "center",
+            render: (rowData) => (
+                <Typography component="p" variant="p">
+                    {rowData.tableData.id + 1}
+                </Typography>
+            ),
+            width: "10%",
+        },
+        { title: "ผู้ปฏิบัติงาน", field: "user.user_name", width: "10%" },
+        {
+            title: "สถานะการซ่อม",
+            align: "center",
+            cellStyle: {
+                textAlign: "center",
+            },
+            render: (rowData) => (
+                <BadgeStatus
+                    badgeContent={rowData.status.status_name}
+                ></BadgeStatus>
+            ),
+            width: "10%",
+        },
+        {
+            title: "วันที่ทำรายการ",
+            field: "process_date",
+            width: "20%",
+        },
+        {
+            title: "รายละเอียดการซ่อม",
+            field: "description",
+            width: "50%",
+        },
+    ];
 
     return (
         <>
@@ -40,41 +77,7 @@ const HistoryTableDetail = ({ dataRepair }) => {
                     sorting: false,
                 }}
                 title=""
-                columns={[
-                    {
-                        title: "ลำดับ",
-                        textAlign: "center",
-                        render: (rowData) => (
-                            <Typography component="p" variant="p">
-                                {rowData.tableData.id + 1}
-                            </Typography>
-                        ),
-                    },
-                    { title: "ผู้ปฏิบัติงาน", field: "user.user_name" },
-                    {
-                        title: "สถานะการซ่อม",
-                        align: "center",
-                        cellStyle: {
-                            textAlign: "center",
-                        },
-                        render: (rowData) => (
-                            <BadgeStatus
-                                badgeContent={rowData.status.status_name}
-                            ></BadgeStatus>
-                        ),
-                        textOverflow: "ellipsis",
-                    },
-                    {
-                        title: "วันที่ทำรายการ",
-                        field: "process_date",
-                        textOverflow: "ellipsis",
-                    },
-                    {
-                        title: "รายละเอียดการซ่อม",
-                        field: "description",
-                        textOverflow: "ellipsis",
-                    },
-                ]}
+                columns={tableColumns}
                 data={dataHistory}
                 localization={{
                     body: {

@@ -310,7 +310,7 @@ const CustomerDetail = (props) => {
                                         return (
                                             <MenuItem
                                                 key={item.status_id}
-                                                value={parseInt(item.status_id)}
+                                                value={item.status_name}
                                             >
                                                 {item.status_name}
                                             </MenuItem>
