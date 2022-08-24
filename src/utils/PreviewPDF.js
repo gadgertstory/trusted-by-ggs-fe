@@ -76,12 +76,8 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
             {
                 columns: [
                     {
-                        text: `${ObjData.customer_house_no} ${
-                            ObjData.customer_subdistrict
-                        } ${ObjData.customer_district} ${
-                            ObjData.customer_province
-                        } ${ObjData.customer_zipcode}
-                        โทรศัพท์: ${formatPhoneNumber(ObjData.customer_tel)}
+                        text: `${ObjData.customer_house_no} ${ObjData.customer_subdistrict} ${ObjData.customer_district} ${ObjData.customer_province} ${ObjData.customer_zipcode}
+                        โทรศัพท์: ${ObjData.customer_tel}
                         ช่องทางรับแจ้ง:  ${ObjData.receive_method}`,
                     },
                     {
@@ -99,9 +95,7 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
                     body: [
                         [
                             `ชื่อลูกค้า: ${ObjData.customer_firstname} ${ObjData.customer_lastname}`,
-                            `โทรศัพท์:  ${formatPhoneNumber(
-                                ObjData.receive_method
-                            )}`,
+                            `โทรศัพท์:  ${ObjData.customer_tel}`,
                         ],
                         [
                             {
