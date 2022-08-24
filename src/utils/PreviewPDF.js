@@ -125,12 +125,7 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
                         ],
                         [
                             {
-                                text: `ระยะประกัน:  ${
-                                    ObjData.waranty_status &&
-                                    ObjData.waranty_status ===  "1"
-                                        ? "มีประกัน"
-                                        : "หมดประกัน"
-                                }`,
+                                text: `ระยะประกัน:  ${ObjData.waranty_status}`,
                                 colSpan: 2,
                             },
                         ],
