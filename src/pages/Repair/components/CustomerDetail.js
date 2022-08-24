@@ -13,10 +13,7 @@ import {
 } from "@mui/material";
 
 import Input from "../../../components/Input";
-import {
-    receiveMethodList,
-    warantyStatusList,
-} from "../../../dataMock/master";
+import { receiveMethodList, warantyStatusList } from "../../../dataMock/master";
 
 import ThailandAddress from "../../../components/InputAddress";
 
@@ -313,7 +310,7 @@ const CustomerDetail = (props) => {
                                         return (
                                             <MenuItem
                                                 key={item.status_id}
-                                                value={item.status_id}
+                                                value={parseInt(item.status_id)}
                                             >
                                                 {item.status_name}
                                             </MenuItem>
