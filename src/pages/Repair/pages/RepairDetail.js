@@ -454,6 +454,9 @@ const RepairDetail = (roleUser) => {
     };
 
     const handleRemoveRepair = () => {
+        if (!error) {
+            setLoading(true);
+        }
         dispatch(deleteRepair(id));
     };
 
@@ -595,19 +598,19 @@ const RepairDetail = (roleUser) => {
                 </Grid>
                 {loading ? (
                     <Stack spacing={1}>
-                        <Skeleton variant="text" height={30} width={150} />
+                        <Skeleton variant="text" height={40} width={200} />
                         <Skeleton
                             variant="rectangular"
                             width={"100%"}
                             height={300}
                         />
-                        <Skeleton variant="text" height={30} width={150} />
+                        <Skeleton variant="text" height={40} width={200} />
                         <Skeleton
                             variant="rectangular"
                             width={"100%"}
-                            height={300}
+                            height={400}
                         />
-                        <Skeleton variant="text" height={30} width={150} />
+                        <Skeleton variant="text" height={40} width={200} />
                         <Skeleton
                             variant="rectangular"
                             width={"100%"}
