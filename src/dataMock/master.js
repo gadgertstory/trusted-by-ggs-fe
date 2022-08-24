@@ -43,11 +43,11 @@ export const receiveMethodList = [
 
 export const warantyStatusList = [
     {
-        status_id: 1,
+        status_id: "0",
         status_name: "หมดประกัน",
     },
     {
-        status_id: 2,
+        status_id: "1",
         status_name: "มีประกัน",
     },
 ];

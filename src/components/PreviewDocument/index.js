@@ -137,7 +137,7 @@ const PreviewDocument = () => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                {dataRepair?.waranty_status}
+                                {dataRepair?.waranty_status === '1' ? 'มีประกัน' : 'หมดประกัน'}
                             </Grid>
                         </Grid>
                     </Paper>
