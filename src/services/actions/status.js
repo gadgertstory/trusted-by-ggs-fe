@@ -1,5 +1,4 @@
 import {
-    FETCH_STATUS_REQUEST,
     FETCH_STATUS_SUCCESS,
     FETCH_STATUS_FAIL
 } from "./types";
@@ -7,7 +6,6 @@ import {
 import fetchMaster from "../../middleware/master";
 
 export const getAllStatus = () => async (dispatch) => {
-    dispatch({ type: FETCH_STATUS_REQUEST });
     await fetchMaster
         .fetchAllStatus()
         .then((response) => response.data)

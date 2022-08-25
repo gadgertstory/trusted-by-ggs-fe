@@ -35,7 +35,6 @@ import { getAllStatus } from "../../../services/actions/status";
 import {
     createRepair,
     updateRepair,
-    getRepair,
     deleteRepair,
     getRepairPDF,
 } from "../../../services/actions/repair";
@@ -95,6 +94,8 @@ const RepairDetail = (roleUser) => {
     const [beforeRepair, setBeforeRepair] = useState([]);
     const [betweenRepair, setBetweenRepair] = useState([]);
     const [afterRepair, setAfterRepair] = useState([]);
+
+    console.log(dataRepairPDF);
 
     const fetch = useCallback(() => {
         Repair.fetchRepair(id).then((res) => {
@@ -158,7 +159,7 @@ const RepairDetail = (roleUser) => {
                     dataRepair.status[0].status.status_id || ""
                 );
                 setValue("receive_method", dataRepair.receive_method || "");
-                setValue("waranty_status", dataRepair.waranty_status || "");
+                setValue("warranty_status", dataRepair.warranty_status || "");
 
                 let beforeRepairArr = [];
                 let betweenRepairArr = [];
@@ -189,7 +190,6 @@ const RepairDetail = (roleUser) => {
             setDataUrl(dataUrl);
         });
         if (id !== "new") {
-            dispatch(getRepair(id));
             dispatch(getRepairPDF(id));
             fetch();
         } else {
@@ -288,7 +288,7 @@ const RepairDetail = (roleUser) => {
                     customer_district: _data.customer_district,
                     customer_province: _data.customer_province,
                     customer_zipcode: _data.customer_zipcode,
-                    waranty_status: _data.waranty_status,
+                    warranty_status: _data.warranty_status,
                     receive_method: _data.receive_method,
                     brand_id: _data.brand_id,
                     product_name: _data.product_name,

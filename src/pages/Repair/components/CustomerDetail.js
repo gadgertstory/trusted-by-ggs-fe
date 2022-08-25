@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 
 import Input from "../../../components/Input";
-import { receiveMethodList, warantyStatusList } from "../../../dataMock/master";
+import { receiveMethodList, warrantyStatusList } from "../../../dataMock/master";
 
 import ThailandAddress from "../../../components/InputAddress";
 
@@ -283,7 +283,7 @@ const CustomerDetail = (props) => {
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Controller
-                        name="waranty_status"
+                        name="warranty_status"
                         required
                         control={control}
                         defaultValue=""
@@ -306,7 +306,7 @@ const CustomerDetail = (props) => {
                                     onChange={onChange}
                                     error={!!error}
                                 >
-                                    {warantyStatusList?.map((item) => {
+                                    {warrantyStatusList?.map((item) => {
                                         return (
                                             <MenuItem
                                                 key={item.status_id}

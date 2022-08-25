@@ -1,6 +1,5 @@
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
-import { formatPhoneNumber } from "./FormatPhoneNumber";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -119,7 +118,7 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
                         ],
                         [
                             {
-                                text: `ระยะประกัน:  ${ObjData.waranty_status}`,
+                                text: `ระยะประกัน:  ${ObjData.warranty_status}`,
                                 colSpan: 2,
                             },
                         ],

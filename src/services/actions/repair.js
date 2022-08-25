@@ -4,9 +4,6 @@ import {
     UPDATE_REPAIR_SUCCESS,
     UPDATE_REPAIR_FAIL,
     SET_MESSAGE,
-    FETCH_REPAIR_REQUEST,
-    FETCH_REPAIR_SUCCESS,
-    FETCH_REPAIR_FAIL,
     DELETE_REPAIR_SUCCESS,
     DELETE_REPAIR_FAIL,
     FETCH_REPAIR_PDF_SUCCESS,
@@ -88,49 +85,6 @@ export const updateRepair = (id, data,formData) => async (dispatch) => {
 
             dispatch({
                 type: UPDATE_REPAIR_FAIL,
-            });
-
-            dispatch({
-                type: SET_MESSAGE,
-                payload: message,
-            });
-
-            return (
-                Promise.reject(),
-                actionHandler({
-                    error: message,
-                })
-            );
-        });
-};
-
-export const getRepair = (id) => async (dispatch) => {
-    // // Case1: Think returns Loading until receives response
-    dispatch({ type: FETCH_REPAIR_REQUEST });
-
-    // Calling the server
-    await Repair.fetchRepair(id)
-        .then((response) => {
-            return response.data;
-        })
-
-        .then((responseJson) => {
-            dispatch({
-                type: FETCH_REPAIR_SUCCESS,
-                payload: responseJson,
-            });
-            return responseJson;
-        })
-        .catch((error) => {
-            const message =
-                (error.response &&
-                    error.response.data &&
-                    error.response.data.message) ||
-                error.message ||
-                error.toString();
-
-            dispatch({
-                type: FETCH_REPAIR_FAIL,
             });
 
             dispatch({

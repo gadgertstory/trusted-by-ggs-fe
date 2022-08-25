@@ -1,5 +1,4 @@
 import {
-    FETCH_BRAND_REQUEST,
     FETCH_BRAND_SUCCESS,
     FETCH_BRAND_FAIL,
 } from "../actions/types";
@@ -11,8 +10,6 @@ const INITIAL_STATE = {
 
 const brand = (state = INITIAL_STATE, action) => {
     switch (action.type) {
-        case FETCH_BRAND_REQUEST:
-            return FETCH_BRAND_REQUEST;
         case FETCH_BRAND_SUCCESS:
             return {
                 brandList: action.payload,
