@@ -35,7 +35,6 @@ import { getAllStatus } from "../../../services/actions/status";
 import {
     createRepair,
     updateRepair,
-    getRepair,
     deleteRepair,
     getRepairPDF,
 } from "../../../services/actions/repair";
