@@ -95,8 +95,6 @@ const RepairDetail = (roleUser) => {
     const [betweenRepair, setBetweenRepair] = useState([]);
     const [afterRepair, setAfterRepair] = useState([]);
 
-    console.log(dataRepairPDF);
-
     const fetch = useCallback(() => {
         Repair.fetchRepair(id).then((res) => {
             const dataRepair = res.data;
