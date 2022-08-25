@@ -41,7 +41,7 @@ export const receiveMethodList = [
     },
 ];
 
-export const warantyStatusList = [
+export const warrantyStatusList = [
     {
         status_id: 1,
         status_name: "มีประกัน",

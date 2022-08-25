@@ -119,7 +119,7 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
                         ],
                         [
                             {
-                                text: `ระยะประกัน:  ${ObjData.waranty_status}`,
+                                text: `ระยะประกัน:  ${ObjData.warranty_status}`,
                                 colSpan: 2,
                             },
                         ],
