@@ -32,17 +32,19 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
     if (received_date.toString() === "Invalid Date") {
         var ThaiReceivedDate = "";
     } else {
-        var ThaiReceivedDate = received_date?.toLocaleDateString("th-TH", {
+        // eslint-disable-next-line 
+        var ThaiReceivedDate  = received_date?.toLocaleDateString("th-TH", {
             year: "numeric",
             month: "long",
             day: "numeric",
             weekday: "long",
-        });
+        }); 
     }
 
     if (return_date.toString() === "Invalid Date") {
         var ThaiReturnDate = "";
     } else {
+        // eslint-disable-next-line 
         var ThaiReturnDate = return_date?.toLocaleDateString("th-TH", {
             year: "numeric",
             month: "long",
