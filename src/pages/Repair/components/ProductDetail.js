@@ -115,7 +115,7 @@ const ProductDetail = (props) => {
                                 }}
                             />
                         )}
-                        rules={{ required: "กรุณากรอกชื่ออุปกรกรณ์" }}
+                        rules={{ required: "กรุณากรอกชื่ออุปกรณ์" }}
                     />
                 </Grid>
                 <Grid item xs={12} md={4}>
