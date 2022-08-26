@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 
 import Input from "../../../components/Input";
+import { receiveMethodList, warrantyStatusList } from "../../../dataMock/master";
 
 import ThailandAddress from "../../../components/InputAddress";
 
@@ -33,38 +34,6 @@ const CustomerDetail = (props) => {
         onEdit,
         roleUser,
     } = props;
-
-    const receiveMethodList = [
-        {
-            status_id: 1,
-            status_name: "Facebook",
-        },
-        {
-            status_id: 2,
-            status_name: "Shopee",
-        },
-        {
-            status_id: 3,
-            status_name: "Lazada",
-        },
-        {
-            status_id: 4,
-            status_name: "Website",
-        },
-    ];
-
-    const warantyStatusList = [
-        {
-            status_id: 1,
-            status_name: "มีประกัน",
-            status: 0,
-        },
-        {
-            status_id: 2,
-            status_name: "หมดประกัน",
-            status: 1,
-        },
-    ];
 
     return (
         <Paper
@@ -314,7 +283,7 @@ const CustomerDetail = (props) => {
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Controller
-                        name="waranty_status"
+                        name="warranty_status"
                         required
                         control={control}
                         defaultValue=""
@@ -337,11 +306,11 @@ const CustomerDetail = (props) => {
                                     onChange={onChange}
                                     error={!!error}
                                 >
-                                    {warantyStatusList?.map((item) => {
+                                    {warrantyStatusList?.map((item) => {
                                         return (
                                             <MenuItem
                                                 key={item.status_id}
-                                                value={item.status}
+                                                value={item.status_name}
                                             >
                                                 {item.status_name}
                                             </MenuItem>

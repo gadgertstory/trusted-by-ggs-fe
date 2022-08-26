@@ -112,7 +112,7 @@ const RepairTable = (roleUser) => {
                     pageSize: 20,
                     pageSizeOptions: [20, 40, 60, 80, 100],
                     toolbar: false,
-                    sorting:false
+                    sorting: false,
                     // maxBodyHeight: "50vh",
                     // headerStyle: { position: 'sticky', top: 0 }
                 }}
@@ -122,7 +122,9 @@ const RepairTable = (roleUser) => {
                         title: "ลำดับ",
                         textAlign: "center",
                         render: (rowData) => (
-                            <Typography component="p" variant="p">{rowData.tableData.id + 1}</Typography>
+                            <Typography component="p" variant="p">
+                                {rowData.tableData.id + 1}
+                            </Typography>
                         ),
                     },
                     { title: "เลขที่ใบแจ้งซ่อม", field: "repair_no" },
@@ -137,7 +139,8 @@ const RepairTable = (roleUser) => {
                                     maxWidth: 150,
                                 }}
                             >
-                                {rowData.customer_firstname} {rowData.customer_lastname}
+                                {rowData.customer_firstname}{" "}
+                                {rowData.customer_lastname}
                             </Box>
                         ),
                     },
@@ -157,6 +160,24 @@ const RepairTable = (roleUser) => {
                         ),
                     },
                     {
+                        title: "วันที่แจ้งเรื่อง",
+                        render: (rowData) => (
+                            <Box
+                                sx={{
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap",
+                                    overflow: "hidden",
+                                    maxWidth: 100,
+                                }}
+                            >
+                                {rowData.notified_date
+                                    ?.split("-")
+                                    .reverse()
+                                    .join("/")}
+                            </Box>
+                        ),
+                    },
+                    {
                         title: "วันที่รับซ่อม",
                         render: (rowData) => (
                             <Box
@@ -168,7 +189,7 @@ const RepairTable = (roleUser) => {
                                 }}
                             >
                                 {rowData.received_date
-                                    .split("-")
+                                    ?.split("-")
                                     .reverse()
                                     .join("/")}
                             </Box>
@@ -186,7 +207,7 @@ const RepairTable = (roleUser) => {
                                 }}
                             >
                                 {rowData.return_date
-                                    .split("-")
+                                    ?.split("-")
                                     .reverse()
                                     .join("/")}
                             </Box>

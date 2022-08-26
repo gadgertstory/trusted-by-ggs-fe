@@ -1,6 +1,5 @@
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
-import { formatPhoneNumber } from "./FormatPhoneNumber";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -24,6 +23,14 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
 
     const received_date = new Date(ObjData.received_date);
     const return_date = new Date(ObjData.return_date);
+    const notified_date = new Date(ObjData.notified_date);
+
+    const ThaiNotifiedDate = notified_date.toLocaleDateString("th-TH", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        weekday: "long",
+    });
 
     const ThaiReceivedDate = received_date.toLocaleDateString("th-TH", {
         year: "numeric",
@@ -68,16 +75,14 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
             {
                 columns: [
                     {
-                        text: `${ObjData.customer_house_no} ${
-                            ObjData.customer_subdistrict
-                        } ${ObjData.customer_district} ${
-                            ObjData.customer_province
-                        } ${ObjData.customer_zipcode}
-                        โทรศัพท์: ${formatPhoneNumber(ObjData.customer_tel)}`,
+                        text: `${ObjData.customer_house_no} ${ObjData.customer_subdistrict} ${ObjData.customer_district} ${ObjData.customer_province} ${ObjData.customer_zipcode}
+                        โทรศัพท์: ${ObjData.customer_tel}
+                        ช่องทางรับแจ้ง:  ${ObjData.receive_method}`,
                     },
                     {
                         text: `เลขที่ใบแจ้งซ่อม: ${ObjData.repair_no}
-                        วันที่ทำรายการ : ${ThaiReceivedDate}`,
+                        วันที่แจ้งเรื่อง : ${ThaiNotifiedDate} 
+                        วันที่รับซ่อม : ${ThaiReceivedDate}`,
                     },
                 ],
             },
@@ -89,9 +94,7 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
                     body: [
                         [
                             `ชื่อลูกค้า: ${ObjData.customer_firstname} ${ObjData.customer_lastname}`,
-                            `โทรศัพท์:  ${formatPhoneNumber(
-                                ObjData.customer_tel
-                            )}`,
+                            `โทรศัพท์:  ${ObjData.customer_tel}`,
                         ],
                         [
                             {
@@ -106,7 +109,7 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
                         [
                             {
                                 text: `รายละเอียดการซ่อม/ปัญหา: ${
-                                    ObjData.description != null
+                                    ObjData.description
                                         ? ObjData.description
                                         : ""
                                 }`,
@@ -115,15 +118,21 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
                         ],
                         [
                             {
+                                text: `ระยะประกัน:  ${ObjData.warranty_status}`,
+                                colSpan: 2,
+                            },
+                        ],
+                        [
+                            {
                                 text: `หมายเหตุ: ${
-                                    ObjData.remark != null ? ObjData.remark : ""
+                                    ObjData.remark ? ObjData.remark : ""
                                 }`,
                                 colSpan: 2,
                             },
                         ],
                         [
                             {
-                                text: `วันนัดรับ: ${ThaiReturnDate}`,
+                                text: `วันที่นัดรับ: ${ThaiReturnDate}`,
                                 colSpan: 2,
                             },
                         ],

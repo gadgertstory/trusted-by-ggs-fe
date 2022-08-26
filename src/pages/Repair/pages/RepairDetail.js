@@ -21,35 +21,31 @@ import {
     Skeleton,
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { MoreVert, Edit, Print, Delete, Feed } from "@mui/icons-material";
+import { MoreVert, Feed } from "@mui/icons-material";
 
 import CustomerDetail from "../components/CustomerDetail";
 import ProductDetail from "../components/ProductDetail";
+import HistoryTableDetail from "../components/HistoryTableDetail";
+import ConfirmDialog from "../../../components/Dialog/ConfirmDialog";
 
+import Repair from "../../../middleware/repair";
 import { history } from "../../../helpers/history";
 import { getAllBrand } from "../../../services/actions/brand";
 import { getAllStatus } from "../../../services/actions/status";
 import {
     createRepair,
     updateRepair,
-    getRepair,
     deleteRepair,
     getRepairPDF,
 } from "../../../services/actions/repair";
 
-import Repair from "../../../middleware/repair";
 import { convertISOtoGMT } from "../../../utils/ConvertDate";
-import HistoryTableDetail from "../components/HistoryTableDetail";
-import ConfirmDialog from "../../../components/Dialog/ConfirmDialog";
 import PreviewPDF from "../../../utils/PreviewPDF";
-import Logo from "../../../assets/Logo/GadgetStory_logo.png";
 import ConvertBase64 from "../../../utils/ConvertBase64";
 
-const options = [
-    { name: "Edit", icon: <Edit /> },
-    { name: "Print", icon: <Print /> },
-    { name: "Delete", icon: <Delete /> },
-];
+import { options } from "../../../dataMock/master";
+
+import Logo from "../../../assets/Logo/GadgetStory_logo.png";
 
 const RepairDetail = (roleUser) => {
     const { handleSubmit, control, setValue, register } = useForm();
@@ -62,6 +58,11 @@ const RepairDetail = (roleUser) => {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const [imageError, setImageError] = useState("");
+
+    const [receivedDateError, setReceivedDateError] = useState("");
+    const [returnDateError, setReturnDateError] = useState("");
+    const [notifiedDateError, setNotifiedDateError] = useState("");
 
     const [newData, setNewData] = useState({});
 
@@ -77,9 +78,9 @@ const RepairDetail = (roleUser) => {
     const [fullAddress, setFullAddress] = useState({});
 
     //Date
-    const [receivedDate, setReceivedDate] = useState("");
-    const [returnDate, setReturnDate] = useState("");
-    const [notifiedDate, setNotifiedDate] = useState("");
+    const [receivedDate, setReceivedDate] = useState(null);
+    const [returnDate, setReturnDate] = useState(null);
+    const [notifiedDate, setNotifiedDate] = useState(null);
 
     //Dropdown
     const [open, setOpen] = useState(false);
@@ -88,6 +89,11 @@ const RepairDetail = (roleUser) => {
     const [selectedIndex, setSelectedIndex] = useState(null);
 
     const [dataUrl, setDataUrl] = useState();
+
+    //Image File
+    const [beforeRepair, setBeforeRepair] = useState([]);
+    const [betweenRepair, setBetweenRepair] = useState([]);
+    const [afterRepair, setAfterRepair] = useState([]);
 
     const fetch = useCallback(() => {
         Repair.fetchRepair(id).then((res) => {
@@ -103,9 +109,23 @@ const RepairDetail = (roleUser) => {
                     province,
                     zipcode,
                 });
-                setReceivedDate(convertISOtoGMT(dataRepair.received_date));
-                setReturnDate(convertISOtoGMT(dataRepair.return_date));
-                setNotifiedDate(convertISOtoGMT(dataRepair.notified_date));
+
+                if (dataRepair.notified_date === null) {
+                    setNotifiedDate(null);
+                } else {
+                    setNotifiedDate(convertISOtoGMT(dataRepair.notified_date));
+                }
+                if (dataRepair.received_date === null) {
+                    setReceivedDate(null);
+                } else {
+                    setReceivedDate(convertISOtoGMT(dataRepair.received_date));
+                }
+                if (dataRepair.return_date === null) {
+                    setReturnDate(null);
+                } else {
+                    setReturnDate(convertISOtoGMT(dataRepair.return_date));
+                }
+
                 setValue(
                     "customer_firstname",
                     dataRepair.customer_firstname || ""
@@ -137,11 +157,26 @@ const RepairDetail = (roleUser) => {
                     dataRepair.status[0].status.status_id || ""
                 );
                 setValue("receive_method", dataRepair.receive_method || "");
-                if (dataRepair.waranty_status === true) {
-                    setValue("waranty_status", (dataRepair.waranty_status = 0));
-                } else {
-                    setValue("waranty_status", (dataRepair.waranty_status = 1));
+                setValue("warranty_status", dataRepair.warranty_status || "");
+
+                let beforeRepairArr = [];
+                let betweenRepairArr = [];
+                let afterRepairArr = [];
+                for (const iterator of dataRepair?.images) {
+                    if (iterator.image_status === "before_repair") {
+                        const obj = { previewUrl: iterator.image_url };
+                        beforeRepairArr.push(obj);
+                    } else if (iterator.image_status === "between_repair") {
+                        const obj = { previewUrl: iterator.image_url };
+                        betweenRepairArr.push(obj);
+                    } else {
+                        const obj = { previewUrl: iterator.image_url };
+                        afterRepairArr.push(obj);
+                    }
                 }
+                setBeforeRepair(beforeRepairArr);
+                setBetweenRepair(betweenRepairArr);
+                setAfterRepair(afterRepairArr);
             }
         });
     }, [district, province, setValue, subdistrict, zipcode, id]);
@@ -153,7 +188,6 @@ const RepairDetail = (roleUser) => {
             setDataUrl(dataUrl);
         });
         if (id !== "new") {
-            dispatch(getRepair(id));
             dispatch(getRepairPDF(id));
             fetch();
         } else {
@@ -172,6 +206,9 @@ const RepairDetail = (roleUser) => {
             received_date: receivedDate,
             return_date: returnDate,
             notified_date: notifiedDate,
+            beforeRepair: beforeRepair,
+            betweenRepair: betweenRepair,
+            afterRepair: afterRepair,
             customer_subdistrict: subdistrict,
             customer_district: district,
             customer_province: province,
@@ -186,6 +223,9 @@ const RepairDetail = (roleUser) => {
         receivedDate,
         returnDate,
         notifiedDate,
+        beforeRepair,
+        betweenRepair,
+        afterRepair,
         currentUser,
     ]);
 
@@ -194,24 +234,48 @@ const RepairDetail = (roleUser) => {
             setError("กรุณากรอกข้อมูลให้ครบ");
             return;
         }
+        if (currentUser.data.role === "admin") {
+            if (!notifiedDate) {
+                setNotifiedDateError("กรุณากรอกวันที่แจ้งเรื่อง");
+                setReceivedDate(null);
+                setReturnDate(null);
+                return;
+            }
+        } else {
+            if (!receivedDate || !returnDate) {
+                setReceivedDateError("กรุณากรอกวันที่รับซ่อม");
+                setReturnDateError("กรุณากรอกวันที่นัดรับ");
+                return;
+            }
+        }
+
         if (!error) {
             setLoading(true);
         }
 
         if (id === "new") {
             const _data = Object.assign(data, newData);
-            if (_data.waranty_status === 0) {
-                return (
-                    (_data.waranty_status = true), dispatch(createRepair(_data))
-                );
-            } else {
-                return (
-                    (_data.waranty_status = false),
-                    dispatch(createRepair(_data))
-                );
-            }
+
+            const formData = new FormData();
+            _data.beforeRepair?.forEach((file) => {
+                formData.append("before_repair", file.file);
+            });
+
+            _data.betweenRepair?.forEach((file) => {
+                formData.append("between_repair", file.file);
+            });
+
+            _data.afterRepair?.forEach((file) => {
+                formData.append("after_repair", file.file);
+            });
+
+            formData.append("data", JSON.stringify(_data));
+            dispatch(createRepair(formData));
         } else {
             const _data = Object.assign(data, newData);
+
+            const formData = new FormData();
+
             const _updateData = {
                 data: {
                     customer_firstname: _data.customer_firstname,
@@ -222,10 +286,13 @@ const RepairDetail = (roleUser) => {
                     customer_district: _data.customer_district,
                     customer_province: _data.customer_province,
                     customer_zipcode: _data.customer_zipcode,
+                    warranty_status: _data.warranty_status,
+                    receive_method: _data.receive_method,
                     brand_id: _data.brand_id,
                     product_name: _data.product_name,
                     description: _data.description,
                     return_date: _data.return_date,
+                    received_date: _data.received_date,
                     remark: _data.remark,
                 },
                 status: {
@@ -233,7 +300,24 @@ const RepairDetail = (roleUser) => {
                     user_id: _data.user_id,
                 },
             };
-            dispatch(updateRepair(id, _updateData));
+
+            _data.beforeRepair?.forEach((file) => {
+                formData.append("before_repair", file.file);
+                formData.append("previewUrl", file.previewUrl);
+            });
+
+            _data.betweenRepair?.forEach((file) => {
+                formData.append("between_repair", file.file);
+                formData.append("previewUrl", file.previewUrl);
+            });
+
+            _data.afterRepair?.forEach((file) => {
+                formData.append("after_repair", file.file);
+                formData.append("previewUrl", file.previewUrl);
+            });
+
+            formData.append("data", JSON.stringify(_updateData));
+            dispatch(updateRepair(id, formData));
         }
     };
 
@@ -251,17 +335,32 @@ const RepairDetail = (roleUser) => {
 
     const onSelectReceivedDate = (receivedDate) => {
         setReceivedDate(receivedDate?.toISOString().split("T")[0]);
-        setError("");
+        setReceivedDateError("");
     };
 
     const onSelectReturnDate = (returnDate) => {
         setReturnDate(returnDate?.toISOString().split("T")[0]);
-        setError("");
+        setReturnDateError("");
     };
 
     const onSelectNotifiedDate = (notifiedDate) => {
         setNotifiedDate(notifiedDate?.toISOString().split("T")[0]);
-        setError("");
+        setNotifiedDateError("");
+    };
+
+    const onSelectBeforeRepair = (beforeRepair) => {
+        setBeforeRepair(beforeRepair);
+        setImageError("");
+    };
+
+    const onSelectBetweenRepair = (betweenRepair) => {
+        setBetweenRepair(betweenRepair);
+        setImageError("");
+    };
+
+    const onSelectAfterRepair = (afterRepair) => {
+        setAfterRepair(afterRepair);
+        setImageError("");
     };
 
     const onError = () => {
@@ -270,6 +369,56 @@ const RepairDetail = (roleUser) => {
                 {error ? (
                     <FormControl>
                         <FormHelperText error>{error}</FormHelperText>
+                    </FormControl>
+                ) : (
+                    ""
+                )}
+            </>
+        );
+    };
+
+    const onImageError = () => {
+        return (
+            <>
+                {imageError ? (
+                    <FormControl>
+                        <FormHelperText error>{imageError}</FormHelperText>
+                    </FormControl>
+                ) : (
+                    ""
+                )}
+            </>
+        );
+    };
+
+    const onDateError = (
+        notifiedDateError,
+        receivedDateError,
+        returnDateError
+    ) => {
+        return (
+            <>
+                {notifiedDateError ? (
+                    <FormControl>
+                        <FormHelperText error>
+                            {notifiedDateError}
+                        </FormHelperText>
+                    </FormControl>
+                ) : (
+                    ""
+                )}
+                {receivedDateError ? (
+                    <FormControl>
+                        <FormHelperText error>
+                            {receivedDateError}
+                        </FormHelperText>
+                    </FormControl>
+                ) : (
+                    ""
+                )}
+                {returnDateError ? (
+                    <FormControl>
+                        <FormHelperText error>{returnDateError}</FormHelperText>
                     </FormControl>
                 ) : (
                     ""
@@ -303,6 +452,9 @@ const RepairDetail = (roleUser) => {
     };
 
     const handleRemoveRepair = () => {
+        if (!error) {
+            setLoading(true);
+        }
         dispatch(deleteRepair(id));
     };
 
@@ -444,19 +596,19 @@ const RepairDetail = (roleUser) => {
                 </Grid>
                 {loading ? (
                     <Stack spacing={1}>
-                        <Skeleton variant="text" height={30} width={150} />
+                        <Skeleton variant="text" height={40} width={200} />
                         <Skeleton
                             variant="rectangular"
                             width={"100%"}
                             height={300}
                         />
-                        <Skeleton variant="text" height={30} width={150} />
+                        <Skeleton variant="text" height={40} width={200} />
                         <Skeleton
                             variant="rectangular"
                             width={"100%"}
-                            height={300}
+                            height={400}
                         />
-                        <Skeleton variant="text" height={30} width={150} />
+                        <Skeleton variant="text" height={40} width={200} />
                         <Skeleton
                             variant="rectangular"
                             width={"100%"}
@@ -487,13 +639,22 @@ const RepairDetail = (roleUser) => {
                             roleUser={roleUser}
                             id={id}
                             onEdit={onEdit}
-                            onError={onError}
                             control={control}
                             error={error}
+                            onError={onError}
                             setError={setError}
+                            onImageError={onImageError}
+                            onDateError={onDateError}
+                            setImageError={setImageError}
+                            notifiedDateError={notifiedDateError}
+                            receivedDateError={receivedDateError}
+                            returnDateError={returnDateError}
                             onSelectReturnDate={onSelectReturnDate}
                             onSelectReceivedDate={onSelectReceivedDate}
                             onSelectNotifiedDate={onSelectNotifiedDate}
+                            onSelectBetweenRepair={onSelectBetweenRepair}
+                            onSelectBeforeRepair={onSelectBeforeRepair}
+                            onSelectAfterRepair={onSelectAfterRepair}
                             brandList={brandList}
                             statusList={statusList}
                             receivedDate={receivedDate}
@@ -502,6 +663,12 @@ const RepairDetail = (roleUser) => {
                             setReturnDate={setReturnDate}
                             notifiedDate={notifiedDate}
                             setNotifiedDate={setNotifiedDate}
+                            betweenRepair={betweenRepair}
+                            setBetweenRepair={setBetweenRepair}
+                            beforeRepair={beforeRepair}
+                            setBeforeRepair={setBeforeRepair}
+                            afterRepair={afterRepair}
+                            setAfterRepair={setAfterRepair}
                         />
                         {id === "new" ? (
                             ""

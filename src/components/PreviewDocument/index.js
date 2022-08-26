@@ -117,6 +117,28 @@ const PreviewDocument = () => {
                                 {dataRepair?.customer_province} ,
                                 XXXXX
                             </Grid>
+                            <Grid item xs={12} md={6}>
+                                <Typography
+                                    variant="h6"
+                                    sx={{ fontWeight: 600 }}
+                                >
+                                    ช่องทางรับแจ้ง
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                {dataRepair?.receive_method}
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <Typography
+                                    variant="h6"
+                                    sx={{ fontWeight: 600 }}
+                                >
+                                    ระยะเวลาประกัน
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                {dataRepair?.warranty_status}
+                            </Grid>
                         </Grid>
                     </Paper>
                     <Paper
@@ -193,6 +215,20 @@ const PreviewDocument = () => {
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 {dataRepair?.remark}
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <Typography
+                                    variant="h6"
+                                    sx={{ fontWeight: 600 }}
+                                >
+                                    วันที่แจ้งเรื่อง
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                {dataRepair?.notified_date
+                                    ?.split("-")
+                                    .reverse()
+                                    .join("/")}
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <Typography

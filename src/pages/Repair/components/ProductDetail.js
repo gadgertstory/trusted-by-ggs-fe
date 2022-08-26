@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 
 import Input from "../../../components/Input";
+import InputUploadImage from "../../../components/InputUploadImage";
 
 const ProductDetail = (props) => {
     const {
@@ -24,35 +25,59 @@ const ProductDetail = (props) => {
         returnDate,
         receivedDate,
         notifiedDate,
+        betweenRepair,
+        beforeRepair,
+        afterRepair,
+        afterCustomer,
         setReceivedDate,
         setReturnDate,
         setNotifiedDate,
-        setError,
+        setBeforeRepair,
+        setBetweenRepair,
+        setAfterRepair,
         onSelectReceivedDate,
         onSelectReturnDate,
         onSelectNotifiedDate,
+        onSelectBetweenRepair,
+        onSelectBeforeRepair,
+        onSelectAfterRepair,
         onEdit,
         brandList,
         statusList,
-        roleUser
+        roleUser,
+        onDateError,
+        onImageError,
+        setImageError,
+        notifiedDateError,
+        receivedDateError,
+        returnDateError,
     } = props;
 
     const handleReceivedDateChange = (receivedDate) => {
         setReceivedDate(receivedDate);
         onSelectReceivedDate(receivedDate);
-        setError("");
     };
 
     const handleReturnDateChange = (returnDate) => {
         setReturnDate(returnDate);
         onSelectReturnDate(returnDate);
-        setError("");
     };
-    
+
     const handleNotifiedDateChange = (notifiedDate) => {
         setNotifiedDate(notifiedDate);
         onSelectNotifiedDate(notifiedDate);
-        setError("");
+    };
+
+    React.useEffect(() => {
+        onSelectBeforeRepair(beforeRepair);
+        onSelectBetweenRepair(betweenRepair);
+        onSelectAfterRepair(afterRepair);
+    }, [betweenRepair, beforeRepair, afterCustomer]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    const handleDateChangeRaw = (e) => {
+        if (e) {
+            e.preventDefault();
+        }
     };
 
     return (
@@ -75,12 +100,14 @@ const ProductDetail = (props) => {
                             fieldState: { error },
                         }) => (
                             <Input
-                                disabled={!onEdit || roleUser.roleUser.role ==='user'}
+                                disabled={
+                                    !onEdit || roleUser.roleUser.role === "user"
+                                }
                                 onChange={onChange}
                                 value={value}
                                 required
                                 fullWidth={true}
-                                label="ชื่ออุปกรกรณ์"
+                                label="ชื่ออุปกรณ์"
                                 error={!!error}
                                 helperText={error ? error.message : null}
                                 inputProps={{
@@ -134,7 +161,10 @@ const ProductDetail = (props) => {
                                     Brand
                                 </InputLabel>
                                 <Select
-                                    disabled={!onEdit || roleUser.roleUser.role ==='user'}
+                                    disabled={
+                                        !onEdit ||
+                                        roleUser.roleUser.role === "user"
+                                    }
                                     size="small"
                                     value={value}
                                     label="Brand"
@@ -160,6 +190,37 @@ const ProductDetail = (props) => {
                         rules={{
                             required: "กรุณาเลือก Brand",
                         }}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <InputUploadImage
+                        activeUpload={'all'}
+                        label={"รูปภาพก่อนซ่อม (อัปโหลด ไม่เกิน 3 รูป)"}
+                        imagesList={beforeRepair}
+                        onEdit={onEdit}
+                        setImagesList={setBeforeRepair}
+                        onImageError={onImageError}
+                        setImageError={setImageError}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <InputUploadImage
+                        label={"รูปภาพระหว่างซ่อม (อัปโหลด ไม่เกิน 3 รูป)"}
+                        imagesList={betweenRepair}
+                        onEdit={onEdit}
+                        setImagesList={setBetweenRepair}
+                        onImageError={onImageError}
+                        setImageError={setImageError}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <InputUploadImage
+                        label={"รูปภาพหลังซ่อม (อัปโหลด ไม่เกิน 3 รูป)"}
+                        imagesList={afterRepair}
+                        onEdit={onEdit}
+                        setImagesList={setAfterRepair}
+                        onImageError={onImageError}
+                        setImageError={setImageError}
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -251,10 +312,16 @@ const ProductDetail = (props) => {
                             onChange={handleNotifiedDateChange}
                             disabled={!onEdit || id !== "new"}
                             renderInput={(params) => (
-                                <TextField fullWidth size="small" {...params} />
+                                <TextField
+                                    onKeyDown={handleDateChangeRaw}
+                                    fullWidth
+                                    size="small"
+                                    {...params}
+                                />
                             )}
                         />
                     </LocalizationProvider>
+                    {onDateError(notifiedDateError)}
                 </Grid>
                 <Grid item xs={12} md={3}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -263,12 +330,18 @@ const ProductDetail = (props) => {
                             inputFormat="dd/MM/yyyy"
                             value={receivedDate}
                             onChange={handleReceivedDateChange}
-                            disabled={!onEdit || id !== "new"}
+                            disabled={!onEdit}
                             renderInput={(params) => (
-                                <TextField fullWidth size="small" {...params} />
+                                <TextField
+                                    onKeyDown={handleDateChangeRaw}
+                                    fullWidth
+                                    size="small"
+                                    {...params}
+                                />
                             )}
                         />
                     </LocalizationProvider>
+                    {onDateError(receivedDateError)}
                 </Grid>
                 <Grid item xs={12} md={3}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -277,12 +350,18 @@ const ProductDetail = (props) => {
                             inputFormat="dd/MM/yyyy"
                             value={returnDate}
                             onChange={handleReturnDateChange}
-                            disabled={!onEdit || roleUser.roleUser.role ==='user'}
+                            disabled={!onEdit}
                             renderInput={(params) => (
-                                <TextField fullWidth size="small" {...params} />
+                                <TextField
+                                    onKeyDown={handleDateChangeRaw}
+                                    fullWidth
+                                    size="small"
+                                    {...params}
+                                />
                             )}
                         />
                     </LocalizationProvider>
+                    {onDateError(returnDateError)}
                 </Grid>
             </Grid>
         </Paper>
