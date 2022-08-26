@@ -99,7 +99,7 @@ const CustomerDetail = (props) => {
                                 }}
                             />
                         )}
-                        rules={{ required: "กรุณากรอกนามสุกล" }}
+                        rules={{ required: "กรุณากรอกนามสกุล" }}
                     />
                 </Grid>
                 <Grid item xs={12} md={4}>

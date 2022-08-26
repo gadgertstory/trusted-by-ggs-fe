@@ -21,25 +21,39 @@ pdfMake.fonts = {
 const PreviewPDF = (dataRepairPDF, dataUrl) => {
     const ObjData = dataRepairPDF;
 
-    const received_date = new Date(ObjData.received_date);
-    const return_date = new Date(ObjData.return_date);
-    const notified_date = new Date(ObjData.notified_date);
+    const received_date = new Date(
+        ObjData?.received_date === null ? "" : ObjData?.received_date
+    );
+    const return_date = new Date(
+        ObjData?.return_date === null ? "" : ObjData?.return_date
+    );
+    const notified_date = new Date(ObjData?.notified_date);
 
-    const ThaiNotifiedDate = notified_date.toLocaleDateString("th-TH", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        weekday: "long",
-    });
+    if (received_date.toString() === "Invalid Date") {
+        var ThaiReceivedDate = "";
+    } else {
+        // eslint-disable-next-line 
+        var ThaiReceivedDate  = received_date?.toLocaleDateString("th-TH", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            weekday: "long",
+        }); 
+    }
 
-    const ThaiReceivedDate = received_date.toLocaleDateString("th-TH", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        weekday: "long",
-    });
+    if (return_date.toString() === "Invalid Date") {
+        var ThaiReturnDate = "";
+    } else {
+        // eslint-disable-next-line 
+        var ThaiReturnDate = return_date?.toLocaleDateString("th-TH", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            weekday: "long",
+        });
+    }
 
-    const ThaiReturnDate = return_date.toLocaleDateString("th-TH", {
+    const ThaiNotifiedDate = notified_date?.toLocaleDateString("th-TH", {
         year: "numeric",
         month: "long",
         day: "numeric",
