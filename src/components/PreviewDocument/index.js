@@ -122,11 +122,33 @@ const PreviewDocument = () => {
                                     variant="h6"
                                     sx={{ fontWeight: 600 }}
                                 >
+                                    ช่องทางการสั่งซื้อ
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                {dataRepair?.purchase_method}
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <Typography
+                                    variant="h6"
+                                    sx={{ fontWeight: 600 }}
+                                >
                                     ช่องทางรับแจ้ง
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 {dataRepair?.receive_method}
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <Typography
+                                    variant="h6"
+                                    sx={{ fontWeight: 600 }}
+                                >
+                                    เลขที่ออเดอร์ / เลขที่ทำรายการ
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                {dataRepair?.order_no}
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <Typography

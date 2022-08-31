@@ -22,6 +22,7 @@ import {
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { MoreVert, Feed } from "@mui/icons-material";
+import { makeStyles } from "@mui/styles";
 
 import CustomerDetail from "../components/CustomerDetail";
 import ProductDetail from "../components/ProductDetail";
@@ -47,7 +48,17 @@ import { options } from "../../../dataMock/master";
 
 import Logo from "../../../assets/Logo/GadgetStory_logo.png";
 
+const useStyles = makeStyles(theme => ({
+    formControl: {
+      minWidth: 120
+    },
+    menuPaper: {
+      maxHeight: 150
+    }
+  }));
+
 const RepairDetail = (roleUser) => {
+    const classes = useStyles();
     const { handleSubmit, control, setValue, register } = useForm();
     const { id } = useParams();
     const dispatch = useDispatch();
@@ -158,6 +169,8 @@ const RepairDetail = (roleUser) => {
                 );
                 setValue("receive_method", dataRepair.receive_method || "");
                 setValue("warranty_status", dataRepair.warranty_status || "");
+                setValue("order_no", dataRepair.order_no || "");
+                setValue("purchase_method", dataRepair.purchase_method || "");
 
                 let beforeRepairArr = [];
                 let betweenRepairArr = [];
@@ -249,9 +262,9 @@ const RepairDetail = (roleUser) => {
             }
         }
 
-        if (!error) {
-            setLoading(true);
-        }
+        // if (!error) {
+        //     setLoading(true);
+        // }
 
         if (id === "new") {
             const _data = Object.assign(data, newData);
@@ -288,6 +301,8 @@ const RepairDetail = (roleUser) => {
                     customer_zipcode: _data.customer_zipcode,
                     warranty_status: _data.warranty_status,
                     receive_method: _data.receive_method,
+                    order_no: _data.order_no,
+                    purchase_method: _data.purchase_method,
                     brand_id: _data.brand_id,
                     product_name: _data.product_name,
                     description: _data.description,
@@ -634,6 +649,7 @@ const RepairDetail = (roleUser) => {
                             error={error}
                             setError={setError}
                             onSelect={onSelect}
+                            classes={classes}
                         />
                         <ProductDetail
                             roleUser={roleUser}
@@ -669,6 +685,7 @@ const RepairDetail = (roleUser) => {
                             setBeforeRepair={setBeforeRepair}
                             afterRepair={afterRepair}
                             setAfterRepair={setAfterRepair}
+                            classes={classes}
                         />
                         {id === "new" ? (
                             ""

@@ -91,10 +91,12 @@ const PreviewPDF = (dataRepairPDF, dataUrl) => {
                     {
                         text: `${ObjData.customer_house_no} ${ObjData.customer_subdistrict} ${ObjData.customer_district} ${ObjData.customer_province} ${ObjData.customer_zipcode}
                         โทรศัพท์: ${ObjData.customer_tel}
+                        ช่องทางการสั่งซื้อ:  ${ObjData.purchase_method}
                         ช่องทางรับแจ้ง:  ${ObjData.receive_method}`,
                     },
                     {
                         text: `เลขที่ใบแจ้งซ่อม: ${ObjData.repair_no}
+                        เลขที่ออเดอร์ / เลขที่ทำรายการ : ${ObjData.order_no} 
                         วันที่แจ้งเรื่อง : ${ThaiNotifiedDate} 
                         วันที่รับซ่อม : ${ThaiReceivedDate}`,
                     },
