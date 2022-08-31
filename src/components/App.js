@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback,lazy } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     BrowserRouter as Router,
@@ -14,12 +14,12 @@ import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import "react-toastify/dist/ReactToastify.css";
 
-import Header from "./Header";
-import Dashboard from "../pages/Dashboard";
-import Profile from "../pages/Profile";
-import Repair from "../pages/Repair";
-import LogIn from "../pages/Login";
-import NotFound from "../pages/NotFound";
+// import Header from "./Header";
+// import Dashboard from "../pages/Dashboard";
+// import Profile from "../pages/Profile";
+// import Repair from "../pages/Repair";
+// import LogIn from "../pages/Login";
+// import NotFound from "../pages/NotFound";
 
 import { clearMessage } from "../services/actions/message";
 
@@ -28,6 +28,13 @@ import PreviewDocument from "./PreviewDocument";
 
 import { logout } from "../services/actions/auth";
 import AuthVerify from "../common/AuthVerify";
+
+const Header = lazy(() => import('./Header'));
+const Dashboard = lazy(() => import('../pages/Dashboard'));
+const Profile = lazy(() => import('../pages/Profile'));
+const Repair = lazy(() => import('../pages/Repair'));
+const LogIn = lazy(() => import('../pages/Login'));
+const NotFound = lazy(() => import('../pages/NotFound'));
 
 const App = () => {
     const { user: currentUser } = useSelector((state) => state.auth);
