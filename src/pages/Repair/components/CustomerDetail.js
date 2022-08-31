@@ -33,6 +33,7 @@ const CustomerDetail = (props) => {
         onSelect,
         onEdit,
         roleUser,
+        classes
     } = props;
 
     return (
@@ -237,6 +238,34 @@ const CustomerDetail = (props) => {
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Controller
+                        name="purchase_method"
+                        control={control}
+                        defaultValue=""
+                        render={({
+                            field: { onChange, value },
+                            fieldState: { error },
+                        }) => (
+                            <Input
+                                disabled={
+                                    !onEdit || roleUser.roleUser.role === "user"
+                                }
+                                required={true}
+                                fullWidth
+                                label="ช่องทางการสั่งซื้อ"
+                                value={value}
+                                onChange={onChange}
+                                error={!!error}
+                                helperText={error ? error.message : null}
+                                inputProps={{
+                                    maxLength: 100,
+                                }}
+                            />
+                        )}
+                        rules={{ required: "กรุณากรอกช่องทางการสั่งซื้อ" }}
+                    />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <Controller
                         name="receive_method"
                         required
                         control={control}
@@ -245,7 +274,7 @@ const CustomerDetail = (props) => {
                             field: { onChange, value },
                             fieldState: { error },
                         }) => (
-                            <FormControl fullWidth required error={!!error}>
+                            <FormControl className={classes.formControl} fullWidth required error={!!error}>
                                 <InputLabel id="demo-simple-select-required-label">
                                     ช่องทางรับแจ้ง
                                 </InputLabel>
@@ -259,6 +288,7 @@ const CustomerDetail = (props) => {
                                     label="ช่องทางรับแจ้ง"
                                     onChange={onChange}
                                     error={!!error}
+                                    MenuProps={{ classes: { paper: classes.menuPaper } }}
                                 >
                                     {receiveMethodList?.map((item) => {
                                         return (
@@ -279,6 +309,34 @@ const CustomerDetail = (props) => {
                         rules={{
                             required: "กรุณาเลือก ช่องทางรับแจ้ง",
                         }}
+                    />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <Controller
+                        name="order_no"
+                        control={control}
+                        defaultValue=""
+                        render={({
+                            field: { onChange, value },
+                            fieldState: { error },
+                        }) => (
+                            <Input
+                                disabled={
+                                    !onEdit || roleUser.roleUser.role === "user"
+                                }
+                                required={true}
+                                fullWidth
+                                label="เลขที่ออเดอร์ / เลขที่ทำรายการ"
+                                value={value}
+                                onChange={onChange}
+                                error={!!error}
+                                helperText={error ? error.message : null}
+                                inputProps={{
+                                    maxLength: 100,
+                                }}
+                            />
+                        )}
+                        rules={{ required: "กรุณากรอกเลขที่ออเดอร์ / เลขที่ทำรายการ" }}
                     />
                 </Grid>
                 <Grid item xs={12} md={6}>

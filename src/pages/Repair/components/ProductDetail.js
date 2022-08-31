@@ -51,6 +51,7 @@ const ProductDetail = (props) => {
         notifiedDateError,
         receivedDateError,
         returnDateError,
+        classes
     } = props;
 
     const handleReceivedDateChange = (receivedDate) => {
@@ -156,7 +157,7 @@ const ProductDetail = (props) => {
                             field: { onChange, value },
                             fieldState: { error },
                         }) => (
-                            <FormControl fullWidth required error={!!error}>
+                            <FormControl fullWidth required error={!!error} className={classes.formControl}>
                                 <InputLabel id="demo-simple-select-required-label">
                                     Brand
                                 </InputLabel>
@@ -170,6 +171,7 @@ const ProductDetail = (props) => {
                                     label="Brand"
                                     onChange={onChange}
                                     error={!!error}
+                                    MenuProps={{ classes: { paper: classes.menuPaper } }}
                                 >
                                     {brandList?.map((item) => {
                                         return (
@@ -274,7 +276,7 @@ const ProductDetail = (props) => {
                                 field: { onChange, value },
                                 fieldState: { error },
                             }) => (
-                                <FormControl fullWidth>
+                                <FormControl className={classes.formControl} fullWidth>
                                     <InputLabel id="demo-simple-select-required-label">
                                         สถานะการซ่อม
                                     </InputLabel>
@@ -284,6 +286,7 @@ const ProductDetail = (props) => {
                                         value={value}
                                         label="Status"
                                         onChange={onChange}
+                                        MenuProps={{ classes: { paper: classes.menuPaper } }}
                                     >
                                         {statusList?.map((item) => {
                                             return (

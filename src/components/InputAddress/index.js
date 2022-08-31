@@ -110,6 +110,8 @@ class ThailandAddress extends Component {
                                     position: "absolute",
                                     top: "auto",
                                     left: "auto",
+                                    height:'200px',
+                                    overflowY:'scroll'
                                 }}
                             >
                                 {options}
