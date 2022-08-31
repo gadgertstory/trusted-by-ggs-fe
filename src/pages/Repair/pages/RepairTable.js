@@ -68,6 +68,44 @@ const RepairTable = (roleUser) => {
         [keyword, status, dispatch]
     );
 
+    const Logo = (brandName) => {
+        let src = "";
+
+        if (brandName === "Sillicons") {
+            src =
+                "https://gadgetstory-logo.s3.ap-southeast-1.amazonaws.com/Sillicons.png";
+        } else if (brandName === "Keychron") {
+            src =
+                "https://gadgetstory-logo.s3.ap-southeast-1.amazonaws.com/Keychron.png";
+        } else if (brandName === "RSQ") {
+            src =
+                "https://gadgetstory-logo.s3.ap-southeast-1.amazonaws.com/Rolling-Square.png";
+        } else if (brandName === "XDDesign") {
+            src =
+                "https://gadgetstory-logo.s3.ap-southeast-1.amazonaws.com/XD-Design.png";
+        } else if (brandName === "Deltahub") {
+            src =
+                "https://gadgetstory-logo.s3.ap-southeast-1.amazonaws.com/DeltaHub.png";
+        } else if (brandName === "INVZI") {
+            src =
+                "https://gadgetstory-logo.s3.ap-southeast-1.amazonaws.com/Invzi.png";
+        } else {
+            src =
+                "https://gadgetstory-logo.s3.ap-southeast-1.amazonaws.com/NuPhy.png";
+        }
+
+        return (
+            <Stack
+                direction="row"
+                justifyItems={"center"}
+                alignItems={"center"}
+            >
+                <img height="20" width="20" src={src} alt={brandName}></img>
+                <Box> &nbsp; {brandName}</Box>
+            </Stack>
+        );
+    };
+
     return (
         <>
             <Stack
@@ -113,7 +151,7 @@ const RepairTable = (roleUser) => {
                     pageSizeOptions: [20, 40, 60, 80, 100],
                     toolbar: false,
                     sorting: false,
-                    // maxBodyHeight: "50vh",
+                    // maxBodyHeight: "80vh",
                     // headerStyle: { position: 'sticky', top: 0 }
                 }}
                 title=""
@@ -155,7 +193,7 @@ const RepairTable = (roleUser) => {
                                     maxWidth: 150,
                                 }}
                             >
-                                {rowData.brand_name}
+                                {Logo(rowData.brand_name)}
                             </Box>
                         ),
                     },
