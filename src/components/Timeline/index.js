@@ -73,7 +73,9 @@ export default function CustomizedTimeline(props) {
                                             <Grid item xs={8}>
                                                 {new Date(
                                                     history.process_date
-                                                ).toLocaleString("en-GB")}
+                                                ).toLocaleString("en-GB", {
+                                                    timeZone: "UTC",
+                                                })}
                                             </Grid>
                                             <Grid item xs={4}>
                                                 <Typography
