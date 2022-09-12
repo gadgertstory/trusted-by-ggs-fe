@@ -21,15 +21,19 @@ const Dashboard = () => {
 
     return (
         <React.Fragment>
-            <Typography variant="h3" component="h3" sx={{ my: 8,fontWeight:'bold'}}>
+            <Typography
+                variant="h3"
+                component="h3"
+                sx={{ my: 8, fontWeight: "bold" }}
+            >
                 สวัสดี, {currentUser.data.name.toUpperCase()} 👋🏻
             </Typography>
-            <Typography variant="h5" sx={{ my: 2,fontWeight:'bold' }}>
+            <Typography variant="h5" sx={{ my: 2, fontWeight: "bold" }}>
                 จำนวนใบแจ้งซ่อม
             </Typography>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={3}>
-                    <Link href="/repair" underline="none">
+                    <Link href="/repair?status_no=0&customer_name=" underline="none">
                         <Paper
                             elevation={3}
                             sx={{
@@ -42,10 +46,22 @@ const Dashboard = () => {
                                 borderTop: `solid ${theme.palette.indigo[500]} 4px`,
                             }}
                         >
-                            <Typography variant="h5" sx={{ mb: 2,color:`${theme.palette.indigo[500]}` }}>
+                            <Typography
+                                variant="h5"
+                                sx={{
+                                    mb: 2,
+                                    color: `${theme.palette.indigo[500]}`,
+                                }}
+                            >
                                 ทั้งหมด
                             </Typography>
-                            <Typography variant="h1" sx={{ mb: 2,color:`${theme.palette.indigo[500]}` }}>
+                            <Typography
+                                variant="h1"
+                                sx={{
+                                    mb: 2,
+                                    color: `${theme.palette.indigo[500]}`,
+                                }}
+                            >
                                 {countRepair?.count_all}
                             </Typography>
                         </Paper>
@@ -61,9 +77,20 @@ const Dashboard = () => {
                             return theme.palette.teal[500];
                         }
                     };
+
+                    const getUrl = () => {
+                        if (item.status_id === 1) {
+                            return "/repair?status_no=1&customer_name=";
+                        } else if (item.status_id === 2) {
+                            return "/repair?status_no=2&customer_name=";
+                        } else {
+                            return "/repair?status_no=9&customer_name=";
+                        }
+                    };
+
                     return (
                         <Grid item xs={12} md={3} key={item.status_id}>
-                            <Link href="/repair" underline="none">
+                            <Link href={getUrl()} underline="none">
                                 <Paper
                                     elevation={3}
                                     sx={{
@@ -76,10 +103,16 @@ const Dashboard = () => {
                                         borderTop: `solid ${getColor()} 4px`,
                                     }}
                                 >
-                                    <Typography variant="h5" sx={{ mb: 2 ,color:`${getColor()}`}}>
+                                    <Typography
+                                        variant="h5"
+                                        sx={{ mb: 2, color: `${getColor()}` }}
+                                    >
                                         {item.status_name}
                                     </Typography>
-                                    <Typography variant="h1" sx={{ mb: 2,color:`${getColor()}` }}>
+                                    <Typography
+                                        variant="h1"
+                                        sx={{ mb: 2, color: `${getColor()}` }}
+                                    >
                                         {item.count_status}
                                     </Typography>
                                 </Paper>

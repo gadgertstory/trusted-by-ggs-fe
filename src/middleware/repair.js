@@ -3,15 +3,15 @@ import authHeader from "./authHeader";
 
 const API_URL = process.env.REACT_APP_BASE_URL || "";
 
-const fetchAllRepair = () => {
-    return axios.get(`${API_URL}/repair-request`, { headers: authHeader() });
+const RepairRequestSearch = (search) => {
+    return axios.get(`${API_URL}/repair-request${search}`, { headers: authHeader() });
 };
 
-const requestRepairSearch = (body) => {
-    return axios.post(`${API_URL}/repair-request-search`, body, {
-        headers: authHeader(),
-    });
-};
+// const requestRepairSearch = (body) => {
+//     return axios.post(`${API_URL}/repair-request-search`, body, {
+//         headers: authHeader(),
+//     });
+// };
 
 const createRepair = (data) => {
     return axios
@@ -56,10 +56,9 @@ const fetchRepairPDFForCustomer = (id) => {
 const exportedFunction = {
     createRepair,
     updateRepair,
-    fetchAllRepair,
     fetchRepair,
     deleteRepair,
-    requestRepairSearch,
+    RepairRequestSearch,
     fetchRepairPDF,
     fetchRepairPDFForCustomer
 };

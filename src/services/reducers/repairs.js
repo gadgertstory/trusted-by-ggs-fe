@@ -2,12 +2,12 @@ import {
     FETCH_ALL_REPAIR_SUCCESS,
     FETCH_ALL_REPAIR_FAIL,
     REQUEST_REPAIR_SEARCH_SUCCESS,
-    REQUEST_REPAIR_SEARCH_FAIL
+    REQUEST_REPAIR_SEARCH_FAIL,
 } from "../actions/types";
 
 const initialState = {
     dataAllRepair: [],
-    dataSearchRepair:[],
+    dataSearchRepair: [],
     isLoading: false,
 };
 
@@ -23,7 +23,7 @@ const repairs = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
             };
-            case REQUEST_REPAIR_SEARCH_SUCCESS:
+        case REQUEST_REPAIR_SEARCH_SUCCESS:
             return {
                 dataAllRepair: action.payload,
                 isLoading: true,

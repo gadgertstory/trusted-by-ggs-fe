@@ -1,16 +1,14 @@
 import React, { useEffect, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
+import { useLocation } from "react-router-dom";
 
 import MaterialTable from "material-table";
 import { history } from "../../../helpers/history";
 import { Button, Stack, Typography, Box } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-import {
-    getAllRepair,
-    requestRepairSearch,
-} from "../../../services/actions/repairs";
+import { RepairRequestSearch } from "../../../services/actions/repairs";
 import { getAllStatus } from "../../../services/actions/status";
 import HeaderTable from "../components/HeaderTable";
 import BadgeStatus from "../../../components/Badge";
@@ -19,6 +17,7 @@ const RepairTable = (roleUser) => {
     const dispatch = useDispatch();
     const { control } = useForm();
     const { dataAllRepair = [] } = useSelector((state) => state.repairs);
+    const { search } = useLocation();
 
     const [status, setStatus] = useState(0);
     const [keyword, setKeyword] = useState("");
@@ -27,8 +26,14 @@ const RepairTable = (roleUser) => {
         dispatch(getAllStatus());
     }, [dispatch]);
 
+    const useQuery = () => {
+        return React.useMemo(() => new URLSearchParams(search), []);
+    };
+
+    const query = useQuery();
+
     useEffect(() => {
-        handleSearch();
+        handleSearchByDashboard();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const selectRow = (selectRow) => {
@@ -51,19 +56,26 @@ const RepairTable = (roleUser) => {
         setKeyword(e.target.value);
     };
 
+    const handleSearchByDashboard = useCallback(
+        (isClear) => {
+            const _keyword = isClear ? "" : keyword;
+            setStatus(query.get("status_no"));
+            const queryParams = `?status_no=${query.get(
+                "status_no"
+            )}&customer_name=${_keyword}`;
+            history.push(queryParams);
+            dispatch(RepairRequestSearch(queryParams));
+        },
+        [keyword,dispatch,query]
+    );
+
     const handleSearch = useCallback(
         (isClear) => {
             const _keyword = isClear ? "" : keyword;
-            const params = {
-                status_no: status,
-                customer_name: _keyword,
-            };
 
-            if (status === 0 && _keyword === "") {
-                dispatch(getAllRepair());
-            } else {
-                dispatch(requestRepairSearch(params));
-            }
+            const queryParams = `?status_no=${status}&customer_name=${_keyword}`;
+            history.push(queryParams);
+            dispatch(RepairRequestSearch(queryParams));
         },
         [keyword, status, dispatch]
     );
