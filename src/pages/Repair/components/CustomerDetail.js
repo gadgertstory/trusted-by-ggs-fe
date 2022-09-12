@@ -168,12 +168,29 @@ const CustomerDetail = (props) => {
                         }}
                     />
                 </Grid>
+                <Grid item xs={12} md={6}>
+                    <Typography component="label" variant="caption">
+                        ไปรษณีย์*
+                    </Typography>
+                    <ThailandAddress
+                        disabled={!onEdit || roleUser.roleUser.role === "user"}
+                        style={{ width: "100%", outlineStyle: "none" }}
+                        address="zipcode"
+                        value={zipcode}
+                        onChange={(e) => {
+                            setZipcode(e.target.value);
+                            setError("");
+                        }}
+                        onSelect={onSelect}
+                    />
+                    {onError()}
+                </Grid>
                 <Grid item xs={12} md={6} sx={{ width: "100%" }}>
                     <Typography component="label" variant="caption">
                         แขวง / ตำบล*
                     </Typography>
                     <ThailandAddress
-                        disabled={!onEdit || roleUser.roleUser.role === "user"}
+                        disabled
                         style={{ width: "100%" }}
                         address="subdistrict"
                         value={subdistrict}
@@ -213,23 +230,6 @@ const CustomerDetail = (props) => {
                         value={province}
                         onChange={(e) => {
                             setProvince(e.target.value);
-                            setError("");
-                        }}
-                        onSelect={onSelect}
-                    />
-                    {onError()}
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <Typography component="label" variant="caption">
-                        ไปรษณีย์*
-                    </Typography>
-                    <ThailandAddress
-                        disabled
-                        style={{ width: "100%", outlineStyle: "none" }}
-                        address="zipcode"
-                        value={zipcode}
-                        onChange={(e) => {
-                            setZipcode(e.target.value);
                             setError("");
                         }}
                         onSelect={onSelect}
