@@ -163,8 +163,6 @@ const RepairTable = (roleUser) => {
                     pageSizeOptions: [20, 40, 60, 80, 100],
                     toolbar: false,
                     sorting: false,
-                    // maxBodyHeight: "80vh",
-                    // headerStyle: { position: 'sticky', top: 0 }
                 }}
                 title=""
                 columns={[

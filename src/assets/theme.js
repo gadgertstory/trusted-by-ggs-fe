@@ -47,14 +47,8 @@ export const theme = createTheme({
         action: {
             active: teal[200],
             activeOpacity: 1,
-            // disabled: grey[700],
-            // disabledBackground: grey[200],
             hover: grey[300],
             hoverOpacity: 0.7,
-            // focus: teal[600],
-            // focusOpacity: 1,
-            // selected: teal[300],
-            // selectedOpacity: 1,
         },
         background: {
             default: "white",

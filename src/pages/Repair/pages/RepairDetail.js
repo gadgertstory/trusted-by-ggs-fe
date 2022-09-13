@@ -493,7 +493,6 @@ const RepairDetail = (roleUser) => {
                             container
                             flexDirection="row"
                             alignItems={"center"}
-                            // spacing={2}
                             sx={{
                                 p: 2,
                             }}
