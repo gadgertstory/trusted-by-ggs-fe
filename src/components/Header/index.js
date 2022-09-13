@@ -18,7 +18,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ConstructionIcon from "@mui/icons-material/Construction";
 
 import { logout } from "../../services/actions/auth";
-// import AuthVerify from "./common/AuthVerify";
 import EventBus from "../../common/EventBus";
 
 const pagesList = [
@@ -45,17 +44,10 @@ const settings = [
 
 const ResponsiveAppBar = (currentUser) => {
     const dispatch = useDispatch();
-    // const [showModeratorBoard, setShowModeratorBoard] = useState(false);
-    // const [showAdminBoard, setShowAdminBoard] = useState(false);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-    // const [value, setValue] = React.useState(0);
 
     const [dataUser] = useState(currentUser);
-
-    // const handleChange = (event, newValue) => {
-    //     setValue(newValue);
-    // };
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -77,14 +69,6 @@ const ResponsiveAppBar = (currentUser) => {
     }, [dispatch]);
 
     useEffect(() => {
-        // if (dataUser) {
-        //     setShowModeratorBoard(currentUser.roles.includes("ROLE_MODERATOR"));
-        //     setShowAdminBoard(currentUser.roles.includes("ROLE_ADMIN"));
-        // } else {
-        //     setShowModeratorBoard(false);
-        //     setShowAdminBoard(false);
-        // }
-
         EventBus.on("logout", () => {
             logOut();
         });

@@ -7,31 +7,12 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Avatar from "@mui/material/Avatar";
 
-// import UserService from "../../middleware/user";
-
 const Profile = () => {
     const { user: currentUser } = useSelector((state) => state.auth);
 
     if (!currentUser) {
         return <Navigate to="/login" />;
     }
-
-    // useEffect(() => {
-    //   console.log('Profile currentUser',currentUser)
-    //   UserService.getPublicContent().then(
-    //     (response) => {
-    //       setData(response.data);
-    //     },
-    //     (error) => {
-    //       const _content =
-    //         (error.response && error.response.data) ||
-    //         error.message ||
-    //         error.toString();
-
-    //         setData(_content);
-    //     }
-    //   );
-    // }, []);
 
     return (
         <Grid container justifyContent="center" alignItems="center">

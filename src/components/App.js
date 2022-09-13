@@ -14,13 +14,6 @@ import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import "react-toastify/dist/ReactToastify.css";
 
-// import Header from "./Header";
-// import Dashboard from "../pages/Dashboard";
-// import Profile from "../pages/Profile";
-// import Repair from "../pages/Repair";
-// import LogIn from "../pages/Login";
-// import NotFound from "../pages/NotFound";
-
 import { clearMessage } from "../services/actions/message";
 
 import { history } from "../helpers/history";

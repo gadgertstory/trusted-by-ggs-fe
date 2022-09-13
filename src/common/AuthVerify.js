@@ -1,5 +1,4 @@
 import React from "react";
-// import { history } from "../helpers/history";
 
 const parseJwt = (token) => {
     try {

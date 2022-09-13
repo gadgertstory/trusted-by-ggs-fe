@@ -7,12 +7,6 @@ const RepairRequestSearch = (search) => {
     return axios.get(`${API_URL}/repair-request${search}`, { headers: authHeader() });
 };
 
-// const requestRepairSearch = (body) => {
-//     return axios.post(`${API_URL}/repair-request-search`, body, {
-//         headers: authHeader(),
-//     });
-// };
-
 const createRepair = (data) => {
     return axios
         .post(`${API_URL}/repair-request`, data, { headers: authHeader() })
