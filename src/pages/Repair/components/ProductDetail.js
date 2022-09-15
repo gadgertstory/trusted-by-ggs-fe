@@ -313,7 +313,8 @@ const ProductDetail = (props) => {
                             inputFormat="dd/MM/yyyy"
                             value={notifiedDate}
                             onChange={handleNotifiedDateChange}
-                            disabled={!onEdit || id !== "new"}
+                            // disabled={!onEdit || id !== "new"}
+                            disabled={!onEdit}
                             renderInput={(params) => (
                                 <TextField
                                     onKeyDown={handleDateChangeRaw}
