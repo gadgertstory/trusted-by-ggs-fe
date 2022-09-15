@@ -308,6 +308,7 @@ const RepairDetail = (roleUser) => {
                     description: _data.description,
                     return_date: _data.return_date,
                     received_date: _data.received_date,
+                    notified_date: _data.notified_date,
                     remark: _data.remark,
                 },
                 status: {
@@ -330,7 +331,6 @@ const RepairDetail = (roleUser) => {
                 formData.append("after_repair", file.file);
                 formData.append("previewUrl", file.previewUrl);
             });
-
             formData.append("data", JSON.stringify(_updateData));
             dispatch(updateRepair(id, formData));
         }
@@ -709,7 +709,7 @@ const RepairDetail = (roleUser) => {
                         }}
                         variant="contained"
                         onClick={() => {
-                            history.push("/repair");
+                            history.push("/repair?status_no=0&customer_name=");
                             window.location.reload();
                         }}
                     >

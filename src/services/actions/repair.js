@@ -26,7 +26,7 @@ export const createRepair = (data) => async (dispatch) => {
                 actionHandler({
                     successMessage: "Create Repair Success",
                 }),
-                history.push("/repair"),
+                history.push("/repair?status_no=0&customer_name="),
                 setTimeout(function () {
                     window.location.reload();
                 }, 1000 * 1.5)
@@ -116,7 +116,7 @@ export const deleteRepair = (id) => async (dispatch) => {
                 actionHandler({
                     successMessage: "Delete Success",
                 }),
-                history.push("/repair"),
+                history.push("/repair?status_no=0&customer_name="),
                 setTimeout(function () {
                     window.location.reload();
                 }, 1000 * 1.5)
