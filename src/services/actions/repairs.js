@@ -44,9 +44,9 @@ export const getAllRepair = () => async (dispatch) => {
         });
 };
 
-export const requestRepairSearch = (id) => async (dispatch) => {
+export const RepairRequestSearch = (search) => async (dispatch) => {
     // Calling the server
-    await Repair.requestRepairSearch(id)
+    await Repair.RepairRequestSearch(search)
         .then((response) => {
             return response.data;
         })

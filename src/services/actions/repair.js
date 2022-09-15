@@ -69,7 +69,6 @@ export const updateRepair = (id, data,formData) => async (dispatch) => {
                 actionHandler({
                     successMessage: "Update Repair Success",
                 }),
-                // history.push("/repair"),
                 setTimeout(function () {
                     window.location.reload();
                 }, 1000 * 1.5)

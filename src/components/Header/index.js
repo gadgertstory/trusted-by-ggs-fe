@@ -18,7 +18,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ConstructionIcon from "@mui/icons-material/Construction";
 
 import { logout } from "../../services/actions/auth";
-// import AuthVerify from "./common/AuthVerify";
 import EventBus from "../../common/EventBus";
 
 const pagesList = [
@@ -27,7 +26,7 @@ const pagesList = [
         name: "หน้าหลัก",
     },
     {
-        pathname: "/repair",
+        pathname: "/repair?status_no=0&customer_name=",
         name: "งานซ่อม",
     },
 ];
@@ -45,17 +44,10 @@ const settings = [
 
 const ResponsiveAppBar = (currentUser) => {
     const dispatch = useDispatch();
-    // const [showModeratorBoard, setShowModeratorBoard] = useState(false);
-    // const [showAdminBoard, setShowAdminBoard] = useState(false);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-    // const [value, setValue] = React.useState(0);
 
-    const [dataUser] = useState(currentUser)
-
-    // const handleChange = (event, newValue) => {
-    //     setValue(newValue);
-    // };
+    const [dataUser] = useState(currentUser);
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -77,14 +69,6 @@ const ResponsiveAppBar = (currentUser) => {
     }, [dispatch]);
 
     useEffect(() => {
-        // if (dataUser) {
-        //     setShowModeratorBoard(currentUser.roles.includes("ROLE_MODERATOR"));
-        //     setShowAdminBoard(currentUser.roles.includes("ROLE_ADMIN"));
-        // } else {
-        //     setShowModeratorBoard(false);
-        //     setShowAdminBoard(false);
-        // }
-
         EventBus.on("logout", () => {
             logOut();
         });
@@ -93,6 +77,33 @@ const ResponsiveAppBar = (currentUser) => {
             EventBus.remove("logout");
         };
     }, [dataUser, logOut]);
+
+    const renderPageList = pagesList.map((page) => (
+        <Link
+            key={`${page.pathname}`}
+            href={`${page.pathname}`}
+            underline="none"
+        >
+            <MenuItem onClick={handleCloseNavMenu}>
+                <Typography textAlign="center">{page.name}</Typography>
+            </MenuItem>
+        </Link>
+    ));
+
+    const renderPageListResponsive = pagesList.map((page) => (
+        <Link underline="none" key={page.pathname} href={`${page.pathname}`}>
+            <Button
+                onClick={handleCloseNavMenu}
+                sx={{
+                    my: 2,
+                    color: "white",
+                    display: "block",
+                }}
+            >
+                {page.name}
+            </Button>
+        </Link>
+    ));
 
     return (
         <AppBar position="static">
@@ -153,26 +164,18 @@ const ResponsiveAppBar = (currentUser) => {
                                 display: { xs: "block", md: "none" },
                             }}
                         >
-                            {pagesList.map((page) => (
-                                <Link
-                                    key={`${page.pathname}`}
-                                    href={`${page.pathname}`}
-                                    underline="none"
-                                >
-                                    <MenuItem onClick={handleCloseNavMenu}>
-                                        <Typography textAlign="center">
-                                            {page.name}
-                                        </Typography>
-                                    </MenuItem>
-                                </Link>
-                            ))}
+                            {renderPageList}
                         </Menu>
                     </Box>
 
                     {/* ==========================Menu Responsive=========================== */}
 
                     <ConstructionIcon
-                        sx={{ display: { xs: "flex", md: "none" },fontSize:40, mr: 1 }}
+                        sx={{
+                            display: { xs: "flex", md: "none" },
+                            fontSize: 40,
+                            mr: 1,
+                        }}
                     />
 
                     <Typography
@@ -183,14 +186,14 @@ const ResponsiveAppBar = (currentUser) => {
                         sx={{
                             mr: 2,
                             display: { xs: "flex", md: "none" },
-                            direction:  "flex-wrap",
+                            direction: "flex-wrap",
                             flexGrow: 1,
                             fontFamily: "monospace",
                             fontWeight: 700,
                             letterSpacing: ".2rem",
                             color: "inherit",
                             textDecoration: "none",
-                            whiteSpace:'pre-wrap'
+                            whiteSpace: "pre-wrap",
                         }}
                     >
                         Repair System
@@ -201,30 +204,20 @@ const ResponsiveAppBar = (currentUser) => {
                             display: { xs: "none", md: "flex" },
                         }}
                     >
-                        {pagesList.map((page) => (
-                            <Link
-                                underline="none"
-                                key={page.pathname}
-                                href={`${page.pathname}`}
-                            >
-                                <Button
-                                    onClick={handleCloseNavMenu}
-                                    sx={{
-                                        my: 2,
-                                        color: "white",
-                                        display: "block",
-                                    }}
-                                >
-                                    {page.name}
-                                </Button>
-                            </Link>
-                        ))}
+                        {renderPageListResponsive}
                     </Box>
 
                     {/* ============================Setting==========================      */}
 
-                    <Box sx={{ flexGrow: 0,display:'flex',justifyContent:'center', alignItems:'center' }}>
-                            {dataUser.currentUser.data.name.toUpperCase()}
+                    <Box
+                        sx={{
+                            flexGrow: 0,
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }}
+                    >
+                        {dataUser.currentUser.data.name.toUpperCase()}
                         <Tooltip title="Open settings">
                             <IconButton
                                 onClick={handleOpenUserMenu}

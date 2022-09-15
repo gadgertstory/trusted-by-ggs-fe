@@ -1,6 +1,4 @@
 import {
-    // REGISTER_SUCCESS,
-    // REGISTER_FAIL,
     LOGIN_SUCCESS,
     LOGIN_FAIL,
     LOGOUT,
@@ -10,42 +8,6 @@ import {
 import AuthService from "../../middleware/auth";
 import actionHandler from "../../middleware/action_handler";
 import { history } from "../../helpers/history";
-
-// export const register = (username, email, password) => (dispatch) => {
-//   return AuthService.register(username, email, password).then(
-//     (response) => {
-//       dispatch({
-//         type: REGISTER_SUCCESS,
-//       });
-
-//       dispatch({
-//         type: SET_MESSAGE,
-//         payload: response.data.message,
-//       });
-
-//       return Promise.resolve();
-//     },
-//     (error) => {
-//       const message =
-//         (error.response &&
-//           error.response.data &&
-//           error.response.data.message) ||
-//         error.message ||
-//         error.toString();
-
-//       dispatch({
-//         type: REGISTER_FAIL,
-//       });
-
-//       dispatch({
-//         type: SET_MESSAGE,
-//         payload: message,
-//       });
-
-//       return Promise.reject();
-//     }
-//   );
-// };
 
 export const login = (loginUser) => (dispatch) => {
     return AuthService.login(loginUser).then(
