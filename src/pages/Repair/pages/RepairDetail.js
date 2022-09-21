@@ -81,13 +81,6 @@ const RepairDetail = (roleUser) => {
     const [openConfirmRemoveRepair, setOpenConfirmRemoveRepair] =
         useState(false);
 
-    //AddressForm state
-    const [subdistrict, setSubDistrict] = useState("");
-    const [district, setDistrict] = useState("");
-    const [province, setProvince] = useState("");
-    const [zipcode, setZipcode] = useState("");
-    const [fullAddress, setFullAddress] = useState({});
-
     //Date
     const [receivedDate, setReceivedDate] = useState(null);
     const [returnDate, setReturnDate] = useState(null);
@@ -110,17 +103,6 @@ const RepairDetail = (roleUser) => {
         Repair.fetchRepair(id).then((res) => {
             const dataRepair = res.data;
             if (dataRepair) {
-                setSubDistrict(dataRepair.customer_subdistrict);
-                setDistrict(dataRepair.customer_district);
-                setProvince(dataRepair.customer_province);
-                setZipcode(dataRepair.customer_zipcode);
-                setFullAddress({
-                    subdistrict,
-                    district,
-                    province,
-                    zipcode,
-                });
-
                 if (dataRepair.notified_date === null) {
                     setNotifiedDate(null);
                 } else {
@@ -149,6 +131,22 @@ const RepairDetail = (roleUser) => {
                 setValue(
                     "customer_house_no",
                     dataRepair.customer_house_no || ""
+                );
+                setValue(
+                    "customer_subdistrict",
+                    dataRepair.customer_subdistrict || ""
+                );
+                setValue(
+                    "customer_district",
+                    dataRepair.customer_district || ""
+                );
+                setValue(
+                    "customer_province",
+                    dataRepair.customer_province || ""
+                );
+                setValue(
+                    "customer_zipcode",
+                    dataRepair.customer_zipcode || ""
                 );
                 setValue("product_name", dataRepair.product_name || "");
                 setValue(
@@ -192,7 +190,7 @@ const RepairDetail = (roleUser) => {
                 setAfterRepair(afterRepairArr);
             }
         });
-    }, [district, province, setValue, subdistrict, zipcode, id]);
+    }, [id]);
 
     useEffect(() => {
         dispatch(getAllBrand());
@@ -209,12 +207,6 @@ const RepairDetail = (roleUser) => {
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        setFullAddress({
-            subdistrict,
-            district,
-            province,
-            zipcode,
-        });
         setNewData({
             received_date: receivedDate,
             return_date: returnDate,
@@ -222,17 +214,9 @@ const RepairDetail = (roleUser) => {
             beforeRepair: beforeRepair,
             betweenRepair: betweenRepair,
             afterRepair: afterRepair,
-            customer_subdistrict: subdistrict,
-            customer_district: district,
-            customer_province: province,
-            customer_zipcode: zipcode,
             user_id: currentUser.data.user_id,
         });
     }, [
-        subdistrict,
-        district,
-        province,
-        zipcode,
         receivedDate,
         returnDate,
         notifiedDate,
@@ -243,10 +227,7 @@ const RepairDetail = (roleUser) => {
     ]);
 
     const onSubmit = (data) => {
-        if (!subdistrict || !district || !province || !zipcode) {
-            setError("กรุณากรอกข้อมูลให้ครบ");
-            return;
-        }
+      
         if (currentUser.data.role === "admin") {
             if (!notifiedDate) {
                 setNotifiedDateError("กรุณากรอกวันที่แจ้งเรื่อง");
@@ -334,18 +315,6 @@ const RepairDetail = (roleUser) => {
             formData.append("data", JSON.stringify(_updateData));
             dispatch(updateRepair(id, formData));
         }
-    };
-
-    const onSelect = (fulladdress) => {
-        const { subdistrict, district, province, zipcode } = fulladdress;
-
-        setSubDistrict(subdistrict);
-        setDistrict(district);
-        setProvince(province);
-        setZipcode(zipcode);
-        setFullAddress(fullAddress);
-
-        setError("");
     };
 
     const onSelectReceivedDate = (receivedDate) => {
@@ -635,19 +604,9 @@ const RepairDetail = (roleUser) => {
                             roleUser={roleUser}
                             onEdit={onEdit}
                             register={register}
-                            setSubDistrict={setSubDistrict}
-                            setDistrict={setDistrict}
-                            setProvince={setProvince}
-                            setZipcode={setZipcode}
-                            subdistrict={subdistrict}
-                            zipcode={zipcode}
-                            district={district}
-                            province={province}
-                            onError={onError}
                             control={control}
                             error={error}
                             setError={setError}
-                            onSelect={onSelect}
                             classes={classes}
                         />
                         <ProductDetail
