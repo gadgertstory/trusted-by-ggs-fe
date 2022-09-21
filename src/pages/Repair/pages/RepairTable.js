@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 
 import MaterialTable from "material-table";
 import { history } from "../../../helpers/history";
-import { Button, Stack, Typography, Box } from "@mui/material";
+import { Button, Stack, Typography, Box, Link } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import { RepairRequestSearch } from "../../../services/actions/repairs";
@@ -43,6 +43,11 @@ const RepairTable = (roleUser) => {
         window.location.reload();
     };
 
+    const selectNewtab = (rowData) => {
+        const id = rowData.repair_id;
+        window.open(`/repair/${id}`, "_blank");
+    };
+
     const handleCreateRepair = () => {
         history.push("/repair/new");
         window.location.reload();
@@ -66,7 +71,7 @@ const RepairTable = (roleUser) => {
             history.push(queryParams);
             dispatch(RepairRequestSearch(queryParams));
         },
-        [keyword,dispatch,query]
+        [keyword, dispatch, query]
     );
 
     const handleSearch = useCallback(
@@ -175,7 +180,15 @@ const RepairTable = (roleUser) => {
                             </Typography>
                         ),
                     },
-                    { title: "เลขที่ใบแจ้งซ่อม", field: "repair_no" },
+                    {
+                        title: "เลขที่ใบแจ้งซ่อม",
+                        field: "repair_no",
+                        render: (rowData) => (
+                            <Link href="#" onClick={() => selectNewtab(rowData)}>
+                                {rowData.repair_no}
+                            </Link>
+                        ),
+                    },
                     {
                         title: "ชื่อ - นามสกุล",
                         render: (rowData) => (

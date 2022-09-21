@@ -4,7 +4,6 @@ import { Controller } from "react-hook-form";
 import {
     Grid,
     Paper,
-    Typography,
     FormHelperText,
     FormControl,
     Select,
@@ -13,27 +12,17 @@ import {
 } from "@mui/material";
 
 import Input from "../../../components/Input";
-import { receiveMethodList, warrantyStatusList } from "../../../dataMock/master";
-
-import ThailandAddress from "../../../components/InputAddress";
+import {
+    receiveMethodList,
+    warrantyStatusList,
+} from "../../../dataMock/master";
 
 const CustomerDetail = (props) => {
     const {
         control,
-        onError,
-        subdistrict,
-        setSubDistrict,
-        district,
-        setDistrict,
-        province,
-        setProvince,
-        zipcode,
-        setZipcode,
-        setError,
-        onSelect,
         onEdit,
         roleUser,
-        classes
+        classes,
     } = props;
 
     return (
@@ -169,72 +158,128 @@ const CustomerDetail = (props) => {
                     />
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <Typography component="label" variant="caption">
-                        ไปรษณีย์*
-                    </Typography>
-                    <ThailandAddress
-                        disabled={!onEdit || roleUser.roleUser.role === "user"}
-                        style={{ width: "100%", outlineStyle: "none" }}
-                        address="zipcode"
-                        value={zipcode}
-                        onChange={(e) => {
-                            setZipcode(e.target.value);
-                            setError("");
+                    <Controller
+                        name="customer_subdistrict"
+                        control={control}
+                        defaultValue=""
+                        render={({
+                            field: { onChange, value },
+                            fieldState: { error },
+                        }) => (
+                            <Input
+                                disabled={
+                                    !onEdit || roleUser.roleUser.role === "user"
+                                }
+                                onChange={onChange}
+                                value={value}
+                                required
+                                fullWidth={true}
+                                label="แขวง / ตำบล"
+                                error={!!error}
+                                helperText={error ? error.message : null}
+                                inputProps={{
+                                    maxLength: 100,
+                                }}
+                            />
+                        )}
+                        rules={{
+                            required: "กรุณากรอกแขวง / ตำบล",
                         }}
-                        onSelect={onSelect}
                     />
-                    {onError()}
-                </Grid>
-                <Grid item xs={12} md={6} sx={{ width: "100%" }}>
-                    <Typography component="label" variant="caption">
-                        แขวง / ตำบล*
-                    </Typography>
-                    <ThailandAddress
-                        disabled
-                        style={{ width: "100%" }}
-                        address="subdistrict"
-                        value={subdistrict}
-                        onChange={(e) => {
-                            setSubDistrict(e.target.value);
-                            setError("");
-                        }}
-                        onSelect={onSelect}
-                    />
-                    {onError()}
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <Typography component="label" variant="caption">
-                        เขต / อำเภอ*
-                    </Typography>
-                    <ThailandAddress
-                        disabled
-                        style={{ width: "100%" }}
-                        address="district"
-                        value={district}
-                        onChange={(e) => {
-                            setDistrict(e.target.value);
-                            setError("");
+                    <Controller
+                        name="customer_district"
+                        control={control}
+                        defaultValue=""
+                        render={({
+                            field: { onChange, value },
+                            fieldState: { error },
+                        }) => (
+                            <Input
+                                disabled={
+                                    !onEdit || roleUser.roleUser.role === "user"
+                                }
+                                onChange={onChange}
+                                value={value}
+                                required
+                                fullWidth={true}
+                                label="เขต / อำเภอ"
+                                error={!!error}
+                                helperText={error ? error.message : null}
+                                inputProps={{
+                                    maxLength: 100,
+                                }}
+                            />
+                        )}
+                        rules={{
+                            required: "กรุณากรอกเขต / อำเภอ",
                         }}
-                        onSelect={onSelect}
                     />
-                    {onError()}
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <Typography component="label" variant="caption">
-                        จังหวัด*
-                    </Typography>
-                    <ThailandAddress
-                        disabled
-                        style={{ width: "100%", outlineStyle: "none" }}
-                        address="province"
-                        value={province}
-                        onChange={(e) => {
-                            setProvince(e.target.value);
-                            setError("");
+                    <Controller
+                        name="customer_province"
+                        control={control}
+                        defaultValue=""
+                        render={({
+                            field: { onChange, value },
+                            fieldState: { error },
+                        }) => (
+                            <Input
+                                disabled={
+                                    !onEdit || roleUser.roleUser.role === "user"
+                                }
+                                onChange={onChange}
+                                value={value}
+                                required
+                                fullWidth={true}
+                                label="จังหวัด"
+                                error={!!error}
+                                helperText={error ? error.message : null}
+                                inputProps={{
+                                    maxLength: 100,
+                                }}
+                            />
+                        )}
+                        rules={{
+                            required: "กรุณากรอกจังหวัด",
                         }}
-                        onSelect={onSelect}
                     />
-                    {onError()}
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <Controller
+                        name="customer_zipcode"
+                        control={control}
+                        defaultValue=""
+                        render={({
+                            field: { onChange, value },
+                            fieldState: { error },
+                        }) => (
+                            <Input
+                                disabled={
+                                    !onEdit || roleUser.roleUser.role === "user"
+                                }
+                                onChange={onChange}
+                                value={value}
+                                required
+                                fullWidth={true}
+                                label="รหัสไปรษณีย์"
+                                error={!!error}
+                                helperText={error ? error.message : null}
+                                inputProps={{
+                                    maxLength: 10,
+                                }}
+                            />
+                        )}
+                        rules={{
+                            required: "กรุณากรอกรหัสไปรษณีย์",
+                            pattern: {
+                                value: /^[0-9]+$/,
+                                message: "กรุณาใส่ตัวเลขเท่านั้น",
+                            },
+                        }}
+                    />
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Controller
@@ -274,7 +319,12 @@ const CustomerDetail = (props) => {
                             field: { onChange, value },
                             fieldState: { error },
                         }) => (
-                            <FormControl className={classes.formControl} fullWidth required error={!!error}>
+                            <FormControl
+                                className={classes.formControl}
+                                fullWidth
+                                required
+                                error={!!error}
+                            >
                                 <InputLabel id="demo-simple-select-required-label">
                                     ช่องทางรับแจ้ง
                                 </InputLabel>
@@ -288,7 +338,9 @@ const CustomerDetail = (props) => {
                                     label="ช่องทางรับแจ้ง"
                                     onChange={onChange}
                                     error={!!error}
-                                    MenuProps={{ classes: { paper: classes.menuPaper } }}
+                                    MenuProps={{
+                                        classes: { paper: classes.menuPaper },
+                                    }}
                                 >
                                     {receiveMethodList?.map((item) => {
                                         return (
@@ -336,7 +388,9 @@ const CustomerDetail = (props) => {
                                 }}
                             />
                         )}
-                        rules={{ required: "กรุณากรอกเลขที่ออเดอร์ / เลขที่ทำรายการ" }}
+                        rules={{
+                            required: "กรุณากรอกเลขที่ออเดอร์ / เลขที่ทำรายการ",
+                        }}
                     />
                 </Grid>
                 <Grid item xs={12} md={6}>
