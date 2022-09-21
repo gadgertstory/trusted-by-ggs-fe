@@ -190,7 +190,7 @@ const RepairDetail = (roleUser) => {
                 setAfterRepair(afterRepairArr);
             }
         });
-    }, [id]);
+    }, [id,setValue]);
 
     useEffect(() => {
         dispatch(getAllBrand());
