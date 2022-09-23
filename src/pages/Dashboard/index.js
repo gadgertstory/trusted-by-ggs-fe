@@ -105,7 +105,7 @@ const Dashboard = () => {
                                 >
                                     <Typography
                                         variant="h5"
-                                        sx={{ mb: 2, color: `${getColor()}` }}
+                                        sx={{ mb: 2, color: `${getColor()}`,textAlign: "center" }}
                                     >
                                         {item.status_name}
                                     </Typography>

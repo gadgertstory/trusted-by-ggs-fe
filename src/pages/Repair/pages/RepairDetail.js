@@ -89,7 +89,7 @@ const RepairDetail = (roleUser) => {
     //Dropdown
     const [open, setOpen] = useState(false);
     const anchorRef = React.useRef(null);
-    const [onEdit, setOnEdit] = useState(false);
+    const [onEdit, setOnEdit] = useState();
     const [selectedIndex, setSelectedIndex] = useState(null);
 
     const [dataUrl, setDataUrl] = useState();
@@ -202,7 +202,7 @@ const RepairDetail = (roleUser) => {
             dispatch(getRepairPDF(id));
             fetch();
         } else {
-            setOnEdit(true);
+            setOnEdit(!onEdit);
         }
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -413,7 +413,7 @@ const RepairDetail = (roleUser) => {
 
     const handleMenuItemClick = (event, index, option) => {
         if (option.name === "Edit") {
-            setOnEdit(true);
+            setOnEdit(!onEdit);
             setSelectedIndex(index);
         } else if (option.name === "Delete") {
             setOpenConfirmRemoveRepair(true);
