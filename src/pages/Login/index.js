@@ -47,7 +47,7 @@ function Copyright(props) {
 
 const LogIn = () => {
     const dispatch = useDispatch();
-    const [loading,setLoading] = useState(false);
+    const [loading] = useState(false);
     const { handleSubmit, control } = useForm();
 
     const [values, setValues] = React.useState({
@@ -109,7 +109,7 @@ const LogIn = () => {
                                 margin="normal"
                                 required
                                 fullWidth
-                                label="Email Address"
+                                label="Email"
                                 autoComplete="email"
                                 autoFocus
                                 value={value}

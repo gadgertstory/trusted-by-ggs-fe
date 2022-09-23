@@ -73,12 +73,12 @@ export const forgotPassword = (user_email) => async (dispatch) => {
             return (
                 Promise.resolve(),
                 actionHandler({
-                    successMessage: "Reset Password Success",
+                    successMessage: "รีเซ็ตพาสเวิร์ดสำเร็จ กรุณาตรวจสอบ Email ของท่าน"
                 }),
                 setTimeout(function () {
                     history.push('/login')
                     window.location.reload();
-                }, 1000 * 1.5)
+                }, 1000 * 2)
             );
         })
         .catch((error) => {
@@ -97,12 +97,16 @@ export const forgotPassword = (user_email) => async (dispatch) => {
                 type: SET_MESSAGE,
                 payload: message,
             });
-
             return (
                 Promise.reject(),
-                actionHandler({
-                    error: message,
-                })
+                actionHandler(
+                    message === "Invalid email."
+                        ? {
+                              error: `ไม่มี Email ของท่านอยู่ในระบบ 
+                              กรุณาตรวจสอบ Email ที่ท่านกรอก`,
+                          }
+                        : message
+                )
             );
         });
 };

@@ -5,23 +5,29 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import TextField from "@mui/material/TextField";
 
 import { useForm, Controller } from "react-hook-form";
-import {
-    Box,
-    Link,
-    Typography,
-    Container,
-} from "@mui/material";
+import { Box, Link, Typography, Container } from "@mui/material";
 
 import { history } from "../../helpers/history";
 import { forgotPassword } from "../../services/actions/auth";
 
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
 const ForgotPassword = () => {
+    const schema = Yup.object().shape({
+        user_email: Yup.string()
+            .required("Email is required")
+            .email("Please enter a valid email"),
+    });
+
+    const formOptions = { resolver: yupResolver(schema) };
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
-    const { handleSubmit, control } = useForm();
+    const { handleSubmit, register, formState } = useForm(formOptions);
+    const { errors } = formState;
 
     const onSubmit = (email) => {
-     dispatch(forgotPassword(email))
+        dispatch(forgotPassword(email));
     };
 
     return (
@@ -34,36 +40,30 @@ const ForgotPassword = () => {
                     alignItems: "center",
                 }}
             >
-                <Typography variant="h5">Forgot Password</Typography>
+                <Typography variant="h4" fontWeight={"bold"}>
+                    Forgot Password
+                </Typography>
                 <Box
                     component="form"
                     onSubmit={handleSubmit(onSubmit)}
                     noValidate
                     sx={{ mt: 1 }}
                 >
-                    <Controller
-                        name="user_email"
-                        control={control}
-                        defaultValue=""
-                        render={({
-                            field: { onChange, value },
-                            fieldState: { error },
-                        }) => (
-                            <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                label="Email Address"
-                                autoComplete="email"
-                                autoFocus
-                                value={value}
-                                onChange={onChange}
-                                error={!!error}
-                                helperText={error ? error.message : null}
-                                type="email"
-                            />
-                        )}
-                        rules={{ required: "Email required" }}
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        label="Email"
+                        autoComplete="email"
+                        autoFocus
+                        type="email"
+                        error={!!errors["user_email"]}
+                        helperText={
+                            errors["user_email"]
+                                ? errors["user_email"].message
+                                : ""
+                        }
+                        {...register("user_email")}
                     />
                     <Link
                         href="#"
