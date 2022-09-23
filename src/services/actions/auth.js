@@ -2,6 +2,8 @@ import {
     LOGIN_SUCCESS,
     LOGIN_FAIL,
     LOGOUT,
+    RESET_PASSWORD_SUCCESS,
+    RESET_PASSWORD_FAIL,
     SET_MESSAGE,
 } from "./types";
 
@@ -58,4 +60,49 @@ export const logout = () => (dispatch) => {
     dispatch({
         type: LOGOUT,
     });
+};
+
+
+export const forgotPassword = (user_email) => async (dispatch) => {
+    await AuthService.forgotPassword(user_email)
+        .then((user_email) => {
+            dispatch({
+                type: RESET_PASSWORD_SUCCESS,
+                payload: { user_email: user_email },
+            });
+            return (
+                Promise.resolve(),
+                actionHandler({
+                    successMessage: "Reset Password Success",
+                }),
+                setTimeout(function () {
+                    history.push('/login')
+                    window.location.reload();
+                }, 1000 * 1.5)
+            );
+        })
+        .catch((error) => {
+            const message =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString();
+
+            dispatch({
+                type: RESET_PASSWORD_FAIL,
+            });
+
+            dispatch({
+                type: SET_MESSAGE,
+                payload: message,
+            });
+
+            return (
+                Promise.reject(),
+                actionHandler({
+                    error: message,
+                })
+            );
+        });
 };

@@ -20,6 +20,7 @@ import {
     FormHelperText,
 } from "@mui/material";
 
+import { history } from "../../helpers/history";
 import { login } from "../../services/actions/auth";
 
 //button
@@ -46,7 +47,7 @@ function Copyright(props) {
 
 const LogIn = () => {
     const dispatch = useDispatch();
-    const [loading] = useState(false);
+    const [loading,setLoading] = useState(false);
     const { handleSubmit, control } = useForm();
 
     const [values, setValues] = React.useState({
@@ -176,6 +177,9 @@ const LogIn = () => {
                         )}
                         rules={{ required: "Password required" }}
                     />
+                    <Link href="#" onClick={()=>{
+                        history.push("/forgot-password")
+                    }}>Forgot Password</Link>
                     <LoadingButton
                         type="submit"
                         fullWidth
