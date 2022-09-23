@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 
@@ -20,8 +20,6 @@ import { Edit } from "@mui/icons-material";
 
 import getProfile from "../../middleware/user";
 import { updateProfile } from "../../services/actions/profile";
-
-import Input from "../../components/Input";
 
 const Profile = () => {
     const validationSchema = Yup.object().shape(
@@ -58,7 +56,7 @@ const Profile = () => {
     );
     const formOptions = { resolver: yupResolver(validationSchema) };
 
-    const { handleSubmit, control, setValue, register, formState } =
+    const { handleSubmit, setValue, register, formState } =
         useForm(formOptions);
     const { errors } = formState;
 
@@ -77,7 +75,7 @@ const Profile = () => {
             setProfile(profile);
             setValue("user_name", profile.user_name || "");
         });
-    }, []);
+    }, [setValue]);
 
     if (!currentUser) {
         return <Navigate to="/login" />;
@@ -86,7 +84,6 @@ const Profile = () => {
     const onSubmit = (data) => {
         const user_email = profile.user_email;
         const dataProfile = { ...data, user_email };
-        // console.log(data);
         dispatch(updateProfile(dataProfile));
     };
 
