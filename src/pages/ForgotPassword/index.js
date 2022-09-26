@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 
 import LoadingButton from "@mui/lab/LoadingButton";
 import TextField from "@mui/material/TextField";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Box, Link, Typography, Container } from "@mui/material";
 
 import { history } from "../../helpers/history";
@@ -12,6 +12,7 @@ import { forgotPassword } from "../../services/actions/auth";
 
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useSelector } from "react-redux";
 
 const ForgotPassword = () => {
     const schema = Yup.object().shape({
@@ -22,12 +23,23 @@ const ForgotPassword = () => {
 
     const formOptions = { resolver: yupResolver(schema) };
     const dispatch = useDispatch();
-    const [loading, setLoading] = useState(false);
+    const { message } = useSelector((state) => state.message);
     const { handleSubmit, register, formState } = useForm(formOptions);
     const { errors } = formState;
 
+    const [loading, setLoading] = useState(false);
+
     const onSubmit = (email) => {
-        dispatch(forgotPassword(email));
+        if(!message){
+            setLoading(true);
+            setTimeout(function () {
+                dispatch(forgotPassword(email));
+                setLoading(false);
+            }, 1000 * 2);
+        }else{
+            setLoading(true);
+            dispatch(forgotPassword(email));
+        }
     };
 
     return (

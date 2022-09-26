@@ -62,7 +62,6 @@ export const logout = () => (dispatch) => {
     });
 };
 
-
 export const forgotPassword = (user_email) => async (dispatch) => {
     await AuthService.forgotPassword(user_email)
         .then((user_email) => {
@@ -73,10 +72,11 @@ export const forgotPassword = (user_email) => async (dispatch) => {
             return (
                 Promise.resolve(),
                 actionHandler({
-                    successMessage: "รีเซ็ตพาสเวิร์ดสำเร็จ กรุณาตรวจสอบ Email ของท่าน"
+                    successMessage:
+                        "รีเซ็ตพาสเวิร์ดสำเร็จ กรุณาตรวจสอบ Email ของท่าน",
                 }),
                 setTimeout(function () {
-                    history.push('/login')
+                    history.push("/login");
                     window.location.reload();
                 }, 1000 * 2)
             );
@@ -97,6 +97,7 @@ export const forgotPassword = (user_email) => async (dispatch) => {
                 type: SET_MESSAGE,
                 payload: message,
             });
+
             return (
                 Promise.reject(),
                 actionHandler(
@@ -110,3 +111,47 @@ export const forgotPassword = (user_email) => async (dispatch) => {
             );
         });
 };
+
+export const resetPassword =
+    (user_password, queryParams) => async (dispatch) => {
+        await AuthService.resetPassword(user_password, queryParams)
+            .then((user_password) => {
+                dispatch({
+                    type: RESET_PASSWORD_SUCCESS,
+                    payload: { user_password: user_password },
+                });
+                return (
+                    Promise.resolve(),
+                    actionHandler({
+                        successMessage: "รีเซ็ตพาสเวิร์ดสำเร็จ",
+                    }),
+                    setTimeout(function () {
+                        history.push("/login");
+                        window.location.reload();
+                    }, 1000 * 2)
+                );
+            })
+            .catch((error) => {
+                const message =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+
+                dispatch({
+                    type: RESET_PASSWORD_FAIL,
+                });
+
+                dispatch({
+                    type: SET_MESSAGE,
+                    payload: message,
+                });
+                return (
+                    Promise.reject(),
+                    actionHandler({
+                        error: message,
+                    })
+                );
+            });
+    };

@@ -1,23 +1,54 @@
 import React, { useState } from "react";
 
 import { useDispatch } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 
 import LoadingButton from "@mui/lab/LoadingButton";
-import TextField from "@mui/material/TextField";
+import { Box, Typography, Container, TextField } from "@mui/material";
 
-import { useForm, Controller } from "react-hook-form";
-import { Box, Link, Typography, Container } from "@mui/material";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
 
-import { history } from "../../helpers/history";
+import { resetPassword } from "../../services/actions/auth";
 
 const ResetPassword = () => {
+    const validationSchema = Yup.object().shape(
+        {
+            new_password: Yup.string()
+                .required("New Password is a required")
+                .min(8, "Password must be at least 8 characters"),
+            user_password: Yup.string().oneOf(
+                [Yup.ref("new_password")],
+                "Passwords must match"
+            ),
+        },
+        [
+            // Add Cyclic deps here because when require itself
+            ["new_password"],
+            ["user_password"],
+        ]
+    );
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
-    const { handleSubmit, control } = useForm();
 
-    const onSubmit = (email) => {
-        console.log(email);
+    const formOptions = { resolver: yupResolver(validationSchema) };
+
+    const { handleSubmit, register, formState } = useForm(formOptions);
+    const { errors } = formState;
+    let [searchParams] = useSearchParams();
+
+    const onSubmit = (password) => {
+        setLoading(true);
+       
+        const queryHashParams = searchParams.get("h");
+        const queryEmailParams = searchParams.get("e");
+
+        const _newObjQuery = { queryHashParams, queryEmailParams };
+
+        dispatch(resetPassword(password.user_password,_newObjQuery));
     };
+
     return (
         <Container component="main" maxWidth="xs">
             <Box
@@ -35,39 +66,34 @@ const ResetPassword = () => {
                     noValidate
                     sx={{ mt: 1 }}
                 >
-                    <Controller
-                        name="email"
-                        control={control}
-                        defaultValue=""
-                        render={({
-                            field: { onChange, value },
-                            fieldState: { error },
-                        }) => (
-                            <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                label="Email Address"
-                                autoComplete="email"
-                                autoFocus
-                                value={value}
-                                onChange={onChange}
-                                error={!!error}
-                                helperText={error ? error.message : null}
-                                type="email"
-                            />
-                        )}
-                        rules={{ required: "Email required" }}
+                    <TextField
+                        size="small"
+                        sx={{ mb: 2 }}
+                        label="New Password"
+                        fullWidth
+                        type="password"
+                        error={!!errors["new_password"]}
+                        helperText={
+                            errors["new_password"]
+                                ? errors["new_password"].message
+                                : ""
+                        }
+                        {...register("new_password")}
                     />
-                    <Link
-                        href="#"
-                        onClick={() => {
-                            setLoading(true);
-                            history.push("/login");
-                        }}
-                    >
-                        Remember your password?
-                    </Link>
+                    <TextField
+                        size="small"
+                        sx={{ mb: 2 }}
+                        label="Confirm Password"
+                        fullWidth
+                        type="password"
+                        error={!!errors["user_password"]}
+                        helperText={
+                            errors["user_password"]
+                                ? errors["user_password"].message
+                                : ""
+                        }
+                        {...register("user_password")}
+                    />
                     <LoadingButton
                         type="submit"
                         fullWidth
@@ -75,7 +101,7 @@ const ResetPassword = () => {
                         sx={{ my: 2 }}
                         loading={loading}
                     >
-                        Send your email
+                        Reset Password
                     </LoadingButton>
                 </Box>
             </Box>

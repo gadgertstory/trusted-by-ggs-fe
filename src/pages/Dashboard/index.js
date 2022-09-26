@@ -1,22 +1,21 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
+import { Grid, Paper, Typography, Link } from "@mui/material";
 
 import { getDashboard } from "../../services/actions/dashboard";
+import { getProfile } from "../../services/actions/profile";
 
 import { theme } from "../../assets/theme";
 
 const Dashboard = () => {
     const dispatch = useDispatch();
-    const { user: currentUser } = useSelector((state) => state.auth);
     const { countRepair } = useSelector((state) => state.dashboard);
+    const { profile } = useSelector((state) => state.profile);
 
     useEffect(() => {
         dispatch(getDashboard());
+        dispatch(getProfile());
     }, [dispatch]);
 
     return (
@@ -26,14 +25,17 @@ const Dashboard = () => {
                 component="h3"
                 sx={{ my: 8, fontWeight: "bold" }}
             >
-                สวัสดี, {currentUser.data.name.toUpperCase()} 👋🏻
+                สวัสดี, {profile.user_name?.toUpperCase()} 👋🏻
             </Typography>
             <Typography variant="h5" sx={{ my: 2, fontWeight: "bold" }}>
                 จำนวนใบแจ้งซ่อม
             </Typography>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={3}>
-                    <Link href="/repair?status_no=0&customer_name=" underline="none">
+                    <Link
+                        href="/repair?status_no=0&customer_name="
+                        underline="none"
+                    >
                         <Paper
                             elevation={3}
                             sx={{
@@ -105,7 +107,11 @@ const Dashboard = () => {
                                 >
                                     <Typography
                                         variant="h5"
-                                        sx={{ mb: 2, color: `${getColor()}` }}
+                                        sx={{
+                                            mb: 2,
+                                            color: `${getColor()}`,
+                                            textAlign: "center",
+                                        }}
                                     >
                                         {item.status_name}
                                     </Typography>

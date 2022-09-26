@@ -95,7 +95,7 @@ const App = () => {
                             />
                             <Route
                                 exact
-                                path={`/reset-password/:token`}
+                                path={`/reset-password`}
                                 element={<ResetPassword />}
                             />
                             <Route path="/404" element={<NotFound />} />
