@@ -12,7 +12,6 @@ import { forgotPassword } from "../../services/actions/auth";
 
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useSelector } from "react-redux";
 
 const ForgotPassword = () => {
     const schema = Yup.object().shape({
@@ -23,23 +22,17 @@ const ForgotPassword = () => {
 
     const formOptions = { resolver: yupResolver(schema) };
     const dispatch = useDispatch();
-    const { message } = useSelector((state) => state.message);
     const { handleSubmit, register, formState } = useForm(formOptions);
     const { errors } = formState;
 
     const [loading, setLoading] = useState(false);
 
     const onSubmit = (email) => {
-        if(!message){
-            setLoading(true);
-            setTimeout(function () {
-                dispatch(forgotPassword(email));
-                setLoading(false);
-            }, 1000 * 2);
-        }else{
-            setLoading(true);
+        setLoading(true);
+        setTimeout(function () {
             dispatch(forgotPassword(email));
-        }
+            setLoading(false);
+        }, 1000 * 5);
     };
 
     return (
