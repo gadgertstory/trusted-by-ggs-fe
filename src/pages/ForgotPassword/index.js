@@ -29,9 +29,9 @@ const ForgotPassword = () => {
 
     const onSubmit = (email) => {
         setLoading(true);
-        setTimeout(function () {
+        setTimeout(() => {
             dispatch(forgotPassword(email));
-            setLoading(false);
+            clearTimeout(setLoading(false))
         }, 1000 * 5);
     };
 
