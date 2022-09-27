@@ -20,6 +20,7 @@ import {
     FormHelperText,
 } from "@mui/material";
 
+import { history } from "../../helpers/history";
 import { login } from "../../services/actions/auth";
 
 //button
@@ -108,7 +109,7 @@ const LogIn = () => {
                                 margin="normal"
                                 required
                                 fullWidth
-                                label="Email Address"
+                                label="Email"
                                 autoComplete="email"
                                 autoFocus
                                 value={value}
@@ -176,6 +177,9 @@ const LogIn = () => {
                         )}
                         rules={{ required: "Password required" }}
                     />
+                    <Link href="#" onClick={()=>{
+                        history.push("/forgot-password")
+                    }}>Forgot Password</Link>
                     <LoadingButton
                         type="submit"
                         fullWidth
