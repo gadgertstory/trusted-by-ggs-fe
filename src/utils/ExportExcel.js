@@ -15,17 +15,40 @@ const ExportExcel = async (value) => {
         .then((response) => response.data)
         .then((data) => {
             if (data) {
+                console.log(data)
                 const worksheet = XLSX.utils.json_to_sheet(data);
                 const workbook = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(workbook, worksheet, "Dates");
 
                 /* fix headers */
-                XLSX.utils.sheet_add_aoa(worksheet, [["id", "no", "customer_firstname"]], { origin: "A1" });
+                XLSX.utils.sheet_add_aoa(worksheet, [["เลขที่ใบแจ้งซ่อม",
+                "ชื่อ",
+                "นามสกุล",
+                "เบอร์โทรศัพท์ ",
+                "บ้านเลขที่ / อาคาร / ซอย / ถนน",
+                "แขวง / ตำบล",
+                "เขต / อำเภอ",
+                "จังหวัด",
+                "รหัสไปรษณีย์",
+                "Brand",
+                "ชื่ออุปกรณ์ ",
+                "หมายเลขเครื่อง/Serial Number",
+                "รายละเอียดการซ่อม/ปัญหา",
+                "วันที่รับซ่อม",
+                "วันที่นัดรับ",
+                "หมายเหตุ",
+                "ช่องทางรับแจ้ง ",
+                "ระยะเวลาประกัน",
+                "วันที่แจ้งเรื่อง",
+                "ช่องทางการสั่งซื้อ",
+                "เลขที่ออเดอร์ / เลขที่ทำรายการ ",
+                "ผู้บันทึกข้อมูล",
+                "สถานะการแจ้งซ่อม"]], { origin: "A1" });
 
                 /* calculate column width */
                 const max_width = data.reduce((w, r) => Math.max(w, r.repair_no.length), 20);
                 worksheet["!cols"] = [{ wch: max_width }];
-                return XLSX.writeFile(workbook, "Presidents.xlsx");
+                return XLSX.writeFile(workbook, "Repair System.xlsx");
             }
         }).catch((err) => {
             const error =
