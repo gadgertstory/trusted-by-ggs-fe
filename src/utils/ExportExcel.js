@@ -1,4 +1,5 @@
 import Repair from "../middleware/repair";
+import { toast } from "react-toastify";
 
 var XLSX = require("xlsx");
 
@@ -26,7 +27,23 @@ const ExportExcel = async (value) => {
                 worksheet["!cols"] = [{ wch: max_width }];
                 return XLSX.writeFile(workbook, "Presidents.xlsx");
             }
-        });
+        }).catch((err) => {
+            const error =
+                (err.response &&
+                    err.response.data &&
+                    err.response.data.message) ||
+                err.message ||
+                err.toString();
+            toast.error(typeof (error) === 'object' ? error[0] : error, {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        })
 }
 
 export default ExportExcel;

@@ -8,7 +8,7 @@ import { history } from "../../../helpers/history";
 import { Button, Stack, Typography, Box, Link } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-import { RepairRequestExport, RepairRequestSearch } from "../../../services/actions/repairs";
+import { RepairRequestSearch } from "../../../services/actions/repairs";
 import { getAllStatus } from "../../../services/actions/status";
 import HeaderTable from "../components/HeaderTable";
 import BadgeStatus from "../../../components/Badge";
@@ -30,7 +30,7 @@ import ExportExcel from "../../../utils/ExportExcel";
 const RepairTable = (roleUser) => {
     const dispatch = useDispatch();
     const { control } = useForm();
-    const { dataAllRepair = [], dataExportRepair = [] } = useSelector((state) => state.repairs);
+    const { dataAllRepair = [] } = useSelector((state) => state.repairs);
 
     const { search } = useLocation();
     const [status, setStatus] = useState(0);
@@ -39,8 +39,6 @@ const RepairTable = (roleUser) => {
 
     const [value, setValue] = useState([null, null]);
     const [newValue, setNewValue] = useState([null, null])
-
-    const [paramExport, setParamExport] = useState('')
 
     useEffect(() => {
         dispatch(getAllStatus());
