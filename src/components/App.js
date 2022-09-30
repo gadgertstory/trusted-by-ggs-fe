@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback,lazy } from "react";
+import React, { useEffect, useCallback, lazy } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     BrowserRouter as Router,
@@ -17,17 +17,20 @@ import "react-toastify/dist/ReactToastify.css";
 import { clearMessage } from "../services/actions/message";
 
 import { history } from "../helpers/history";
-import PreviewDocument from "./PreviewDocument";
+// import PreviewDocument from "./PreviewDocument";
 
 import { logout } from "../services/actions/auth";
 import AuthVerify from "../common/AuthVerify";
 
-const Header = lazy(() => import('./Header'));
-const Dashboard = lazy(() => import('../pages/Dashboard'));
-const Profile = lazy(() => import('../pages/Profile'));
-const Repair = lazy(() => import('../pages/Repair'));
-const LogIn = lazy(() => import('../pages/Login'));
-const NotFound = lazy(() => import('../pages/NotFound'));
+const PreviewDocument = lazy(() => import("./PreviewDocument"));
+const Header = lazy(() => import("./Header"));
+const Dashboard = lazy(() => import("../pages/Dashboard"));
+const Profile = lazy(() => import("../pages/Profile"));
+const Repair = lazy(() => import("../pages/Repair"));
+const LogIn = lazy(() => import("../pages/Login"));
+const ForgotPassword = lazy(() => import("../pages/ForgotPassword"));
+const ResetPassword = lazy(() => import("../pages/ResetPassword"));
+const NotFound = lazy(() => import("../pages/NotFound"));
 
 const App = () => {
     const { user: currentUser } = useSelector((state) => state.auth);
@@ -85,6 +88,16 @@ const App = () => {
                                 path={`/repair-document/:id`}
                                 element={<PreviewDocument />}
                             />
+                            <Route
+                                exact
+                                path={`/forgot-password`}
+                                element={<ForgotPassword />}
+                            />
+                            <Route
+                                exact
+                                path={`/reset-password`}
+                                element={<ResetPassword />}
+                            />
                             <Route path="/404" element={<NotFound />} />
                             <Route
                                 path="*"
@@ -92,6 +105,10 @@ const App = () => {
                             />
                             <Route
                                 path={`/repair-document/*`}
+                                element={<Navigate replace to="/404" />}
+                            />
+                            <Route
+                                path={`/forgot-password/*`}
                                 element={<Navigate replace to="/404" />}
                             />
                         </>

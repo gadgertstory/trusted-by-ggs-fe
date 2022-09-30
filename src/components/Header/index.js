@@ -1,24 +1,27 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Link from "@mui/material/Link";
 
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
+import {
+    AppBar,
+    Box,
+    Toolbar,
+    IconButton,
+    Typography,
+    Menu,
+    Container,
+    Avatar,
+    Button,
+    Tooltip,
+    MenuItem,
+} from "@mui/material";
 
 import MenuIcon from "@mui/icons-material/Menu";
 import ConstructionIcon from "@mui/icons-material/Construction";
 
-import { logout } from "../../services/actions/auth";
 import EventBus from "../../common/EventBus";
+import { logout } from "../../services/actions/auth";
+import { getProfile } from "../../services/actions/profile";
 
 const pagesList = [
     {
@@ -42,10 +45,12 @@ const settings = [
     },
 ];
 
-const ResponsiveAppBar = (currentUser) => {
+const ResponsiveAppBar = () => {
     const dispatch = useDispatch();
+    const { user: currentUser } = useSelector((state) => state.auth);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const { profile } = useSelector((state) => state.profile);
 
     const [dataUser] = useState(currentUser);
 
@@ -66,6 +71,10 @@ const ResponsiveAppBar = (currentUser) => {
 
     const logOut = useCallback(() => {
         dispatch(logout());
+    }, [dispatch]);
+
+    useEffect(() => {
+        dispatch(getProfile());
     }, [dispatch]);
 
     useEffect(() => {
@@ -217,14 +226,14 @@ const ResponsiveAppBar = (currentUser) => {
                             alignItems: "center",
                         }}
                     >
-                        {dataUser.currentUser.data.name.toUpperCase()}
+                        {profile.user_name?.toUpperCase()}
                         <Tooltip title="Open settings">
                             <IconButton
                                 onClick={handleOpenUserMenu}
                                 sx={{ pl: 1 }}
                             >
                                 <Avatar
-                                    alt={dataUser.currentUser.data.name.toUpperCase()}
+                                    alt={profile.user_name?.toUpperCase()}
                                     src="/static/images/avatar/2.jpg"
                                 />
                             </IconButton>

@@ -6,16 +6,18 @@ import repair from "./repair";
 import brand from "./brand";
 import status from "./status";
 import dashboard from "./dashboard";
+import profile from "./profile";
 
 import message from "./message";
 
 export default combineReducers({
-  auth,
-  message,
-  master,
-  repairs,
-  repair,
-  brand,
-  status,
-  dashboard
+    auth,
+    message,
+    master,
+    repairs,
+    repair,
+    brand,
+    status,
+    dashboard,
+    profile,
 });
