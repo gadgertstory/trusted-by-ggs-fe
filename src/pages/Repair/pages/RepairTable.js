@@ -159,6 +159,12 @@ const RepairTable = (roleUser) => {
         setValue([null, null])
     }
 
+    const handleDateChangeRaw = (e) => {
+        if (e) {
+            e.preventDefault();
+        }
+    };
+
     return (
         <>
             <Stack
@@ -382,9 +388,9 @@ const RepairTable = (roleUser) => {
                                     }}
                                     renderInput={(startProps, endProps) => (
                                         <React.Fragment>
-                                            <TextField {...startProps} />
+                                            <TextField {...startProps} onKeyDown={handleDateChangeRaw} />
                                             <Box sx={{ mx: 2 }}> to </Box>
-                                            <TextField {...endProps} />
+                                            <TextField {...endProps} onKeyDown={handleDateChangeRaw} />
                                         </React.Fragment>
                                     )}
                                 />
