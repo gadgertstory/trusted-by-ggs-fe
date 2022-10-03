@@ -31,7 +31,18 @@ const pagesList = [
     {
         pathname: "/repair?status_no=0&customer_name=",
         name: "งานซ่อม",
-    }
+    },
+];
+
+const pagesSuperAdminList = [
+    {
+        pathname: "/role",
+        name: "กำหนดสิทธิ์ผู้ใช้",
+    },
+    {
+        pathname: "/register",
+        name: "เพิ่มผู้ใช้งาน",
+    },
 ];
 
 const settings = [
@@ -99,6 +110,18 @@ const ResponsiveAppBar = () => {
         </Link>
     ));
 
+    const renderSuperAdminPageList = pagesSuperAdminList.map((page) => (
+        <Link
+            key={`${page.pathname}`}
+            href={`${page.pathname}`}
+            underline="none"
+        >
+            <MenuItem onClick={handleCloseNavMenu}>
+                <Typography textAlign="center">{page.name}</Typography>
+            </MenuItem>
+        </Link>
+    ));
+
     const renderPageListResponsive = pagesList.map((page) => (
         <Link underline="none" key={page.pathname} href={`${page.pathname}`}>
             <Button
@@ -113,6 +136,27 @@ const ResponsiveAppBar = () => {
             </Button>
         </Link>
     ));
+
+    const renderSuperAdminPageListResponsive = pagesSuperAdminList.map(
+        (page) => (
+            <Link
+                underline="none"
+                key={page.pathname}
+                href={`${page.pathname}`}
+            >
+                <Button
+                    onClick={handleCloseNavMenu}
+                    sx={{
+                        my: 2,
+                        color: "white",
+                        display: "block",
+                    }}
+                >
+                    {page.name}
+                </Button>
+            </Link>
+        )
+    );
 
     return (
         <AppBar position="static">
@@ -173,19 +217,10 @@ const ResponsiveAppBar = () => {
                                 display: { xs: "block", md: "none" },
                             }}
                         >
-                            {renderPageList}
-                            {profile.role?.role_name === 'superadmin' ?
-                                <Link
-                                    key={`/role`}
-                                    href={`/role`}
-                                    underline="none"
-                                >
-                                    <MenuItem onClick={handleCloseNavMenu}>
-                                        <Typography textAlign="center">กำหนดสิทธิ์ผู้ใช้</Typography>
-                                    </MenuItem>
-                                </Link>
-                                : ''}
-
+                             {renderPageList}
+                        {profile.role?.role_name === "superAdmin"
+                            ? renderSuperAdminPageList
+                            : ""}
                         </Menu>
                     </Box>
 
@@ -226,19 +261,9 @@ const ResponsiveAppBar = () => {
                         }}
                     >
                         {renderPageListResponsive}
-                        {profile.role?.role_name === 'superadmin' ? 
-                        <Link underline="none" key="/role" href={`/role`}>
-                            <Button
-                                onClick={handleCloseNavMenu}
-                                sx={{
-                                    my: 2,
-                                    color: "white",
-                                    display: "block",
-                                }}
-                            >
-                                กำหนดสิทธิ์ผู้ใช้
-                            </Button>
-                        </Link> : ''}
+                        {profile.role?.role_name === "superAdmin"
+                            ? renderSuperAdminPageListResponsive
+                            : ""}
                     </Box>
 
                     {/* ============================Setting==========================      */}
