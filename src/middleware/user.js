@@ -33,13 +33,18 @@ const updateProfile = (profile) => {
         });
 };
 
+const getAllUsers = () => {
+  return axios.get(API_URL + "/users", { headers: authHeader() });
+};
+
 const exportedFunction = {
   getPublicContent,
   getUserBoard,
   getModeratorBoard,
   getAdminBoard,
   updateProfile,
-  getProfile
+  getProfile,
+  getAllUsers
 };
 
 export default exportedFunction;

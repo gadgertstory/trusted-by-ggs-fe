@@ -31,7 +31,7 @@ const pagesList = [
     {
         pathname: "/repair?status_no=0&customer_name=",
         name: "งานซ่อม",
-    },
+    }
 ];
 
 const settings = [
@@ -174,6 +174,18 @@ const ResponsiveAppBar = () => {
                             }}
                         >
                             {renderPageList}
+                            {profile.role?.role_name === 'superadmin' ?
+                                <Link
+                                    key={`/role`}
+                                    href={`/role`}
+                                    underline="none"
+                                >
+                                    <MenuItem onClick={handleCloseNavMenu}>
+                                        <Typography textAlign="center">กำหนดสิทธิ์ผู้ใช้</Typography>
+                                    </MenuItem>
+                                </Link>
+                                : ''}
+
                         </Menu>
                     </Box>
 
@@ -214,6 +226,19 @@ const ResponsiveAppBar = () => {
                         }}
                     >
                         {renderPageListResponsive}
+                        {profile.role?.role_name === 'superadmin' ? 
+                        <Link underline="none" key="/role" href={`/role`}>
+                            <Button
+                                onClick={handleCloseNavMenu}
+                                sx={{
+                                    my: 2,
+                                    color: "white",
+                                    display: "block",
+                                }}
+                            >
+                                กำหนดสิทธิ์ผู้ใช้
+                            </Button>
+                        </Link> : ''}
                     </Box>
 
                     {/* ============================Setting==========================      */}

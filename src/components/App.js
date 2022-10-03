@@ -21,6 +21,7 @@ import { history } from "../helpers/history";
 
 import { logout } from "../services/actions/auth";
 import AuthVerify from "../common/AuthVerify";
+import ManageRole from "../pages/Role";
 
 const PreviewDocument = lazy(() => import("./PreviewDocument"));
 const Header = lazy(() => import("./Header"));
@@ -34,6 +35,7 @@ const NotFound = lazy(() => import("../pages/NotFound"));
 
 const App = () => {
     const { user: currentUser } = useSelector((state) => state.auth);
+    const { profile } = useSelector((state) => state.profile);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -60,6 +62,10 @@ const App = () => {
             element: <Repair />,
         },
         {
+            pathname: "/role",
+            element: <ManageRole />,
+        },
+        {
             pathname: "/404",
             element: <NotFound />,
         },
@@ -68,6 +74,8 @@ const App = () => {
             element: <Navigate replace to="/404" />,
         },
     ];
+
+    // console.log(profile.role)
 
     return (
         <ThemeProvider theme={theme}>
@@ -138,13 +146,13 @@ const App = () => {
                                                                         theme
                                                                             .palette
                                                                             .mode ===
-                                                                        "light"
+                                                                            "light"
                                                                             ? theme
-                                                                                  .palette
-                                                                                  .grey[100]
+                                                                                .palette
+                                                                                .grey[100]
                                                                             : theme
-                                                                                  .palette
-                                                                                  .grey[900],
+                                                                                .palette
+                                                                                .grey[900],
                                                                 flexGrow: 1,
                                                                 height: "100vh",
                                                                 overflow:
