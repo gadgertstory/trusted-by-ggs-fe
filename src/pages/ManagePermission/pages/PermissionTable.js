@@ -6,11 +6,11 @@ import MaterialTable from "material-table";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 
 import { history } from "../../../helpers/history";
-import { getAllUsers } from "../../../services/actions/user";
+import { getAllUsers } from "../../../services/actions/users";
 
 const Table = () => {
     const dispatch = useDispatch();
-    const { dataAllUsers = [] } = useSelector((state) => state.user);
+    const { dataAllUsers = [] } = useSelector((state) => state.users);
 
     useEffect(() => {
         dispatch(getAllUsers());

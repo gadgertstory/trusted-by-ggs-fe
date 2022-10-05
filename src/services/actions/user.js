@@ -1,56 +1,19 @@
 import {
-    FETCH_ALL_USER_SUCCESS,
-    FETCH_ALL_USER_FAIL,
     FETCH_USER_SUCCESS,
     FETCH_USER_FAIL,
     SET_MESSAGE,
     UPDATE_ROLE_SUCCESS,
     UPDATE_ROLE_FAIL,
     DELETE_USER_SUCCESS,
-    DELETE_USER_FAIL
+    DELETE_USER_FAIL,
 } from "./types";
 
-import fetchMaster from "../../middleware/user";
+import User from "../../middleware/user";
 import actionHandler from "../../middleware/action_handler";
 import { history } from "../../helpers/history";
 
-export const getAllUsers = () => async (dispatch) => {
-    await fetchMaster.getAllUsers()
-        .then((response) => response.data)
-        .then((responseJson) => {
-            dispatch({
-                type: FETCH_ALL_USER_SUCCESS,
-                payload: responseJson,
-            });
-        })
-        .catch((error) => {
-            const message =
-                (error.response &&
-                    error.response.data &&
-                    error.response.data.message) ||
-                error.message ||
-                error.toString();
-
-            dispatch({
-                type: FETCH_ALL_USER_FAIL,
-            });
-
-            dispatch({
-                type: SET_MESSAGE,
-                payload: message,
-            });
-
-            return (
-                Promise.reject(),
-                actionHandler({
-                    error: message,
-                })
-            );
-        });
-};
-
 export const getUser = (id) => async (dispatch) => {
-    await fetchMaster.getUser(id)
+    await User.getUser(id)
         .then((response) => response.data)
         .then((responseJson) => {
             dispatch({
@@ -84,8 +47,8 @@ export const getUser = (id) => async (dispatch) => {
         });
 };
 
-export const updateRoleUser = (id, role_name) => async (dispatch) => {
-    await fetchMaster.updateRoleUser(id, role_name)
+export const updateUser = (id, role_name) => async (dispatch) => {
+    await User.updateUser(id, role_name)
         .then((role_name) => {
             dispatch({
                 type: UPDATE_ROLE_SUCCESS,
@@ -125,10 +88,10 @@ export const updateRoleUser = (id, role_name) => async (dispatch) => {
                 })
             );
         });
-}
+};
 
 export const deleteUser = (id) => async (dispatch) => {
-    await fetchMaster.deleteUser(id)
+    await User.deleteUser(id)
         .then((response) => {
             return response.data;
         })

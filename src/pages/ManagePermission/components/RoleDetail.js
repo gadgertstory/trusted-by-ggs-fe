@@ -29,13 +29,14 @@ const RoleDetail = (props) => {
         dataUser,
         isEdit,
         setIsEdit,
-        openConfirmRemove,
         setOpenConfirmRemove,
     } = props;
 
     const [open, setOpen] = useState(false);
     const anchorRef = React.useRef(null);
     const [selectedIndex, setSelectedIndex] = useState(null);
+    const [placement, setPlacement] = React.useState();
+    const [setAnchorEl] = React.useState(null);
 
     const handleMenuItemClick = (event, index, option) => {
         if (option.name === "Edit") {
@@ -49,12 +50,13 @@ const RoleDetail = (props) => {
         if (anchorRef.current && anchorRef.current.contains(event.target)) {
             return;
         }
-
-        openConfirmRemove(false);
+        setOpen(false);
     };
 
-    const handleToggle = () => {
-        setOpen((prevOpen) => !prevOpen);
+    const handleToggle = (newPlacement) => (event) => {
+        setAnchorEl(event.currentTarget);
+        setOpen((prev) => placement !== newPlacement || !prev);
+        setPlacement(newPlacement);
     };
 
     return (
@@ -76,7 +78,7 @@ const RoleDetail = (props) => {
                         aria-expanded={open ? "true" : undefined}
                         aria-label="select merge strategy"
                         aria-haspopup="menu"
-                        onClick={handleToggle}
+                        onClick={handleToggle("bottom-end")}
                     >
                         <MoreVert />
                     </Button>
@@ -84,7 +86,7 @@ const RoleDetail = (props) => {
                 <Popper
                     open={open}
                     anchorEl={anchorRef.current}
-                    role={undefined}
+                    placement={placement}
                     transition
                     disablePortal
                     sx={{ zIndex: 2 }}

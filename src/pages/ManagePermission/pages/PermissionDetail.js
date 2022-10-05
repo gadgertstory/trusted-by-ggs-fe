@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
@@ -8,10 +8,13 @@ import { Box, Button, Grid, Stack, Typography, Paper } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 
-import fetchMaster from "../../../middleware/user";
 import { history } from "../../../helpers/history";
-import { getAllRoles } from "../../../services/actions/role";
-import { updateRoleUser, deleteUser } from "../../../services/actions/user";
+import { getAllRoles } from "../../../services/actions/roles";
+import {
+    updateUser,
+    deleteUser,
+    getUser,
+} from "../../../services/actions/user";
 
 import RoleDetail from "../components/RoleDetail";
 import ConfirmDialog from "../../../components/Dialog/ConfirmDialog";
@@ -29,7 +32,8 @@ const ManagePermissionDetail = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const { id } = useParams();
-    const { dataAllRoles } = useSelector((state) => state.role);
+    const { dataAllRoles } = useSelector((state) => state.roles);
+    const { dataUser } = useSelector((state) => state.user);
     const { handleSubmit, control, setValue } = useForm();
 
     const [error, setError] = useState("");
@@ -38,24 +42,19 @@ const ManagePermissionDetail = () => {
     const [isEdit, setIsEdit] = useState();
     const [openConfirmRemove, setOpenConfirmRemove] = useState(false);
 
-    const defaultValue = useCallback(
-        (id) => {
-            fetchMaster.getUser(id).then((res) => {
-                setValue("role_name", res.data.role?.role_name || "");
-                setData(res.data);
-            });
-        },
-        [setValue]
-    );
+    useEffect(() => {
+        setValue("role_name", dataUser.role?.role_name || "");
+        setData(dataUser);
+    }, [dataUser, setValue]);
 
     useEffect(() => {
+        dispatch(getUser(id));
         dispatch(getAllRoles());
-        defaultValue(id);
-    }, [dispatch, id, defaultValue]);
+    }, [dispatch, id]);
 
     const onSubmit = (data) => {
         setLoading(true);
-        dispatch(updateRoleUser(id, data));
+        dispatch(updateUser(id, data));
     };
 
     const handleRemove = () => {
