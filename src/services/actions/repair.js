@@ -24,7 +24,7 @@ export const createRepair = (data) => async (dispatch) => {
             return (
                 Promise.resolve(),
                 actionHandler({
-                    successMessage: "Create Repair Success",
+                    successMessage: "สร้างใบแจ้งซ่อมสำเร็จ",
                 }),
                 history.push("/repair?status_no=0&customer_name="),
                 setTimeout(function () {
@@ -67,7 +67,7 @@ export const updateRepair = (id, data,formData) => async (dispatch) => {
             return (
                 Promise.resolve(),
                 actionHandler({
-                    successMessage: "Update Repair Success",
+                    successMessage: "บันทึกข้อมูลใบแจ้งซ่อมสำเร็จ",
                 }),
                 setTimeout(function () {
                     window.location.reload();
@@ -114,7 +114,7 @@ export const deleteRepair = (id) => async (dispatch) => {
             return (
                 Promise.resolve(),
                 actionHandler({
-                    successMessage: "Delete Success",
+                    successMessage: "ลบใบแจ้งซ่อมสำเร็จ",
                 }),
                 history.push("/repair?status_no=0&customer_name="),
                 setTimeout(function () {

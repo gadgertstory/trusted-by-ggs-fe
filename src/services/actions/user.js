@@ -57,7 +57,7 @@ export const updateUser = (id, role_name) => async (dispatch) => {
             return (
                 Promise.resolve(),
                 actionHandler({
-                    successMessage: "Update Role Success",
+                    successMessage: "บันทึกข้อมูลสิทธิ์ผู้ใช้งานสำเร็จ",
                 }),
                 history.push("/manage-permission"),
                 setTimeout(function () {

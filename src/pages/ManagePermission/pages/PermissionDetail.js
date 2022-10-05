@@ -139,7 +139,7 @@ const ManagePermissionDetail = () => {
                                     type="submit"
                                     loading={loading}
                                 >
-                                    Update Permission
+                                    Submit
                                 </LoadingButton>
                             </Stack>
                         ) : (

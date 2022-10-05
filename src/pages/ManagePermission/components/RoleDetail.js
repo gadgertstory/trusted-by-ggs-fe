@@ -36,7 +36,7 @@ const RoleDetail = (props) => {
     const anchorRef = React.useRef(null);
     const [selectedIndex, setSelectedIndex] = useState(null);
     const [placement, setPlacement] = React.useState();
-    const [setAnchorEl] = React.useState(null);
+    const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleMenuItemClick = (event, index, option) => {
         if (option.name === "Edit") {
