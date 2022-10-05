@@ -48,14 +48,14 @@ import { options } from "../../../dataMock/master";
 
 import Logo from "../../../assets/Logo/GadgetStory_logo.png";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     formControl: {
-      minWidth: 120
+        minWidth: 120,
     },
     menuPaper: {
-      maxHeight: 150
-    }
-  }));
+        maxHeight: 150,
+    },
+}));
 
 const RepairDetail = (roleUser) => {
     const classes = useStyles();
@@ -91,6 +91,8 @@ const RepairDetail = (roleUser) => {
     const anchorRef = React.useRef(null);
     const [onEdit, setOnEdit] = useState();
     const [selectedIndex, setSelectedIndex] = useState(null);
+    const [placement, setPlacement] = React.useState();
+    const [anchorEl, setAnchorEl] = React.useState(null);
 
     const [dataUrl, setDataUrl] = useState();
 
@@ -144,10 +146,7 @@ const RepairDetail = (roleUser) => {
                     "customer_province",
                     dataRepair.customer_province || ""
                 );
-                setValue(
-                    "customer_zipcode",
-                    dataRepair.customer_zipcode || ""
-                );
+                setValue("customer_zipcode", dataRepair.customer_zipcode || "");
                 setValue("product_name", dataRepair.product_name || "");
                 setValue(
                     "product_serial_no",
@@ -190,7 +189,7 @@ const RepairDetail = (roleUser) => {
                 setAfterRepair(afterRepairArr);
             }
         });
-    }, [id,setValue]);
+    }, [id, setValue]);
 
     useEffect(() => {
         dispatch(getAllBrand());
@@ -227,7 +226,6 @@ const RepairDetail = (roleUser) => {
     ]);
 
     const onSubmit = (data) => {
-      
         if (currentUser.data.role === "admin") {
             if (!notifiedDate) {
                 setNotifiedDateError("กรุณากรอกวันที่แจ้งเรื่อง");
@@ -423,8 +421,10 @@ const RepairDetail = (roleUser) => {
         setOpen(false);
     };
 
-    const handleToggle = () => {
-        setOpen((prevOpen) => !prevOpen);
+    const handleToggle = (newPlacement) => (event) => {
+        setAnchorEl(event.currentTarget);
+        setOpen((prev) => placement !== newPlacement || !prev);
+        setPlacement(newPlacement);
     };
 
     const handleClose = (event) => {
@@ -489,16 +489,16 @@ const RepairDetail = (roleUser) => {
                                     aria-expanded={open ? "true" : undefined}
                                     aria-label="select merge strategy"
                                     aria-haspopup="menu"
-                                    onClick={handleToggle}
+                                    onClick={handleToggle("bottom-end")}
                                 >
                                     <MoreVert />
                                 </Button>
                             </ButtonGroup>
                             <Popper
                                 open={open}
-                                anchorEl={anchorRef.current}
-                                role={undefined}
+                                anchorEl={anchorEl}
                                 transition
+                                placement={placement}
                                 disablePortal
                                 sx={{ zIndex: 2 }}
                             >
@@ -652,29 +652,32 @@ const RepairDetail = (roleUser) => {
                         )}
                     </>
                 )}
-                <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                >
-                    <Button
-                        sx={{
-                            my: 2,
-                            bgcolor: "background.default",
-                            color: "text.primary",
-                            ":hover": {
-                                bgcolor: "background.default",
-                            },
-                        }}
-                        variant="contained"
-                        onClick={() => {
-                            history.push("/repair?status_no=0&customer_name=");
-                            window.location.reload();
-                        }}
+
+                {onEdit ? (
+                    <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
                     >
-                        Cancel
-                    </Button>
-                    {onEdit ? (
+                        <Button
+                            sx={{
+                                my: 2,
+                                bgcolor: "background.default",
+                                color: "text.primary",
+                                ":hover": {
+                                    bgcolor: "background.default",
+                                },
+                            }}
+                            variant="contained"
+                            onClick={() => {
+                                history.push(
+                                    "/repair?status_no=0&customer_name="
+                                );
+                                window.location.reload();
+                            }}
+                        >
+                            Cancel
+                        </Button>
                         <LoadingButton
                             sx={{ my: 2 }}
                             variant="contained"
@@ -684,10 +687,10 @@ const RepairDetail = (roleUser) => {
                         >
                             Submit
                         </LoadingButton>
-                    ) : (
-                        ""
-                    )}
-                </Stack>
+                    </Stack>
+                ) : (
+                    ""
+                )}
                 <ConfirmDialog
                     open={openConfirmRemoveRepair}
                     onClose={() => setOpenConfirmRemoveRepair(false)}

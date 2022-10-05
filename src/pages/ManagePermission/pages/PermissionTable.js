@@ -1,15 +1,16 @@
 import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import { Box, Grid, Typography } from "@mui/material";
 import MaterialTable from "material-table";
-import { useDispatch } from "react-redux";
-import { getAllUsers } from "../../../services/actions/user";
-import { useSelector } from "react-redux";
-import { history } from "../../../helpers/history";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 
-const Table = (props) => {
+import { history } from "../../../helpers/history";
+import { getAllUsers } from "../../../services/actions/users";
+
+const Table = () => {
     const dispatch = useDispatch();
-    const { dataAllUsers = [] } = useSelector((state) => state.user);
+    const { dataAllUsers = [] } = useSelector((state) => state.users);
 
     useEffect(() => {
         dispatch(getAllUsers());
@@ -94,7 +95,7 @@ const Table = (props) => {
                         return rowData.role?.role_name !== "superAdmin"
                             ? {
                                   title: " ",
-                                  icon: "edit",
+                                  icon: "visibility",
                                   tooltip: "View Detail",
                                   onClick: () => {
                                       selectRow(rowData);
@@ -126,22 +127,31 @@ const Table = (props) => {
     );
 };
 
-const ManagePermissionTable = (roleUser) => {
+const ManagePermissionTable = () => {
     return (
         <>
             <Box component="form" noValidate sx={{ mt: 1 }}>
-                <Grid container flexDirection="row" spacing={2}>
-                    <Grid
-                        container
-                        alignItems={"center"}
-                        sx={{
-                            p: 2,
-                        }}
-                    >
-                        <ManageAccountsIcon fontSize="large" /> &nbsp;
-                        <Typography variant="h4" component="h1">
-                            จัดการสิทธิ์ผู้ใช้งาน
-                        </Typography>
+                <Grid
+                    container
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    spacing={2}
+                >
+                    <Grid>
+                        <Grid
+                            container
+                            flexDirection="row"
+                            alignItems={"center"}
+                            sx={{
+                                p: 2,
+                            }}
+                        >
+                            <ManageAccountsIcon fontSize="large" /> &nbsp;
+                            <Typography variant="h4" component="h1">
+                                จัดการสิทธิ์ผู้ใช้งาน
+                            </Typography>
+                        </Grid>
                     </Grid>
                 </Grid>
                 <Table />

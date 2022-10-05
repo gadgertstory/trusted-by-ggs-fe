@@ -1,87 +1,216 @@
+import React, { useState } from "react";
 import { Controller } from "react-hook-form";
 
 import {
     FormControl,
-    FormHelperText,
     Grid,
     InputLabel,
     MenuItem,
+    Select,
+    Typography,
+    ButtonGroup,
+    Button,
+    Popper,
+    MenuList,
     Paper,
-    Select
+    ClickAwayListener,
+    Grow,
 } from "@mui/material";
 
-const RoleDetail = (props) => { 
+import { MoreVert } from "@mui/icons-material";
+
+import { options } from "../../../dataMock/master";
+
+const RoleDetail = (props) => {
     const {
         control,
-        // error,
-        // setError,
         classes,
-        roles
+        roles,
+        dataUser,
+        isEdit,
+        setIsEdit,
+        setOpenConfirmRemove,
     } = props;
-    
+
+    const [open, setOpen] = useState(false);
+    const [selectedIndex, setSelectedIndex] = useState(null);
+    const [placement, setPlacement] = React.useState();
+    const anchorRef = React.useRef(null);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const handleMenuItemClick = (event, index, option) => {
+        if (option.name === "Edit") {
+            setIsEdit(!isEdit);
+            setSelectedIndex(index);
+        } else setOpenConfirmRemove(true);
+        setOpen(false);
+    };
+
+    const handleClose = (event) => {
+        if (anchorRef.current && anchorRef.current.contains(event.target)) {
+            return;
+        }
+        setOpen(false);
+    };
+
+    const handleToggle = (newPlacement) => (event) => {
+        setAnchorEl(event.currentTarget);
+        setOpen((prev) => placement !== newPlacement || !prev);
+        setPlacement(newPlacement);
+    };
+
     return (
-        <Paper
-            sx={{
-                p: 2,
-                display: "flex",
-                flexDirection: "column",
-                mb: 3,
-            }}
-        >
-            <h2>แก้ไขสิทธิ์</h2>
-            <Grid container spacing={2}>
-                <Grid item xs={12} md={4}>
-                <Controller
-                        name="role_name"
-                        required
-                        control={control}
-                        defaultValue=""
-                        render={({
-                            field: { onChange, value },
-                            fieldState: { error },
-                        }) => (
-                            <FormControl
-                                className={classes.formControl}
-                                fullWidth
-                                required
-                                error={!!error}
-                            >
-                                <InputLabel id="demo-simple-select-required-label">
-                                    สิทธิ์ผู้ใช้งาน
-                                </InputLabel>
-                                <Select
-                                    size="small"
-                                    value={value}
-                                    label="สิทธิ์ผู้ใช้งาน"
-                                    onChange={onChange}
-                                    error={!!error}
-                                    MenuProps={{
-                                        classes: { paper: classes.menuPaper },
-                                    }}
-                                >
-                                    {roles?.map((item) => {
-                                        return (
+        <>
+            <Grid
+                container
+                flexDirection="row"
+                justifyContent="flex-end"
+                alignItems="center"
+            >
+                <ButtonGroup
+                    variant="contained"
+                    ref={anchorRef}
+                    aria-label="split button"
+                >
+                    <Button
+                        size="small"
+                        aria-controls={open ? "split-button-menu" : undefined}
+                        aria-expanded={open ? "true" : undefined}
+                        aria-label="select merge strategy"
+                        aria-haspopup="menu"
+                        onClick={handleToggle("bottom-end")}
+                    >
+                        <MoreVert />
+                    </Button>
+                </ButtonGroup>
+                <Popper
+                    open={open}
+                    anchorEl={anchorEl}
+                    placement={placement}
+                    transition
+                    disablePortal
+                    sx={{ zIndex: 2 }}
+                >
+                    {({ TransitionProps, placement }) => (
+                        <Grow
+                            {...TransitionProps}
+                            style={{
+                                transformOrigin:
+                                    placement === "right bottom"
+                                        ? "center top"
+                                        : "center bottom",
+                            }}
+                        >
+                            <Paper>
+                                <ClickAwayListener onClickAway={handleClose}>
+                                    <MenuList
+                                        id="split-button-menu"
+                                        autoFocusItem
+                                    >
+                                        {options.map((option, index) => (
                                             <MenuItem
-                                                key={item.role_id}
-                                                value={item.role_name}
+                                                key={option.name}
+                                                selected={
+                                                    index === selectedIndex
+                                                }
+                                                onClick={(event) =>
+                                                    handleMenuItemClick(
+                                                        event,
+                                                        index,
+                                                        option
+                                                    )
+                                                }
                                             >
-                                                {item.role_name}
+                                                <Typography
+                                                    variant="p"
+                                                    component="p"
+                                                    sx={{
+                                                        display: "flex",
+                                                        justifyContent:
+                                                            "center",
+                                                        aligItems: "center",
+                                                    }}
+                                                    color={
+                                                        option.name === "Delete"
+                                                            ? "error.light"
+                                                            : ""
+                                                    }
+                                                >
+                                                    {option.name === "Print" ? (
+                                                        ""
+                                                    ) : (
+                                                        <>
+                                                            {option.icon}
+                                                            {option.name}
+                                                        </>
+                                                    )}
+                                                </Typography>
                                             </MenuItem>
-                                        );
-                                    })}
-                                </Select>
-                                <FormHelperText error>
-                                    {error ? error.message : null}
-                                </FormHelperText>
-                            </FormControl>
-                        )}
-                        rules={{
-                            required: "กรุณาเลือก ช่องทางรับแจ้ง",
-                        }}
-                    />
-                </Grid>
+                                        ))}
+                                    </MenuList>
+                                </ClickAwayListener>
+                            </Paper>
+                        </Grow>
+                    )}
+                </Popper>
             </Grid>
-        </Paper>
+            <Grid container direction="column">
+                <Typography variant="p">
+                    <strong>Email: </strong> {dataUser.user_email}
+                </Typography>
+                <Typography variant="p">
+                    <strong>Name: </strong> {dataUser.user_name}
+                </Typography>
+                {isEdit ? (
+                    <Grid>
+                        <Grid item sm={6}>
+                            <Controller
+                                name="role_name"
+                                control={control}
+                                defaultValue=""
+                                render={({ field: { onChange, value } }) => (
+                                    <FormControl
+                                        sx={{ mt: 2 }}
+                                        className={classes.formControl}
+                                        fullWidth
+                                    >
+                                        <InputLabel id="demo-simple-select-required-label">
+                                            สิทธิ์ผู้ใช้งาน
+                                        </InputLabel>
+                                        <Select
+                                            size="small"
+                                            value={value}
+                                            label="สิทธิ์ผู้ใช้งาน"
+                                            onChange={onChange}
+                                            MenuProps={{
+                                                classes: {
+                                                    paper: classes.menuPaper,
+                                                },
+                                            }}
+                                        >
+                                            {roles?.map((item) => {
+                                                return (
+                                                    <MenuItem
+                                                        key={item.role_id}
+                                                        value={item.role_name}
+                                                    >
+                                                        {item.role_name}
+                                                    </MenuItem>
+                                                );
+                                            })}
+                                        </Select>
+                                    </FormControl>
+                                )}
+                            />
+                        </Grid>
+                    </Grid>
+                ) : (
+                    <Typography variant="p">
+                        <strong>Role: </strong> {dataUser.role?.role_name}
+                    </Typography>
+                )}
+            </Grid>
+        </>
     );
 };
 
