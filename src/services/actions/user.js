@@ -141,8 +141,9 @@ export const deleteUser = (id) => async (dispatch) => {
             return (
                 Promise.resolve(),
                 actionHandler({
-                    successMessage: "Delete Success",
+                    successMessage: "ลบข้อมูลผู้ใช้สำเร็จ",
                 }),
+                history.push("/manage-permission"),
                 setTimeout(function () {
                     window.location.reload();
                 }, 1000 * 1.5)

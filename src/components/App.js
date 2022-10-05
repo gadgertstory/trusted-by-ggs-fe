@@ -35,7 +35,6 @@ const NotFound = lazy(() => import("../pages/NotFound"));
 
 const App = () => {
     const { user: currentUser } = useSelector((state) => state.auth);
-    const { profile } = useSelector((state) => state.profile);
     const dispatch = useDispatch();
 
     useEffect(() => {

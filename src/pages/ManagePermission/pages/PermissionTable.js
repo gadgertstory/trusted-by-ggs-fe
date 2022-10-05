@@ -1,26 +1,19 @@
-import React, { useEffect, useState } from "react";
-import {
-    Box,
-    Grid,
-    Typography
-} from "@mui/material";
-import MaterialTable from "material-table";
-import { useDispatch } from "react-redux";
-import { deleteUser, getAllUsers } from "../../../services/actions/user";
-import { getAllRoles } from "../../../services/actions/role";
-import { useSelector } from "react-redux";
-import { history } from "../../../helpers/history";
-import { Feed } from "@mui/icons-material";
-import ConfirmDialog from "../../../components/Dialog/ConfirmDialog";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-const Table = (props) => {
+import { Box, Grid, Typography } from "@mui/material";
+import MaterialTable from "material-table";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+
+import { history } from "../../../helpers/history";
+import { getAllUsers } from "../../../services/actions/user";
+
+const Table = () => {
     const dispatch = useDispatch();
     const { dataAllUsers = [] } = useSelector((state) => state.user);
-    const[openConfirmRemove, setOpenConfirmRemove] = useState(false);
-    const [deleteId, setDeleteId] = useState();
 
     useEffect(() => {
-        dispatch(getAllUsers())
+        dispatch(getAllUsers());
     }, [dispatch]);
 
     const selectRow = (selectRow) => {
@@ -28,16 +21,6 @@ const Table = (props) => {
 
         history.push(`/manage-permission/${id}`);
         window.location.reload();
-    };
-
-    const deleteRow = (selectRow) => {
-        setDeleteId(selectRow.user_id)
-        setOpenConfirmRemove(true);
-    }
-
-    const handleRemove = () => {
-        dispatch(deleteUser(deleteId));
-        setDeleteId(null)
     };
 
     return (
@@ -93,7 +76,7 @@ const Table = (props) => {
                     },
                     {
                         title: "สิทธิ์ผู้ใช้งาน",
-                        field: 'role.role_name',
+                        field: "role.role_name",
                         render: (rowData) => (
                             <Box
                                 sx={{
@@ -109,26 +92,17 @@ const Table = (props) => {
                 ]}
                 actions={[
                     (rowData) => {
-                        return rowData.role?.role_name !== 'superAdmin' ? {
-                            title: " ",
-                            icon: "edit",
-                            tooltip: "Edit",
-                            onClick: () => {
-                                selectRow(rowData);
-                            },
-                        } : ''
+                        return rowData.role?.role_name !== "superAdmin"
+                            ? {
+                                  title: " ",
+                                  icon: "visibility",
+                                  tooltip: "View Detail",
+                                  onClick: () => {
+                                      selectRow(rowData);
+                                  },
+                              }
+                            : "";
                     },
-                    (rowData) => {
-                        return rowData.role?.role_name !== 'superAdmin' ? {
-                            title: " ",
-                            icon: "delete",
-                            tooltip: "Delete",
-                            onClick: () => {
-                                deleteRow(rowData);
-                            },
-                        } : ''
-                    }
-
                 ]}
                 data={dataAllUsers}
                 localization={{
@@ -149,36 +123,14 @@ const Table = (props) => {
                     },
                 }}
             />
-
-
-            <ConfirmDialog
-                open={openConfirmRemove}
-                onClose={() => setOpenConfirmRemove(false)}
-                title={`ยืนยันการลบข้อมูล!`}
-                description={`ลบข้อมูลผู้ใช้งานระบบ`}
-                buttonConfirmText={"ยืนยันการลบ"}
-                buttonConfirmStyle={{
-                    backgroundColor: "error.main",
-                    "&:hover": { backgroundColor: "error.main" },
-                }}
-                onConfirmed={() => {
-                    handleRemove();
-                    setOpenConfirmRemove(false);
-                }}
-            />
         </>
     );
 };
 
-const ManagePermissionTable = (roleUser) => {
-
+const ManagePermissionTable = () => {
     return (
         <>
-            <Box
-                component="form"
-                noValidate
-                sx={{ mt: 1 }}
-            >
+            <Box component="form" noValidate sx={{ mt: 1 }}>
                 <Grid
                     container
                     flexDirection="row"
@@ -195,8 +147,8 @@ const ManagePermissionTable = (roleUser) => {
                                 p: 2,
                             }}
                         >
-                            <Feed fontSize="large" />
-                            <Typography variant="h4" component="h2">
+                            <ManageAccountsIcon fontSize="large" /> &nbsp;
+                            <Typography variant="h4" component="h1">
                                 จัดการสิทธิ์ผู้ใช้งาน
                             </Typography>
                         </Grid>
@@ -207,6 +159,5 @@ const ManagePermissionTable = (roleUser) => {
         </>
     );
 };
-
 
 export default ManagePermissionTable;

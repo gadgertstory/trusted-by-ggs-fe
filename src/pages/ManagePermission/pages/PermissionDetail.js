@@ -1,62 +1,66 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import {
-    Box,
-    Button,
-    Grid,
-    Stack,
-    Typography,
-    Paper
-} from "@mui/material";
-import LoadingButton from "@mui/lab/LoadingButton";
-import { Feed } from "@mui/icons-material";
-import RoleDetail from "../components/RoleDetail";
+import React, { useCallback, useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
-import { makeStyles } from "@mui/styles";
-import { useDispatch } from "react-redux";
-import { getAllRoles } from "../../../services/actions/role";
 import { useParams } from "react-router-dom";
+
+import { makeStyles } from "@mui/styles";
+import { Box, Button, Grid, Stack, Typography, Paper } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+
 import fetchMaster from "../../../middleware/user";
 import { history } from "../../../helpers/history";
-import { updateRoleUser } from "../../../services/actions/user";
+import { getAllRoles } from "../../../services/actions/role";
+import { updateRoleUser, deleteUser } from "../../../services/actions/user";
 
-const useStyles = makeStyles(theme => ({
+import RoleDetail from "../components/RoleDetail";
+import ConfirmDialog from "../../../components/Dialog/ConfirmDialog";
+
+const useStyles = makeStyles((theme) => ({
     formControl: {
-        minWidth: 120
+        minWidth: 120,
     },
     menuPaper: {
-        maxHeight: 150
-    }
+        maxHeight: 150,
+    },
 }));
 
-const ManagePermissionDetail = (roleUser) => {
+const ManagePermissionDetail = () => {
     const classes = useStyles();
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const { id } = useParams();
     const { dataAllRoles } = useSelector((state) => state.role);
     const { handleSubmit, control, setValue } = useForm();
+
     const [error, setError] = useState("");
-    const [name, setName] = useState()
-    const [email, setEmail] = useState()
     const [loading, setLoading] = useState(false);
+    const [data, setData] = useState("");
+    const [isEdit, setIsEdit] = useState();
+    const [openConfirmRemove, setOpenConfirmRemove] = useState(false);
+
+    const defaultValue = useCallback(
+        (id) => {
+            fetchMaster.getUser(id).then((res) => {
+                setValue("role_name", res.data.role?.role_name || "");
+                setData(res.data);
+            });
+        },
+        [setValue]
+    );
 
     useEffect(() => {
         dispatch(getAllRoles());
-        DefaultValue(id)
-    }, [dispatch, id]);
-
-    const DefaultValue = async (id) => {
-        await fetchMaster.getUser(id).then((result) => {
-            setValue("role_name", result.data.role?.role_name || "");
-            setName(result.data.user_name)
-            setEmail(result.data.user_email)
-        })
-    }
+        defaultValue(id);
+    }, [dispatch, id, defaultValue]);
 
     const onSubmit = (data) => {
         setLoading(true);
         dispatch(updateRoleUser(id, data));
-    }
+    };
+
+    const handleRemove = () => {
+        dispatch(deleteUser(id));
+    };
 
     return (
         <>
@@ -66,10 +70,7 @@ const ManagePermissionDetail = (roleUser) => {
                 sx={{ mt: 1 }}
                 onSubmit={handleSubmit(onSubmit)}
             >
-                <Grid
-                    container
-                    justifyContent="center" alignItems="center"
-                >
+                <Grid container justifyContent="center" alignItems="center">
                     <Grid>
                         <Grid
                             container
@@ -79,8 +80,8 @@ const ManagePermissionDetail = (roleUser) => {
                                 p: 2,
                             }}
                         >
-                            <Feed fontSize="large" />
-                            <Typography variant="h4" component="h2">
+                            <ManageAccountsIcon fontSize="large" /> &nbsp;
+                            <Typography variant="h4" component="h1">
                                 จัดการสิทธิ์
                             </Typography>
                         </Grid>
@@ -97,48 +98,69 @@ const ManagePermissionDetail = (roleUser) => {
                             }}
                         >
                             <RoleDetail
+                                id={id}
                                 control={control}
                                 error={error}
                                 setError={setError}
                                 classes={classes}
                                 roles={dataAllRoles}
-                                name={name}
-                                email={email}
+                                dataUser={data}
+                                isEdit={isEdit}
+                                setIsEdit={setIsEdit}
+                                setOpenConfirmRemove={setOpenConfirmRemove}
+                                openConfirmRemove={openConfirmRemove}
                             />
                         </Paper>
-
-                <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                >
-                    <Button
-                        sx={{
-                            my: 2,
-                            bgcolor: "background.default",
-                            color: "text.primary",
-                            ":hover": {
-                                bgcolor: "background.default",
-                            },
-                        }}
-                        variant="contained"
-                        onClick={() => {
-                            history.push("/manage-permission");
-                            window.location.reload();
-                        }}
-                    >
-                        Cancel
-                    </Button>
-                    <LoadingButton
-                        sx={{ my: 2 }}
-                        variant="contained"
-                        color="primary"
-                        type="submit"
-                        loading={loading}
-                    >
-                        Submit
-                    </LoadingButton>
-                </Stack>
+                        {isEdit ? (
+                            <Stack
+                                direction="row"
+                                justifyContent="space-between"
+                                alignItems="center"
+                            >
+                                <Button
+                                    sx={{
+                                        my: 2,
+                                        bgcolor: "background.default",
+                                        color: "text.primary",
+                                        ":hover": {
+                                            bgcolor: "background.default",
+                                        },
+                                    }}
+                                    variant="contained"
+                                    onClick={() => {
+                                        history.push("/manage-permission");
+                                        window.location.reload();
+                                    }}
+                                >
+                                    Cancel
+                                </Button>
+                                <LoadingButton
+                                    variant="contained"
+                                    color="primary"
+                                    type="submit"
+                                    loading={loading}
+                                >
+                                    Update Permission
+                                </LoadingButton>
+                            </Stack>
+                        ) : (
+                            ""
+                        )}
+                        <ConfirmDialog
+                            open={openConfirmRemove}
+                            onClose={() => setOpenConfirmRemove(false)}
+                            title={`ยืนยันการลบข้อมูล!`}
+                            description={`ลบผู้ใช้งานออกจากระบบ`}
+                            buttonConfirmText={"ยืนยันการลบ"}
+                            buttonConfirmStyle={{
+                                backgroundColor: "error.main",
+                                "&:hover": { backgroundColor: "error.main" },
+                            }}
+                            onConfirmed={() => {
+                                handleRemove();
+                                setOpenConfirmRemove(false);
+                            }}
+                        />
                     </Grid>
                 </Grid>
             </Box>
