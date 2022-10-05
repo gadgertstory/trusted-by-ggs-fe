@@ -30,6 +30,7 @@ const Repair = lazy(() => import("../pages/Repair"));
 const LogIn = lazy(() => import("../pages/Login"));
 const ForgotPassword = lazy(() => import("../pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("../pages/ResetPassword"));
+const Register = lazy(() => import("../pages/Register"));
 const NotFound = lazy(() => import("../pages/NotFound"));
 
 const App = () => {
@@ -58,6 +59,10 @@ const App = () => {
         {
             pathname: `/repair/*`,
             element: <Repair />,
+        },
+        {
+            pathname: `/register`,
+            element: <Register />,
         },
         {
             pathname: "/404",
