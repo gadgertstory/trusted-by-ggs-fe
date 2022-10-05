@@ -496,7 +496,7 @@ const RepairDetail = (roleUser) => {
                             </ButtonGroup>
                             <Popper
                                 open={open}
-                                anchorEl={anchorRef.current}
+                                anchorEl={anchorEl}
                                 transition
                                 placement={placement}
                                 disablePortal

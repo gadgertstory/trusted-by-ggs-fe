@@ -74,8 +74,6 @@ const App = () => {
         },
     ];
 
-    // console.log(profile.role)
-
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />

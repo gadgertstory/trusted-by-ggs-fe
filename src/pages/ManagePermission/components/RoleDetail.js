@@ -33,9 +33,9 @@ const RoleDetail = (props) => {
     } = props;
 
     const [open, setOpen] = useState(false);
-    const anchorRef = React.useRef(null);
     const [selectedIndex, setSelectedIndex] = useState(null);
     const [placement, setPlacement] = React.useState();
+    const anchorRef = React.useRef(null);
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleMenuItemClick = (event, index, option) => {
@@ -85,7 +85,7 @@ const RoleDetail = (props) => {
                 </ButtonGroup>
                 <Popper
                     open={open}
-                    anchorEl={anchorRef.current}
+                    anchorEl={anchorEl}
                     placement={placement}
                     transition
                     disablePortal
