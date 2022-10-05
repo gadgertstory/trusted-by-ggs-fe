@@ -6,6 +6,7 @@ import {
     Grid,
     Stack,
     Typography,
+    Paper
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { Feed } from "@mui/icons-material";
@@ -36,6 +37,7 @@ const ManagePermissionDetail = (roleUser) => {
     const { handleSubmit, control, setValue } = useForm();
     const [error, setError] = useState("");
     const [name, setName] = useState()
+    const [email, setEmail] = useState()
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -47,12 +49,13 @@ const ManagePermissionDetail = (roleUser) => {
         await fetchMaster.getUser(id).then((result) => {
             setValue("role_name", result.data.role?.role_name || "");
             setName(result.data.user_name)
+            setEmail(result.data.user_email)
         })
     }
 
-    const onSubmit = (data) => { 
+    const onSubmit = (data) => {
         setLoading(true);
-        dispatch(updateRoleUser(id,data));
+        dispatch(updateRoleUser(id, data));
     }
 
     return (
@@ -65,10 +68,7 @@ const ManagePermissionDetail = (roleUser) => {
             >
                 <Grid
                     container
-                    flexDirection="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    spacing={2}
+                    justifyContent="center" alignItems="center"
                 >
                     <Grid>
                         <Grid
@@ -81,18 +81,32 @@ const ManagePermissionDetail = (roleUser) => {
                         >
                             <Feed fontSize="large" />
                             <Typography variant="h4" component="h2">
-                                จัดการสิทธิ์ {name}
+                                จัดการสิทธิ์
                             </Typography>
                         </Grid>
                     </Grid>
                 </Grid>
-                <RoleDetail
-                    control={control}
-                    error={error}
-                    setError={setError}
-                    classes={classes}
-                    roles={dataAllRoles}
-                />
+                <Grid container justifyContent="center" alignItems="center">
+                    <Grid item xs={12} sm={6}>
+                        <Paper
+                            sx={{
+                                p: 2,
+                                display: "flex",
+                                flexDirection: "column",
+                                lineHeight: "3rem",
+                            }}
+                        >
+                            <RoleDetail
+                                control={control}
+                                error={error}
+                                setError={setError}
+                                classes={classes}
+                                roles={dataAllRoles}
+                                name={name}
+                                email={email}
+                            />
+                        </Paper>
+
                 <Stack
                     direction="row"
                     justifyContent="space-between"
@@ -125,6 +139,8 @@ const ManagePermissionDetail = (roleUser) => {
                         Submit
                     </LoadingButton>
                 </Stack>
+                    </Grid>
+                </Grid>
             </Box>
         </>
     );

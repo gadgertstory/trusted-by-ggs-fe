@@ -45,6 +45,10 @@ const updateRoleUser = (user_id,role_name) => {
   return axios.patch(API_URL + `/users/${user_id}`,role_name, { headers: authHeader() });
 };
 
+const deleteUser = (user_id) => {
+  return axios.delete(API_URL + `/users/${user_id}`, { headers: authHeader() });
+};
+
 const exportedFunction = {
   getPublicContent,
   getUserBoard,
@@ -54,7 +58,8 @@ const exportedFunction = {
   getProfile,
   getAllUsers,
   getUser,
-  updateRoleUser
+  updateRoleUser,
+  deleteUser
 };
 
 export default exportedFunction;

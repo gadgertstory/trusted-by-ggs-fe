@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Box,
     Grid,
@@ -6,15 +6,18 @@ import {
 } from "@mui/material";
 import MaterialTable from "material-table";
 import { useDispatch } from "react-redux";
-import { getAllUsers } from "../../../services/actions/user";
+import { deleteUser, getAllUsers } from "../../../services/actions/user";
 import { getAllRoles } from "../../../services/actions/role";
 import { useSelector } from "react-redux";
 import { history } from "../../../helpers/history";
 import { Feed } from "@mui/icons-material";
+import ConfirmDialog from "../../../components/Dialog/ConfirmDialog";
 
 const Table = (props) => {
     const dispatch = useDispatch();
     const { dataAllUsers = [] } = useSelector((state) => state.user);
+    const[openConfirmRemove, setOpenConfirmRemove] = useState(false);
+    const [deleteId, setDeleteId] = useState();
 
     useEffect(() => {
         dispatch(getAllUsers())
@@ -25,6 +28,16 @@ const Table = (props) => {
 
         history.push(`/manage-permission/${id}`);
         window.location.reload();
+    };
+
+    const deleteRow = (selectRow) => {
+        setDeleteId(selectRow.user_id)
+        setOpenConfirmRemove(true);
+    }
+
+    const handleRemove = () => {
+        dispatch(deleteUser(deleteId));
+        setDeleteId(null)
     };
 
     return (
@@ -99,9 +112,19 @@ const Table = (props) => {
                         return rowData.role?.role_name !== 'superAdmin' ? {
                             title: " ",
                             icon: "edit",
-                            tooltip: "View Detail",
+                            tooltip: "Edit",
                             onClick: () => {
                                 selectRow(rowData);
+                            },
+                        } : ''
+                    },
+                    (rowData) => {
+                        return rowData.role?.role_name !== 'superAdmin' ? {
+                            title: " ",
+                            icon: "delete",
+                            tooltip: "Delete",
+                            onClick: () => {
+                                deleteRow(rowData);
                             },
                         } : ''
                     }
@@ -127,6 +150,22 @@ const Table = (props) => {
                 }}
             />
 
+
+            <ConfirmDialog
+                open={openConfirmRemove}
+                onClose={() => setOpenConfirmRemove(false)}
+                title={`ยืนยันการลบข้อมูล!`}
+                description={`ลบข้อมูลผู้ใช้งานระบบ`}
+                buttonConfirmText={"ยืนยันการลบ"}
+                buttonConfirmStyle={{
+                    backgroundColor: "error.main",
+                    "&:hover": { backgroundColor: "error.main" },
+                }}
+                onConfirmed={() => {
+                    handleRemove();
+                    setOpenConfirmRemove(false);
+                }}
+            />
         </>
     );
 };

@@ -5,33 +5,31 @@ import {
     FormHelperText,
     Grid,
     InputLabel,
-    MenuItem,
-    Paper,
-    Select
+    MenuItem, 
+    Select,
+    Typography
 } from "@mui/material";
 
-const RoleDetail = (props) => { 
+const RoleDetail = (props) => {
     const {
-        control,
-        // error,
-        // setError,
+        control, 
         classes,
-        roles
+        roles,
+        name,
+        email
     } = props;
-    
+
     return (
-        <Paper
-            sx={{
-                p: 2,
-                display: "flex",
-                flexDirection: "column",
-                mb: 3,
-            }}
-        >
-            <h2>แก้ไขสิทธิ์</h2>
-            <Grid container spacing={2}>
-                <Grid item xs={12} md={4}>
-                <Controller
+        <>
+            <Grid container direction="column">
+                <Typography variant="p">
+                    <strong>Email: </strong> {email}
+                </Typography>
+                <Typography variant="p">
+                    <strong>Name: </strong> {name}
+                </Typography>
+                <Grid variant="p">
+                    <Controller
                         name="role_name"
                         required
                         control={control}
@@ -51,6 +49,7 @@ const RoleDetail = (props) => {
                                 </InputLabel>
                                 <Select
                                     size="small"
+                                    sx={{ mb: 2 }}
                                     value={value}
                                     label="สิทธิ์ผู้ใช้งาน"
                                     onChange={onChange}
@@ -81,7 +80,7 @@ const RoleDetail = (props) => {
                     />
                 </Grid>
             </Grid>
-        </Paper>
+        </>
     );
 };
 

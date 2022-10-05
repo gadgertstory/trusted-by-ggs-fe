@@ -5,7 +5,9 @@ import {
     FETCH_USER_FAIL,
     SET_MESSAGE,
     UPDATE_ROLE_SUCCESS,
-    UPDATE_ROLE_FAIL
+    UPDATE_ROLE_FAIL,
+    DELETE_USER_SUCCESS,
+    DELETE_USER_FAIL
 } from "./types";
 
 import fetchMaster from "../../middleware/user";
@@ -124,3 +126,50 @@ export const updateRoleUser = (id, role_name) => async (dispatch) => {
             );
         });
 }
+
+export const deleteUser = (id) => async (dispatch) => {
+    await fetchMaster.deleteUser(id)
+        .then((response) => {
+            return response.data;
+        })
+
+        .then((responseJson) => {
+            dispatch({
+                type: DELETE_USER_SUCCESS,
+                payload: responseJson,
+            });
+            return (
+                Promise.resolve(),
+                actionHandler({
+                    successMessage: "Delete Success",
+                }),
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000 * 1.5)
+            );
+        })
+        .catch((error) => {
+            const message =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString();
+
+            dispatch({
+                type: DELETE_USER_FAIL,
+            });
+
+            dispatch({
+                type: SET_MESSAGE,
+                payload: message,
+            });
+
+            return (
+                Promise.reject(),
+                actionHandler({
+                    error: message,
+                })
+            );
+        });
+};
