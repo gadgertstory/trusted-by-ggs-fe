@@ -36,8 +36,8 @@ const pagesList = [
 
 const pagesSuperAdminList = [
     {
-        pathname: "/role",
-        name: "กำหนดสิทธิ์ผู้ใช้",
+        pathname: "/manage-permission",
+        name: "จัดการสิทธิ์ผู้ใช้",
     },
     {
         pathname: "/register",
@@ -154,6 +154,8 @@ const ResponsiveAppBar = () => {
         </Link>
     ));
 
+    // console.log(profile.role?.role_name)
+
     return (
         <AppBar position="static">
             <Container maxWidth="xl">
@@ -186,16 +188,11 @@ const ResponsiveAppBar = () => {
                         }}
                     >
                         {renderPageList}
-                        {/* {profile.role?.role_name === "superAdmin"
-                            ? renderSuperAdminPageList
-                            : ""} */}
-                        {dataUser.data?.role === "admin"
+                        {profile.role?.role_name === "superAdmin"
                             ? renderSuperAdminPageList
                             : ""}
                     </Box>
-
                     {/* ============================Menu Responsive==========================      */}
-
                     <ConstructionIcon
                         sx={{
                             display: { xs: "flex", md: "none" },
@@ -203,7 +200,6 @@ const ResponsiveAppBar = () => {
                             mr: 1,
                         }}
                     />
-
                     <Typography
                         variant="h5"
                         noWrap
@@ -224,7 +220,6 @@ const ResponsiveAppBar = () => {
                     >
                         Repair System
                     </Typography>
-
                     <Box
                         sx={{
                             flexGrow: 1,
@@ -260,17 +255,51 @@ const ResponsiveAppBar = () => {
                             }}
                         >
                             {renderPageListResponsive}
-                            {/* {profile.role?.role_name === "superAdmin"
-                            ? renderSuperAdminPageListResponsive
-                            : ""} */}
-                            {dataUser.data?.role === "admin"
+                            {profile.role?.role_name === "superAdmin"
                                 ? renderSuperAdminPageListResponsive
                                 : ""}
                         </Menu>
                     </Box>
-
+                    {/* ==========================Menu Responsive=========================== */}
+                    <ConstructionIcon
+                        sx={{
+                            display: { xs: "flex", md: "none" },
+                            fontSize: 40,
+                            mr: 1,
+                        }}
+                    />
+                    <Typography
+                        variant="h5"
+                        noWrap
+                        component="a"
+                        href=""
+                        sx={{
+                            mr: 2,
+                            display: { xs: "flex", md: "none" },
+                            direction: "flex-wrap",
+                            flexGrow: 1,
+                            fontFamily: "monospace",
+                            fontWeight: 700,
+                            letterSpacing: ".2rem",
+                            color: "inherit",
+                            textDecoration: "none",
+                            whiteSpace: "pre-wrap",
+                        }}
+                    >
+                        Repair System
+                    </Typography>
+                    <Box
+                        sx={{
+                            flexGrow: 1,
+                            display: { xs: "none", md: "flex" },
+                        }}
+                    >
+                        {renderPageListResponsive}
+                        {profile.role?.role_name === "superAdmin"
+                            ? renderSuperAdminPageListResponsive
+                            : ""}
+                    </Box>
                     {/* ============================Setting==========================      */}
-
                     <Box
                         sx={{
                             flexGrow: 0,
