@@ -1,23 +1,18 @@
 import React, { useEffect } from "react";
-import {
-    Box,
-    Grid,
-    Typography
-} from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import MaterialTable from "material-table";
 import { useDispatch } from "react-redux";
 import { getAllUsers } from "../../../services/actions/user";
-import { getAllRoles } from "../../../services/actions/role";
 import { useSelector } from "react-redux";
 import { history } from "../../../helpers/history";
-import { Feed } from "@mui/icons-material";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 
 const Table = (props) => {
     const dispatch = useDispatch();
     const { dataAllUsers = [] } = useSelector((state) => state.user);
 
     useEffect(() => {
-        dispatch(getAllUsers())
+        dispatch(getAllUsers());
     }, [dispatch]);
 
     const selectRow = (selectRow) => {
@@ -80,7 +75,7 @@ const Table = (props) => {
                     },
                     {
                         title: "สิทธิ์ผู้ใช้งาน",
-                        field: 'role.role_name',
+                        field: "role.role_name",
                         render: (rowData) => (
                             <Box
                                 sx={{
@@ -96,16 +91,17 @@ const Table = (props) => {
                 ]}
                 actions={[
                     (rowData) => {
-                        return rowData.role?.role_name !== 'superAdmin' ? {
-                            title: " ",
-                            icon: "edit",
-                            tooltip: "View Detail",
-                            onClick: () => {
-                                selectRow(rowData);
-                            },
-                        } : ''
-                    }
-
+                        return rowData.role?.role_name !== "superAdmin"
+                            ? {
+                                  title: " ",
+                                  icon: "edit",
+                                  tooltip: "View Detail",
+                                  onClick: () => {
+                                      selectRow(rowData);
+                                  },
+                              }
+                            : "";
+                    },
                 ]}
                 data={dataAllUsers}
                 localization={{
@@ -126,41 +122,26 @@ const Table = (props) => {
                     },
                 }}
             />
-
         </>
     );
 };
 
 const ManagePermissionTable = (roleUser) => {
-
     return (
         <>
-            <Box
-                component="form"
-                noValidate
-                sx={{ mt: 1 }}
-            >
-                <Grid
-                    container
-                    flexDirection="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    spacing={2}
-                >
-                    <Grid>
-                        <Grid
-                            container
-                            flexDirection="row"
-                            alignItems={"center"}
-                            sx={{
-                                p: 2,
-                            }}
-                        >
-                            <Feed fontSize="large" />
-                            <Typography variant="h4" component="h2">
-                                จัดการสิทธิ์ผู้ใช้งาน
-                            </Typography>
-                        </Grid>
+            <Box component="form" noValidate sx={{ mt: 1 }}>
+                <Grid container flexDirection="row" spacing={2}>
+                    <Grid
+                        container
+                        alignItems={"center"}
+                        sx={{
+                            p: 2,
+                        }}
+                    >
+                        <ManageAccountsIcon fontSize="large" /> &nbsp;
+                        <Typography variant="h4" component="h1">
+                            จัดการสิทธิ์ผู้ใช้งาน
+                        </Typography>
                     </Grid>
                 </Grid>
                 <Table />
@@ -168,6 +149,5 @@ const ManagePermissionTable = (roleUser) => {
         </>
     );
 };
-
 
 export default ManagePermissionTable;

@@ -1,59 +1,59 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import {
-    Box,
-    Button,
-    Grid,
-    Stack,
-    Typography,
-} from "@mui/material";
-import LoadingButton from "@mui/lab/LoadingButton";
-import { Feed } from "@mui/icons-material";
-import RoleDetail from "../components/RoleDetail";
+import React, { useCallback, useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
-import { makeStyles } from "@mui/styles";
-import { useDispatch } from "react-redux";
-import { getAllRoles } from "../../../services/actions/role";
 import { useParams } from "react-router-dom";
+import { makeStyles } from "@mui/styles";
+import { Box, Button, Grid, Stack, Typography } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+
+import RoleDetail from "../components/RoleDetail";
+
 import fetchMaster from "../../../middleware/user";
 import { history } from "../../../helpers/history";
 import { updateRoleUser } from "../../../services/actions/user";
+import { getAllRoles } from "../../../services/actions/roles";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     formControl: {
-        minWidth: 120
+        minWidth: 120,
     },
     menuPaper: {
-        maxHeight: 150
-    }
+        maxHeight: 150,
+    },
 }));
 
 const ManagePermissionDetail = (roleUser) => {
     const classes = useStyles();
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const { id } = useParams();
-    const { dataAllRoles } = useSelector((state) => state.role);
+    const { dataAllRoles } = useSelector((state) => state.roles);
     const { handleSubmit, control, setValue } = useForm();
-    const [error, setError] = useState("");
-    const [name, setName] = useState()
-    const [loading, setLoading] = useState(false);
 
+    const [error, setError] = useState("");
+    const [name, setName] = useState();
+    const [loading, setLoading] = useState(false);
+    
+    const defaultValue = useCallback(
+        (id) => {
+            fetchMaster.getUser(id).then((result) => {
+                setValue("role_name", result.data.role?.role_name || "");
+                setName(result.data.user_name);
+            });
+        },
+        [setValue]
+    );
+    
     useEffect(() => {
         dispatch(getAllRoles());
-        DefaultValue(id)
-    }, [dispatch, id]);
+        defaultValue(id);
+    }, [dispatch, id,defaultValue]);
 
-    const DefaultValue = async (id) => {
-        await fetchMaster.getUser(id).then((result) => {
-            setValue("role_name", result.data.role?.role_name || "");
-            setName(result.data.user_name)
-        })
-    }
 
-    const onSubmit = (data) => { 
+    const onSubmit = (data) => {
         setLoading(true);
-        dispatch(updateRoleUser(id,data));
-    }
+        dispatch(updateRoleUser(id, data));
+    };
 
     return (
         <>
@@ -79,8 +79,8 @@ const ManagePermissionDetail = (roleUser) => {
                                 p: 2,
                             }}
                         >
-                            <Feed fontSize="large" />
-                            <Typography variant="h4" component="h2">
+                            <ManageAccountsIcon fontSize="large" />
+                            <Typography variant="h4" component="h1">
                                 จัดการสิทธิ์ {name}
                             </Typography>
                         </Grid>

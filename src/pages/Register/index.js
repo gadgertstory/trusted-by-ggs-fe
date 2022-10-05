@@ -1,4 +1,4 @@
-import React, { useEffect, useState, } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -13,15 +13,13 @@ import {
     MenuItem,
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
 
 import { registerUser } from "../../services/actions/auth";
-
-const roles = [
-    { value: 1, label: "admin" },
-    { value: 2, label: "superAdmin" },
-];
+import { getAllRoles } from "../../services/actions/roles";
 
 const Register = () => {
+    const { dataAllRoles } = useSelector((state) => state.roles);
     const validationSchema = Yup.object().shape({
         user_name: Yup.string().required("กรุณากรอก User Name"),
         user_email: Yup.string()
@@ -34,12 +32,15 @@ const Register = () => {
     const { handleSubmit, register, formState } = useForm(formOptions);
     const { errors } = formState;
 
+    useEffect(() => {
+        dispatch(getAllRoles());
+    }, [dispatch]);
+
     const onSubmit = (dataUser) => {
-        const user_password = { user_password: "1234" };
+        const user_password = { user_password: "GGS@2022" };
         const _newData = { ...dataUser, ...user_password };
 
         dispatch(registerUser(_newData));
-        // console.log(_newData);
     };
 
     return (
@@ -54,13 +55,15 @@ const Register = () => {
                     }}
                 >
                     <Grid
+                        sx={{ mt: 2 }}
                         container
-                        direction="column"
-                        justifyContent="center"
+                        direction="row"
                         alignItems="center"
+                        justifyContent="center"
                     >
-                        <Typography variant="h4" component="h4" sx={{ mt: 2 }}>
-                            Register User
+                        <GroupAddIcon fontSize="large" /> &nbsp;
+                        <Typography variant="h4" component="h4">
+                            เพิ่มผู้ใช้งาน
                         </Typography>
                     </Grid>
                     <Box
@@ -89,7 +92,6 @@ const Register = () => {
                             <Typography variant="p">
                                 <TextField
                                     size="small"
-                                    sx={{ mb: 2 }}
                                     label="User Email"
                                     fullWidth
                                     type="text"
@@ -116,12 +118,12 @@ const Register = () => {
                                 variant="outlined"
                                 fullWidth
                             >
-                                {roles.map((option) => (
+                                {dataAllRoles.map((option) => (
                                     <MenuItem
-                                        key={option.value}
-                                        value={option.label}
+                                        key={option.role_id}
+                                        value={option.role_name}
                                     >
-                                        {option.label}
+                                        {option.role_name}
                                     </MenuItem>
                                 ))}
                             </TextField>
@@ -132,7 +134,7 @@ const Register = () => {
                                     color="primary"
                                     type="submit"
                                 >
-                                    Submit
+                                    Add
                                 </LoadingButton>
                             </Grid>
                         </Grid>

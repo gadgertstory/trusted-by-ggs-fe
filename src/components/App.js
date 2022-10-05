@@ -17,7 +17,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { clearMessage } from "../services/actions/message";
 
 import { history } from "../helpers/history";
-// import PreviewDocument from "./PreviewDocument";
 
 import { logout } from "../services/actions/auth";
 import AuthVerify from "../common/AuthVerify";
@@ -36,7 +35,6 @@ const NotFound = lazy(() => import("../pages/NotFound"));
 
 const App = () => {
     const { user: currentUser } = useSelector((state) => state.auth);
-    const { profile } = useSelector((state) => state.profile);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -79,8 +77,6 @@ const App = () => {
             element: <Permission />,
         },
     ];
-
-    // console.log(profile.role)
 
     return (
         <ThemeProvider theme={theme}>
