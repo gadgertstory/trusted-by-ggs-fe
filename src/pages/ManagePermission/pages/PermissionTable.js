@@ -1,54 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
-    FormControl,
-    FormHelperText,
-    InputLabel,
-    MenuItem,
-    Select,
-    Switch,
-    Typography,
+    Box,
+    Grid,
+    Typography
 } from "@mui/material";
 import MaterialTable from "material-table";
 import { useDispatch } from "react-redux";
 import { getAllUsers } from "../../../services/actions/user";
 import { getAllRoles } from "../../../services/actions/role";
-import { Box } from "@mui/system";
 import { useSelector } from "react-redux";
-import { Controller } from "react-hook-form";
+import { history } from "../../../helpers/history";
+import { Feed } from "@mui/icons-material";
 
-const RoleDetail = (props) => {
+const Table = (props) => {
     const dispatch = useDispatch();
     const { dataAllUsers = [] } = useSelector((state) => state.user);
-    const { dataAllRoles = [] } = useSelector((state) => state.role);
-
-    // const [switchCheck, setSwitchCheck] = React.useState([]); 
-    const [user, setUser] = useState(dataAllUsers);
-    const [isEdit, setIsEdit] = useState(false);
-    const [value, setValue] = useState('');
-
 
     useEffect(() => {
-        dispatch(getAllUsers());
-        dispatch(getAllRoles());
+        dispatch(getAllUsers())
     }, [dispatch]);
 
-    const {
-        control,
-        // onEdit,
-        // roleUser,
-        // classes,
-    } = props;
+    const selectRow = (selectRow) => {
+        const id = selectRow.user_id;
 
-    const handleChange = (id, checked) => {
-        console.log(id, checked)
-        if (id === value) {
-            setIsEdit(checked)
-        }
-    }
-
-    const changee = (value) => { 
-        setValue(value)
-    }
+        history.push(`/manage-permission/${id}`);
+        window.location.reload();
+    };
 
     return (
         <>
@@ -57,6 +34,7 @@ const RoleDetail = (props) => {
                     search: false,
                     actionsColumnIndex: -1,
                     pageSize: 20,
+                    pageSizeOptions: [20, 40, 60, 80, 100],
                     toolbar: false,
                     sorting: false,
                 }}
@@ -100,6 +78,33 @@ const RoleDetail = (props) => {
                             </Box>
                         ),
                     },
+                    {
+                        title: "สิทธิ์ผู้ใช้งาน",
+                        field: 'role.role_name',
+                        render: (rowData) => (
+                            <Box
+                                sx={{
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap",
+                                    maxWidth: 150,
+                                }}
+                            >
+                                {rowData.role?.role_name.toUpperCase()}
+                            </Box>
+                        ),
+                    },
+                ]}
+                actions={[
+                    (rowData) => {
+                        return rowData.role?.role_name !== 'superAdmin' ? {
+                            title: " ",
+                            icon: "edit",
+                            tooltip: "View Detail",
+                            onClick: () => {
+                                selectRow(rowData);
+                            },
+                        } : ''
+                    }
 
                 ]}
                 data={dataAllUsers}
@@ -126,4 +131,43 @@ const RoleDetail = (props) => {
     );
 };
 
-export default RoleDetail;
+const ManagePermissionTable = (roleUser) => {
+
+    return (
+        <>
+            <Box
+                component="form"
+                noValidate
+                sx={{ mt: 1 }}
+            >
+                <Grid
+                    container
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    spacing={2}
+                >
+                    <Grid>
+                        <Grid
+                            container
+                            flexDirection="row"
+                            alignItems={"center"}
+                            sx={{
+                                p: 2,
+                            }}
+                        >
+                            <Feed fontSize="large" />
+                            <Typography variant="h4" component="h2">
+                                จัดการสิทธิ์ผู้ใช้งาน
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Table />
+            </Box>
+        </>
+    );
+};
+
+
+export default ManagePermissionTable;

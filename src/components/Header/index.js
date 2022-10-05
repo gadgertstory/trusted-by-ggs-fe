@@ -36,8 +36,8 @@ const pagesList = [
 
 const pagesSuperAdminList = [
     {
-        pathname: "/role",
-        name: "กำหนดสิทธิ์ผู้ใช้",
+        pathname: "/manage-permission",
+        name: "จัดการสิทธิ์ผู้ใช้",
     },
     {
         pathname: "/register",

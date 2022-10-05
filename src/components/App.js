@@ -21,7 +21,6 @@ import { history } from "../helpers/history";
 
 import { logout } from "../services/actions/auth";
 import AuthVerify from "../common/AuthVerify";
-import ManageRole from "../pages/Role";
 
 const PreviewDocument = lazy(() => import("./PreviewDocument"));
 const Header = lazy(() => import("./Header"));
@@ -29,6 +28,7 @@ const Dashboard = lazy(() => import("../pages/Dashboard"));
 const Profile = lazy(() => import("../pages/Profile"));
 const Repair = lazy(() => import("../pages/Repair"));
 const LogIn = lazy(() => import("../pages/Login"));
+const Permission = lazy(() => import("../pages/ManagePermission"));
 const ForgotPassword = lazy(() => import("../pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("../pages/ResetPassword"));
 const NotFound = lazy(() => import("../pages/NotFound"));
@@ -62,16 +62,16 @@ const App = () => {
             element: <Repair />,
         },
         {
-            pathname: "/role",
-            element: <ManageRole />,
-        },
-        {
             pathname: "/404",
             element: <NotFound />,
         },
         {
             pathname: "*",
             element: <Navigate replace to="/404" />,
+        },
+        {
+            pathname: `/manage-permission/*`,
+            element: <Permission />,
         },
     ];
 

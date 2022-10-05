@@ -37,6 +37,14 @@ const getAllUsers = () => {
   return axios.get(API_URL + "/users", { headers: authHeader() });
 };
 
+const getUser = (user_id) => {
+  return axios.get(API_URL + `/users/profile/${user_id}`, { headers: authHeader() });
+};
+
+const updateRoleUser = (user_id,role_name) => {
+  return axios.patch(API_URL + `/users/${user_id}`,role_name, { headers: authHeader() });
+};
+
 const exportedFunction = {
   getPublicContent,
   getUserBoard,
@@ -44,7 +52,9 @@ const exportedFunction = {
   getAdminBoard,
   updateProfile,
   getProfile,
-  getAllUsers
+  getAllUsers,
+  getUser,
+  updateRoleUser
 };
 
 export default exportedFunction;
