@@ -13,14 +13,32 @@ import { getAllStatus } from "../../../services/actions/status";
 import HeaderTable from "../components/HeaderTable";
 import BadgeStatus from "../../../components/Badge";
 
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import LoadingButton from "@mui/lab/LoadingButton";
+
+import TextField from '@mui/material/TextField';
+import { LocalizationProvider } from '@mui/x-date-pickers-pro';
+import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
+import { AdapterDateFns } from '@mui/x-date-pickers-pro/AdapterDateFns';
+import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
+import ExportExcel from "../../../utils/ExportExcel";
+
 const RepairTable = (roleUser) => {
     const dispatch = useDispatch();
     const { control } = useForm();
     const { dataAllRepair = [] } = useSelector((state) => state.repairs);
-    const { search } = useLocation();
 
+    const { search } = useLocation();
     const [status, setStatus] = useState(0);
     const [keyword, setKeyword] = useState("");
+    const [openDialog, setOpenDialog] = useState(false)
+
+    const [value, setValue] = useState([null, null]);
+    const [newValue, setNewValue] = useState([null, null])
 
     useEffect(() => {
         dispatch(getAllStatus());
@@ -123,6 +141,30 @@ const RepairTable = (roleUser) => {
         );
     };
 
+    const handleOpenDialog = () => {
+        setOpenDialog(true);
+    };
+
+    const handleCloseDialog = () => {
+        setValue([null, null])
+        setNewValue([null, null])
+        setOpenDialog(false);
+    };
+
+    const handleExport = (val) => {
+        ExportExcel(val)
+        handleSearch()
+        handleCloseDialog()
+        setNewValue([null, null])
+        setValue([null, null])
+    }
+
+    const handleDateChangeRaw = (e) => {
+        if (e) {
+            e.preventDefault();
+        }
+    };
+
     return (
         <>
             <Stack
@@ -159,7 +201,10 @@ const RepairTable = (roleUser) => {
                 onSearch={handleSearch}
                 keyword={keyword}
                 onChangeKeyword={handleChangeKeyword}
+                roleUser={roleUser}
+                handleOpenDialog={handleOpenDialog}
             />
+
             <MaterialTable
                 options={{
                     search: false,
@@ -316,6 +361,54 @@ const RepairTable = (roleUser) => {
                     },
                 }}
             />
+
+            <Dialog
+                open={openDialog}
+                onClose={handleCloseDialog}
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {"EXPORT PDF"}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        <LocalizationProvider
+                            dateAdapter={AdapterDayjs}
+                            localeText={{ start: 'Check-in', end: 'Check-out' }}
+                        >
+                            <LocalizationProvider
+                                dateAdapter={AdapterDateFns}
+                                localeText={{ start: 'วันที่เริ่มต้น', end: 'วันที่สิ้นสุด' }}
+                            >
+                                <DateRangePicker
+                                    value={value}
+                                    onChange={(value) => {
+                                        setValue(value);
+                                        var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+                                        setNewValue([(new Date(value[0] - tzoffset)).toISOString().slice(0, -1).split("T")[0], (new Date(value[1] - tzoffset)).toISOString().slice(0, -1).split("T")[0]])
+                                    }}
+                                    renderInput={(startProps, endProps) => (
+                                        <React.Fragment>
+                                            <TextField {...startProps} onKeyDown={handleDateChangeRaw} />
+                                            <Box sx={{ mx: 2 }}> to </Box>
+                                            <TextField {...endProps} onKeyDown={handleDateChangeRaw} />
+                                        </React.Fragment>
+                                    )}
+                                />
+                            </LocalizationProvider>
+                        </LocalizationProvider>
+                    </DialogContentText>
+
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseDialog}>Cancel</Button>
+                    <LoadingButton
+                        onClick={() => handleExport(newValue)}
+                        autoFocus
+                    >
+                        Submit
+                    </LoadingButton>
+                </DialogActions>
+            </Dialog>
         </>
     );
 };
