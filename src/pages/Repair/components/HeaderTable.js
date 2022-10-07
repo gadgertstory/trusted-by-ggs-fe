@@ -76,7 +76,7 @@ const HeaderTable = (props) => {
                         startIcon={<FileDownloadIcon />}
                         onClick={handleOpenDialog}
                     >
-                        Export PDF
+                        Export Excel
                     </Button>
                 ) : (
                     ""

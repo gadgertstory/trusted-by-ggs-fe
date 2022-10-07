@@ -17,7 +17,6 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import LoadingButton from "@mui/lab/LoadingButton";
 
 import TextField from "@mui/material/TextField";
@@ -373,7 +372,7 @@ const RepairTable = (roleUser) => {
                         fontWeight={"bold"}
                         sx={{ mb: 2 }}
                     >
-                        EXPORT PDF
+                         Export Excel
                     </Typography>
                     <DialogContentText id="alert-dialog-description">
                         <LocalizationProvider
