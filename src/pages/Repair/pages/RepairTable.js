@@ -13,18 +13,18 @@ import { getAllStatus } from "../../../services/actions/status";
 import HeaderTable from "../components/HeaderTable";
 import BadgeStatus from "../../../components/Badge";
 
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 import LoadingButton from "@mui/lab/LoadingButton";
 
-import TextField from '@mui/material/TextField';
-import { LocalizationProvider } from '@mui/x-date-pickers-pro';
-import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
-import { AdapterDateFns } from '@mui/x-date-pickers-pro/AdapterDateFns';
-import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
+import TextField from "@mui/material/TextField";
+import { LocalizationProvider } from "@mui/x-date-pickers-pro";
+import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
+import { AdapterDateFns } from "@mui/x-date-pickers-pro/AdapterDateFns";
+import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import ExportExcel from "../../../utils/ExportExcel";
 
 const RepairTable = (roleUser) => {
@@ -35,10 +35,10 @@ const RepairTable = (roleUser) => {
     const { search } = useLocation();
     const [status, setStatus] = useState(0);
     const [keyword, setKeyword] = useState("");
-    const [openDialog, setOpenDialog] = useState(false)
+    const [openDialog, setOpenDialog] = useState(false);
 
     const [value, setValue] = useState([null, null]);
-    const [newValue, setNewValue] = useState([null, null])
+    const [newValue, setNewValue] = useState([null, null]);
 
     useEffect(() => {
         dispatch(getAllStatus());
@@ -146,18 +146,18 @@ const RepairTable = (roleUser) => {
     };
 
     const handleCloseDialog = () => {
-        setValue([null, null])
-        setNewValue([null, null])
+        setValue([null, null]);
+        setNewValue([null, null]);
         setOpenDialog(false);
     };
 
     const handleExport = (val) => {
-        ExportExcel(val)
-        handleSearch()
-        handleCloseDialog()
-        setNewValue([null, null])
-        setValue([null, null])
-    }
+        ExportExcel(val);
+        handleSearch();
+        handleCloseDialog();
+        setNewValue([null, null]);
+        setValue([null, null]);
+    };
 
     const handleDateChangeRaw = (e) => {
         if (e) {
@@ -229,7 +229,10 @@ const RepairTable = (roleUser) => {
                         title: "เลขที่ใบแจ้งซ่อม",
                         field: "repair_no",
                         render: (rowData) => (
-                            <Link href="#" onClick={() => selectNewtab(rowData)}>
+                            <Link
+                                href="#"
+                                onClick={() => selectNewtab(rowData)}
+                            >
                                 {rowData.repair_no}
                             </Link>
                         ),
@@ -362,46 +365,82 @@ const RepairTable = (roleUser) => {
                 }}
             />
 
-            <Dialog
-                open={openDialog}
-                onClose={handleCloseDialog}
-            >
-                <DialogTitle id="alert-dialog-title">
-                    {"EXPORT PDF"}
-                </DialogTitle>
+            <Dialog open={openDialog} onClose={handleCloseDialog}>
                 <DialogContent>
+                    <Typography
+                        component={"h5"}
+                        variant={"h5"}
+                        fontWeight={"bold"}
+                        sx={{ mb: 2 }}
+                    >
+                        EXPORT PDF
+                    </Typography>
                     <DialogContentText id="alert-dialog-description">
                         <LocalizationProvider
                             dateAdapter={AdapterDayjs}
-                            localeText={{ start: 'Check-in', end: 'Check-out' }}
+                            localeText={{ start: "Check-in", end: "Check-out" }}
                         >
                             <LocalizationProvider
                                 dateAdapter={AdapterDateFns}
-                                localeText={{ start: 'วันที่เริ่มต้น', end: 'วันที่สิ้นสุด' }}
+                                localeText={{
+                                    start: "วันที่เริ่มต้น",
+                                    end: "วันที่สิ้นสุด",
+                                }}
                             >
                                 <DateRangePicker
                                     value={value}
                                     onChange={(value) => {
                                         setValue(value);
-                                        var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
-                                        setNewValue([(new Date(value[0] - tzoffset)).toISOString().slice(0, -1).split("T")[0], (new Date(value[1] - tzoffset)).toISOString().slice(0, -1).split("T")[0]])
+                                        var tzoffset =
+                                            new Date().getTimezoneOffset() *
+                                            60000; //offset in milliseconds
+                                        setNewValue([
+                                            new Date(value[0] - tzoffset)
+                                                .toISOString()
+                                                .slice(0, -1)
+                                                .split("T")[0],
+                                            new Date(value[1] - tzoffset)
+                                                .toISOString()
+                                                .slice(0, -1)
+                                                .split("T")[0],
+                                        ]);
                                     }}
                                     renderInput={(startProps, endProps) => (
                                         <React.Fragment>
-                                            <TextField {...startProps} onKeyDown={handleDateChangeRaw} />
+                                            <TextField
+                                                {...startProps}
+                                                onKeyDown={handleDateChangeRaw}
+                                            />
                                             <Box sx={{ mx: 2 }}> to </Box>
-                                            <TextField {...endProps} onKeyDown={handleDateChangeRaw} />
+                                            <TextField
+                                                {...endProps}
+                                                onKeyDown={handleDateChangeRaw}
+                                            />
                                         </React.Fragment>
                                     )}
                                 />
                             </LocalizationProvider>
                         </LocalizationProvider>
                     </DialogContentText>
-
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCloseDialog}>Cancel</Button>
+                    <Button
+                        sx={{
+                            my: 2,
+                            bgcolor: "background.default",
+                            color: "text.primary",
+                            ":hover": {
+                                bgcolor: "background.default",
+                            },
+                        }}
+                        variant="contained"
+                        onClick={handleCloseDialog}
+                    >
+                        Cancel
+                    </Button>
                     <LoadingButton
+                        variant="contained"
+                        color="primary"
                         onClick={() => handleExport(newValue)}
                         autoFocus
                     >
