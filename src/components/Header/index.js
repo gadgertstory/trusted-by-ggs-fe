@@ -154,8 +154,6 @@ const ResponsiveAppBar = () => {
         </Link>
     ));
 
-    // console.log(profile.role?.role_name)
-
     return (
         <AppBar position="static">
             <Container maxWidth="xl">
