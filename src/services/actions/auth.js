@@ -81,30 +81,27 @@ export const login = (loginUser) => (dispatch) => {
             );
         },
         (error) => {
-            const message =
+            const statusCode =
                 (error.response &&
                     error.response.data &&
-                    error.response.data.message) ||
-                error.message ||
+                    error.response.data.statusCode) ||
+                error.statusCode ||
                 error.toString();
 
             dispatch({
                 type: LOGIN_FAIL,
             });
 
-            dispatch({
-                type: SET_MESSAGE,
-                payload: message,
-            });
-
             return (
                 Promise.reject(),
                 actionHandler(
-                    message === "Unauthorized"
+                    statusCode === 401
                         ? {
                               error: "กรุณากรอก Email และ Password ให้ถูกต้อง",
                           }
-                        : message
+                        : {
+                              error: "ไม่สามารถเชื่อมต่อ Server ได้",
+                          }
                 )
             );
         }
@@ -139,31 +136,28 @@ export const forgotPassword = (user_email) => async (dispatch) => {
             );
         })
         .catch((error) => {
-            const message =
+            const statusCode =
                 (error.response &&
                     error.response.data &&
-                    error.response.data.message) ||
-                error.message ||
+                    error.response.data.statusCode) ||
+                error.statusCode ||
                 error.toString();
 
             dispatch({
                 type: RESET_PASSWORD_FAIL,
             });
 
-            dispatch({
-                type: SET_MESSAGE,
-                payload: message,
-            });
-
             return (
                 Promise.reject(),
                 actionHandler(
-                    message === "Invalid email."
+                    statusCode === 406
                         ? {
                               error: `ไม่มี Email ของท่านอยู่ในระบบ 
                               กรุณาตรวจสอบ Email ที่ท่านกรอก`,
                           }
-                        : message
+                        : {
+                              error: "ไม่สามารถเชื่อมต่อ Server ได้",
+                          }
                 )
             );
         });
@@ -204,6 +198,7 @@ export const resetPassword =
                     type: SET_MESSAGE,
                     payload: message,
                 });
+                
                 return (
                     Promise.reject(),
                     actionHandler({

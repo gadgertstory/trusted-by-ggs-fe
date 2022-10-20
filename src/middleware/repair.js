@@ -7,6 +7,10 @@ const RepairRequestSearch = (search) => {
     return axios.get(`${API_URL}/repair-request${search}`, { headers: authHeader() });
 };
 
+const RepairRequestExport = (value) => {
+    return axios.get(`${API_URL}/repair-request/export${value}`, { headers: authHeader() });
+};
+
 const createRepair = (data) => {
     return axios
         .post(`${API_URL}/repair-request`, data, { headers: authHeader() })
@@ -54,7 +58,8 @@ const exportedFunction = {
     deleteRepair,
     RepairRequestSearch,
     fetchRepairPDF,
-    fetchRepairPDFForCustomer
+    fetchRepairPDFForCustomer,
+    RepairRequestExport
 };
 
 export default exportedFunction;
