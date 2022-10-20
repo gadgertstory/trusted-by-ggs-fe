@@ -7,6 +7,7 @@ import MaterialTable from "material-table";
 import { history } from "../../../helpers/history";
 import { Button, Stack, Typography, Box, Link } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import BuildIcon from '@mui/icons-material/Build';
 
 import { RepairRequestSearch } from "../../../services/actions/repairs";
 import { getAllStatus } from "../../../services/actions/status";
@@ -171,8 +172,8 @@ const RepairTable = (roleUser) => {
                 direction="row"
                 justifyContent={"space-between"}
             >
-                <Typography variant="h5" component="h1">
-                    RepairTable
+                <Typography variant="h4" component="h1">
+                    <BuildIcon/> งานซ่อม
                 </Typography>
                 {roleUser.roleUser.role === "admin" ? (
                     <Button

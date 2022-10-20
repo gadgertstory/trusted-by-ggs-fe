@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -29,7 +29,6 @@ import ProductDetail from "../components/ProductDetail";
 import HistoryTableDetail from "../components/HistoryTableDetail";
 import ConfirmDialog from "../../../components/Dialog/ConfirmDialog";
 
-import Repair from "../../../middleware/repair";
 import { history } from "../../../helpers/history";
 import { getAllBrand } from "../../../services/actions/brand";
 import { getAllStatus } from "../../../services/actions/status";
@@ -38,6 +37,7 @@ import {
     updateRepair,
     deleteRepair,
     getRepairPDF,
+    getRepair,
 } from "../../../services/actions/repair";
 
 import { convertISOtoGMT } from "../../../utils/ConvertDate";
@@ -48,14 +48,14 @@ import { options } from "../../../dataMock/master";
 
 import Logo from "../../../assets/Logo/GadgetStory_logo.png";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     formControl: {
-      minWidth: 120
+        minWidth: 120,
     },
     menuPaper: {
-      maxHeight: 150
-    }
-  }));
+        maxHeight: 150,
+    },
+}));
 
 const RepairDetail = (roleUser) => {
     const classes = useStyles();
@@ -65,7 +65,7 @@ const RepairDetail = (roleUser) => {
     const { user: currentUser } = useSelector((state) => state.auth);
     const { brandList = [] } = useSelector((state) => state.brand);
     const { statusList = [] } = useSelector((state) => state.status);
-    const { dataRepairPDF } = useSelector((state) => state.repair);
+    const { dataRepairPDF, dataRepair } = useSelector((state) => state.repair);
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -91,6 +91,8 @@ const RepairDetail = (roleUser) => {
     const anchorRef = React.useRef(null);
     const [onEdit, setOnEdit] = useState();
     const [selectedIndex, setSelectedIndex] = useState(null);
+    const [placement, setPlacement] = React.useState();
+    const [anchorEl, setAnchorEl] = React.useState(null);
 
     const [dataUrl, setDataUrl] = useState();
 
@@ -99,98 +101,77 @@ const RepairDetail = (roleUser) => {
     const [betweenRepair, setBetweenRepair] = useState([]);
     const [afterRepair, setAfterRepair] = useState([]);
 
-    const fetch = useCallback(() => {
-        Repair.fetchRepair(id).then((res) => {
-            const dataRepair = res.data;
-            if (dataRepair) {
+    useEffect(() => {
+        if (dataRepair) {
+            if (dataRepair.notified_date) {
                 if (dataRepair.notified_date === null) {
                     setNotifiedDate(null);
                 } else {
                     setNotifiedDate(convertISOtoGMT(dataRepair.notified_date));
                 }
+            }
+            if (dataRepair.received_date) {
                 if (dataRepair.received_date === null) {
                     setReceivedDate(null);
                 } else {
                     setReceivedDate(convertISOtoGMT(dataRepair.received_date));
                 }
+            }
+            if (dataRepair.return_date) {
                 if (dataRepair.return_date === null) {
                     setReturnDate(null);
                 } else {
                     setReturnDate(convertISOtoGMT(dataRepair.return_date));
                 }
-
-                setValue(
-                    "customer_firstname",
-                    dataRepair.customer_firstname || ""
-                );
-                setValue(
-                    "customer_lastname",
-                    dataRepair.customer_lastname || ""
-                );
-                setValue("customer_tel", dataRepair.customer_tel || "");
-                setValue(
-                    "customer_house_no",
-                    dataRepair.customer_house_no || ""
-                );
-                setValue(
-                    "customer_subdistrict",
-                    dataRepair.customer_subdistrict || ""
-                );
-                setValue(
-                    "customer_district",
-                    dataRepair.customer_district || ""
-                );
-                setValue(
-                    "customer_province",
-                    dataRepair.customer_province || ""
-                );
-                setValue(
-                    "customer_zipcode",
-                    dataRepair.customer_zipcode || ""
-                );
-                setValue("product_name", dataRepair.product_name || "");
-                setValue(
-                    "product_serial_no",
-                    dataRepair.product_serial_no || ""
-                );
-                setValue(
-                    "product_serial_no",
-                    dataRepair.product_serial_no || ""
-                );
-                setValue("brand_id", dataRepair.brand.brand_id || "");
-                setValue("remark", dataRepair.remark || "");
-                setValue("description", dataRepair.description || "");
-                setValue("product_price", dataRepair.product_price || "");
-                setValue(
-                    "status_id",
-                    dataRepair.status[0].status.status_id || ""
-                );
-                setValue("receive_method", dataRepair.receive_method || "");
-                setValue("warranty_status", dataRepair.warranty_status || "");
-                setValue("order_no", dataRepair.order_no || "");
-                setValue("purchase_method", dataRepair.purchase_method || "");
-
-                let beforeRepairArr = [];
-                let betweenRepairArr = [];
-                let afterRepairArr = [];
-                for (const iterator of dataRepair?.images) {
-                    if (iterator.image_status === "before_repair") {
-                        const obj = { previewUrl: iterator.image_url };
-                        beforeRepairArr.push(obj);
-                    } else if (iterator.image_status === "between_repair") {
-                        const obj = { previewUrl: iterator.image_url };
-                        betweenRepairArr.push(obj);
-                    } else {
-                        const obj = { previewUrl: iterator.image_url };
-                        afterRepairArr.push(obj);
-                    }
-                }
-                setBeforeRepair(beforeRepairArr);
-                setBetweenRepair(betweenRepairArr);
-                setAfterRepair(afterRepairArr);
             }
-        });
-    }, [id,setValue]);
+
+            setValue("customer_firstname", dataRepair.customer_firstname || "");
+            setValue("customer_lastname", dataRepair.customer_lastname || "");
+            setValue("customer_tel", dataRepair.customer_tel || "");
+            setValue("customer_house_no", dataRepair.customer_house_no || "");
+            setValue(
+                "customer_subdistrict",
+                dataRepair.customer_subdistrict || ""
+            );
+            setValue("customer_district", dataRepair.customer_district || "");
+            setValue("customer_province", dataRepair.customer_province || "");
+            setValue("customer_zipcode", dataRepair.customer_zipcode || "");
+            setValue("product_name", dataRepair.product_name || "");
+            setValue("product_serial_no", dataRepair.product_serial_no || "");
+            setValue("product_serial_no", dataRepair.product_serial_no || "");
+            setValue("brand_id", dataRepair.brand?.brand_id || "");
+            setValue("remark", dataRepair.remark || "");
+            setValue("description", dataRepair.description || "");
+            setValue("product_price", dataRepair.product_price || "");
+            setValue(
+                "status_id",
+                dataRepair.status?.[0].status.status_id || ""
+            );
+            setValue("receive_method", dataRepair.receive_method || "");
+            setValue("warranty_status", dataRepair.warranty_status || "");
+            setValue("order_no", dataRepair.order_no || "");
+            setValue("purchase_method", dataRepair.purchase_method || "");
+
+            let beforeRepairArr = [];
+            let betweenRepairArr = [];
+            let afterRepairArr = [];
+            dataRepair?.images?.map((image) => {
+                if (image.image_status === "before_repair") {
+                    const obj = { previewUrl: image.image_url };
+                    return beforeRepairArr.push(obj);
+                } else if (image.image_status === "between_repair") {
+                    const obj = { previewUrl: image.image_url };
+                    return betweenRepairArr.push(obj);
+                } else {
+                    const obj = { previewUrl: image.image_url };
+                    return afterRepairArr.push(obj);
+                }
+            });
+            setBeforeRepair(beforeRepairArr);
+            setBetweenRepair(betweenRepairArr);
+            setAfterRepair(afterRepairArr);
+        }
+    }, [setValue, dataRepair]);
 
     useEffect(() => {
         dispatch(getAllBrand());
@@ -200,7 +181,7 @@ const RepairDetail = (roleUser) => {
         });
         if (id !== "new") {
             dispatch(getRepairPDF(id));
-            fetch();
+            dispatch(getRepair(id));
         } else {
             setOnEdit(!onEdit);
         }
@@ -227,7 +208,6 @@ const RepairDetail = (roleUser) => {
     ]);
 
     const onSubmit = (data) => {
-      
         if (currentUser.data.role === "admin") {
             if (!notifiedDate) {
                 setNotifiedDateError("กรุณากรอกวันที่แจ้งเรื่อง");
@@ -423,8 +403,10 @@ const RepairDetail = (roleUser) => {
         setOpen(false);
     };
 
-    const handleToggle = () => {
-        setOpen((prevOpen) => !prevOpen);
+    const handleToggle = (newPlacement) => (event) => {
+        setAnchorEl(event.currentTarget);
+        setOpen((prev) => placement !== newPlacement || !prev);
+        setPlacement(newPlacement);
     };
 
     const handleClose = (event) => {
@@ -489,16 +471,16 @@ const RepairDetail = (roleUser) => {
                                     aria-expanded={open ? "true" : undefined}
                                     aria-label="select merge strategy"
                                     aria-haspopup="menu"
-                                    onClick={handleToggle}
+                                    onClick={handleToggle("bottom-end")}
                                 >
                                     <MoreVert />
                                 </Button>
                             </ButtonGroup>
                             <Popper
                                 open={open}
-                                anchorEl={anchorRef.current}
-                                role={undefined}
+                                anchorEl={anchorEl}
                                 transition
+                                placement={placement}
                                 disablePortal
                                 sx={{ zIndex: 2 }}
                             >
@@ -652,29 +634,32 @@ const RepairDetail = (roleUser) => {
                         )}
                     </>
                 )}
-                <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                >
-                    <Button
-                        sx={{
-                            my: 2,
-                            bgcolor: "background.default",
-                            color: "text.primary",
-                            ":hover": {
-                                bgcolor: "background.default",
-                            },
-                        }}
-                        variant="contained"
-                        onClick={() => {
-                            history.push("/repair?status_no=0&customer_name=");
-                            window.location.reload();
-                        }}
+
+                {onEdit ? (
+                    <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
                     >
-                        Cancel
-                    </Button>
-                    {onEdit ? (
+                        <Button
+                            sx={{
+                                my: 2,
+                                bgcolor: "background.default",
+                                color: "text.primary",
+                                ":hover": {
+                                    bgcolor: "background.default",
+                                },
+                            }}
+                            variant="contained"
+                            onClick={() => {
+                                history.push(
+                                    "/repair?status_no=0&customer_name="
+                                );
+                                window.location.reload();
+                            }}
+                        >
+                            Cancel
+                        </Button>
                         <LoadingButton
                             sx={{ my: 2 }}
                             variant="contained"
@@ -684,10 +669,10 @@ const RepairDetail = (roleUser) => {
                         >
                             Submit
                         </LoadingButton>
-                    ) : (
-                        ""
-                    )}
-                </Stack>
+                    </Stack>
+                ) : (
+                    ""
+                )}
                 <ConfirmDialog
                     open={openConfirmRemoveRepair}
                     onClose={() => setOpenConfirmRemoveRepair(false)}

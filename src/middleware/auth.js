@@ -3,12 +3,14 @@ import authHeader from "./authHeader";
 
 const API_URL = process.env.REACT_APP_BASE_URL;
 
-const register = (username, email, password) => {
-    return axios.post(API_URL + "signup", {
-        username,
-        email,
-        password,
-    });
+const register = (registerUser) => {
+    return axios
+        .post(`${API_URL}/auth/register`, registerUser, {
+            headers: authHeader(),
+        })
+        .then((response) => {
+            return response.data;
+        });
 };
 
 const login = (loginUser) => {

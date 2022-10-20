@@ -17,7 +17,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { clearMessage } from "../services/actions/message";
 
 import { history } from "../helpers/history";
-// import PreviewDocument from "./PreviewDocument";
 
 import { logout } from "../services/actions/auth";
 import AuthVerify from "../common/AuthVerify";
@@ -28,8 +27,10 @@ const Dashboard = lazy(() => import("../pages/Dashboard"));
 const Profile = lazy(() => import("../pages/Profile"));
 const Repair = lazy(() => import("../pages/Repair"));
 const LogIn = lazy(() => import("../pages/Login"));
+const Permission = lazy(() => import("../pages/ManagePermission"));
 const ForgotPassword = lazy(() => import("../pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("../pages/ResetPassword"));
+const Register = lazy(() => import("../pages/Register"));
 const NotFound = lazy(() => import("../pages/NotFound"));
 
 const App = () => {
@@ -60,12 +61,20 @@ const App = () => {
             element: <Repair />,
         },
         {
+            pathname: `/register`,
+            element: <Register />,
+        },
+        {
             pathname: "/404",
             element: <NotFound />,
         },
         {
             pathname: "*",
             element: <Navigate replace to="/404" />,
+        },
+        {
+            pathname: `/manage-permission/*`,
+            element: <Permission />,
         },
     ];
 
@@ -138,13 +147,13 @@ const App = () => {
                                                                         theme
                                                                             .palette
                                                                             .mode ===
-                                                                        "light"
+                                                                            "light"
                                                                             ? theme
-                                                                                  .palette
-                                                                                  .grey[100]
+                                                                                .palette
+                                                                                .grey[100]
                                                                             : theme
-                                                                                  .palette
-                                                                                  .grey[900],
+                                                                                .palette
+                                                                                .grey[900],
                                                                 flexGrow: 1,
                                                                 height: "100vh",
                                                                 overflow:

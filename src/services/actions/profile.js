@@ -59,7 +59,7 @@ export const updateProfile = (profile) => async (dispatch) => {
             return (
                 Promise.resolve(),
                 actionHandler({
-                    successMessage: "Update Profile Success",
+                    successMessage: "บันทึกข้อมูลผู้ใช้สำเร็จ",
                 }),
                 setTimeout(function () {
                     window.location.reload();

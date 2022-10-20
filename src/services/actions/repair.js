@@ -1,6 +1,8 @@
 import {
     CREATE_REPAIR_SUCCESS,
     CREATE_REPAIR_FAIL,
+    FETCH_REPAIR_SUCCESS,
+    FETCH_REPAIR_FAIL,
     UPDATE_REPAIR_SUCCESS,
     UPDATE_REPAIR_FAIL,
     SET_MESSAGE,
@@ -24,7 +26,7 @@ export const createRepair = (data) => async (dispatch) => {
             return (
                 Promise.resolve(),
                 actionHandler({
-                    successMessage: "Create Repair Success",
+                    successMessage: "สร้างใบแจ้งซ่อมสำเร็จ",
                 }),
                 history.push("/repair?status_no=0&customer_name="),
                 setTimeout(function () {
@@ -67,7 +69,7 @@ export const updateRepair = (id, data,formData) => async (dispatch) => {
             return (
                 Promise.resolve(),
                 actionHandler({
-                    successMessage: "Update Repair Success",
+                    successMessage: "บันทึกข้อมูลใบแจ้งซ่อมสำเร็จ",
                 }),
                 setTimeout(function () {
                     window.location.reload();
@@ -114,7 +116,7 @@ export const deleteRepair = (id) => async (dispatch) => {
             return (
                 Promise.resolve(),
                 actionHandler({
-                    successMessage: "Delete Success",
+                    successMessage: "ลบใบแจ้งซ่อมสำเร็จ",
                 }),
                 history.push("/repair?status_no=0&customer_name="),
                 setTimeout(function () {
@@ -172,6 +174,45 @@ export const getRepairPDF = (id) => async (dispatch) => {
 
             dispatch({
                 type: FETCH_REPAIR_PDF_FAIL,
+            });
+
+            dispatch({
+                type: SET_MESSAGE,
+                payload: message,
+            });
+
+            return (
+                Promise.reject(),
+                actionHandler({
+                    error: message,
+                })
+            );
+        });
+};
+
+export const getRepair = (id) => async (dispatch) => {
+    await Repair.fetchRepair(id)
+        .then((response) => {
+            return response.data;
+        })
+
+        .then((responseJson) => {
+            dispatch({
+                type: FETCH_REPAIR_SUCCESS,
+                payload: responseJson,
+            });
+            return responseJson;
+        })
+        .catch((error) => {
+            const message =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString();
+
+            dispatch({
+                type: FETCH_REPAIR_FAIL,
             });
 
             dispatch({

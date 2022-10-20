@@ -11,9 +11,14 @@ const fetchAllStatus = () => {
   return axios.get(`${API_URL}/repair-status`,{ headers: authHeader() });
 };
 
+const getAllRoles = () => {
+  return axios.get(API_URL + "/role", { headers: authHeader() });
+};
+
 const exportedFunction = {
     fetchAllBrand,
-    fetchAllStatus
+    fetchAllStatus,
+    getAllRoles
 };
 
 export default exportedFunction;

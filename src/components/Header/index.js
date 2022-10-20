@@ -34,6 +34,17 @@ const pagesList = [
     },
 ];
 
+const pagesSuperAdminList = [
+    {
+        pathname: "/manage-permission",
+        name: "จัดการสิทธิ์ผู้ใช้",
+    },
+    {
+        pathname: "/register",
+        name: "เพิ่มผู้ใช้งาน",
+    },
+];
+
 const settings = [
     {
         pathname: "/profile",
@@ -87,7 +98,7 @@ const ResponsiveAppBar = () => {
         };
     }, [dataUser, logOut]);
 
-    const renderPageList = pagesList.map((page) => (
+    const renderPageListResponsive = pagesList.map((page) => (
         <Link
             key={`${page.pathname}`}
             href={`${page.pathname}`}
@@ -99,7 +110,36 @@ const ResponsiveAppBar = () => {
         </Link>
     ));
 
-    const renderPageListResponsive = pagesList.map((page) => (
+    const renderSuperAdminPageListResponsive = pagesSuperAdminList.map(
+        (page) => (
+            <Link
+                key={`${page.pathname}`}
+                href={`${page.pathname}`}
+                underline="none"
+            >
+                <MenuItem onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center">{page.name}</Typography>
+                </MenuItem>
+            </Link>
+        )
+    );
+
+    const renderPageList = pagesList.map((page) => (
+        <Link underline="none" key={page.pathname} href={`${page.pathname}`}>
+            <Button
+                onClick={handleCloseNavMenu}
+                sx={{
+                    my: 2,
+                    color: "white",
+                    display: "block",
+                }}
+            >
+                {page.name}
+            </Button>
+        </Link>
+    ));
+
+    const renderSuperAdminPageList = pagesSuperAdminList.map((page) => (
         <Link underline="none" key={page.pathname} href={`${page.pathname}`}>
             <Button
                 onClick={handleCloseNavMenu}
@@ -142,6 +182,45 @@ const ResponsiveAppBar = () => {
                     <Box
                         sx={{
                             flexGrow: 1,
+                            display: { xs: "none", md: "flex" },
+                        }}
+                    >
+                        {renderPageList}
+                        {profile.role?.role_name === "superAdmin"
+                            ? renderSuperAdminPageList
+                            : ""}
+                    </Box>
+                    {/* ============================Menu Responsive==========================      */}
+                    <ConstructionIcon
+                        sx={{
+                            display: { xs: "flex", md: "none" },
+                            fontSize: 40,
+                            mr: 1,
+                        }}
+                    />
+                    <Typography
+                        variant="h5"
+                        noWrap
+                        component="a"
+                        href=""
+                        sx={{
+                            mr: 2,
+                            display: { xs: "flex", md: "none" },
+                            direction: "flex-wrap",
+                            flexGrow: 1,
+                            fontFamily: "monospace",
+                            fontWeight: 700,
+                            letterSpacing: ".2rem",
+                            color: "inherit",
+                            textDecoration: "none",
+                            whiteSpace: "pre-wrap",
+                        }}
+                    >
+                        Repair System
+                    </Typography>
+                    <Box
+                        sx={{
+                            flexGrow: 1,
                             display: { xs: "flex", md: "none" },
                         }}
                     >
@@ -173,12 +252,13 @@ const ResponsiveAppBar = () => {
                                 display: { xs: "block", md: "none" },
                             }}
                         >
-                            {renderPageList}
+                            {renderPageListResponsive}
+                            {profile.role?.role_name === "superAdmin"
+                                ? renderSuperAdminPageListResponsive
+                                : ""}
                         </Menu>
                     </Box>
-
                     {/* ==========================Menu Responsive=========================== */}
-
                     <ConstructionIcon
                         sx={{
                             display: { xs: "flex", md: "none" },
@@ -186,7 +266,6 @@ const ResponsiveAppBar = () => {
                             mr: 1,
                         }}
                     />
-
                     <Typography
                         variant="h5"
                         noWrap
@@ -214,10 +293,11 @@ const ResponsiveAppBar = () => {
                         }}
                     >
                         {renderPageListResponsive}
+                        {profile.role?.role_name === "superAdmin"
+                            ? renderSuperAdminPageListResponsive
+                            : ""}
                     </Box>
-
                     {/* ============================Setting==========================      */}
-
                     <Box
                         sx={{
                             flexGrow: 0,
