@@ -2,7 +2,7 @@ FROM node:16-alpine
 WORKDIR /app
 RUN npm i yarn
 COPY --chown=node:node . . 
-RUN npm i
+RUN npm i --force
 RUN yarn add xlsx --force
 RUN yarn add history --force
 RUN mkdir -p /app/node_modules/pdfmake/examples
