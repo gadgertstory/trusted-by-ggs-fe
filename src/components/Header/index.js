@@ -98,31 +98,33 @@ const ResponsiveAppBar = () => {
         };
     }, [dataUser, logOut]);
 
-    const renderPageList = pagesList.map((page) => (
-        <Link
-            key={`${page.pathname}`}
-            href={`${page.pathname}`}
-            underline="none"
-        >
-            <MenuItem onClick={handleCloseNavMenu}>
-                <Typography textAlign="center">{page.name}</Typography>
-            </MenuItem>
-        </Link>
-    ));
-
-    const renderSuperAdminPageList = pagesSuperAdminList.map((page) => (
-        <Link
-            key={`${page.pathname}`}
-            href={`${page.pathname}`}
-            underline="none"
-        >
-            <MenuItem onClick={handleCloseNavMenu}>
-                <Typography textAlign="center">{page.name}</Typography>
-            </MenuItem>
-        </Link>
-    ));
-
     const renderPageListResponsive = pagesList.map((page) => (
+        <Link
+            key={`${page.pathname}`}
+            href={`${page.pathname}`}
+            underline="none"
+        >
+            <MenuItem onClick={handleCloseNavMenu}>
+                <Typography textAlign="center">{page.name}</Typography>
+            </MenuItem>
+        </Link>
+    ));
+
+    const renderSuperAdminPageListResponsive = pagesSuperAdminList.map(
+        (page) => (
+            <Link
+                key={`${page.pathname}`}
+                href={`${page.pathname}`}
+                underline="none"
+            >
+                <MenuItem onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center">{page.name}</Typography>
+                </MenuItem>
+            </Link>
+        )
+    );
+
+    const renderPageList = pagesList.map((page) => (
         <Link underline="none" key={page.pathname} href={`${page.pathname}`}>
             <Button
                 onClick={handleCloseNavMenu}
@@ -137,26 +139,20 @@ const ResponsiveAppBar = () => {
         </Link>
     ));
 
-    const renderSuperAdminPageListResponsive = pagesSuperAdminList.map(
-        (page) => (
-            <Link
-                underline="none"
-                key={page.pathname}
-                href={`${page.pathname}`}
+    const renderSuperAdminPageList = pagesSuperAdminList.map((page) => (
+        <Link underline="none" key={page.pathname} href={`${page.pathname}`}>
+            <Button
+                onClick={handleCloseNavMenu}
+                sx={{
+                    my: 2,
+                    color: "white",
+                    display: "block",
+                }}
             >
-                <Button
-                    onClick={handleCloseNavMenu}
-                    sx={{
-                        my: 2,
-                        color: "white",
-                        display: "block",
-                    }}
-                >
-                    {page.name}
-                </Button>
-            </Link>
-        )
-    );
+                {page.name}
+            </Button>
+        </Link>
+    ));
 
     return (
         <AppBar position="static">
@@ -179,6 +175,45 @@ const ResponsiveAppBar = () => {
                             color: "inherit",
                             textDecoration: "none",
                             cursor: "pointer",
+                        }}
+                    >
+                        Repair System
+                    </Typography>
+                    <Box
+                        sx={{
+                            flexGrow: 1,
+                            display: { xs: "none", md: "flex" },
+                        }}
+                    >
+                        {renderPageList}
+                        {profile.role?.role_name === "superAdmin"
+                            ? renderSuperAdminPageList
+                            : ""}
+                    </Box>
+                    {/* ============================Menu Responsive==========================      */}
+                    <ConstructionIcon
+                        sx={{
+                            display: { xs: "flex", md: "none" },
+                            fontSize: 40,
+                            mr: 1,
+                        }}
+                    />
+                    <Typography
+                        variant="h5"
+                        noWrap
+                        component="a"
+                        href=""
+                        sx={{
+                            mr: 2,
+                            display: { xs: "flex", md: "none" },
+                            direction: "flex-wrap",
+                            flexGrow: 1,
+                            fontFamily: "monospace",
+                            fontWeight: 700,
+                            letterSpacing: ".2rem",
+                            color: "inherit",
+                            textDecoration: "none",
+                            whiteSpace: "pre-wrap",
                         }}
                     >
                         Repair System
@@ -217,15 +252,13 @@ const ResponsiveAppBar = () => {
                                 display: { xs: "block", md: "none" },
                             }}
                         >
-                             {renderPageList}
-                        {profile.role?.role_name === "superAdmin"
-                            ? renderSuperAdminPageList
-                            : ""}
+                            {renderPageListResponsive}
+                            {profile.role?.role_name === "superAdmin"
+                                ? renderSuperAdminPageListResponsive
+                                : ""}
                         </Menu>
                     </Box>
-
                     {/* ==========================Menu Responsive=========================== */}
-
                     <ConstructionIcon
                         sx={{
                             display: { xs: "flex", md: "none" },
@@ -233,7 +266,6 @@ const ResponsiveAppBar = () => {
                             mr: 1,
                         }}
                     />
-
                     <Typography
                         variant="h5"
                         noWrap
@@ -265,9 +297,7 @@ const ResponsiveAppBar = () => {
                             ? renderSuperAdminPageListResponsive
                             : ""}
                     </Box>
-
                     {/* ============================Setting==========================      */}
-
                     <Box
                         sx={{
                             flexGrow: 0,

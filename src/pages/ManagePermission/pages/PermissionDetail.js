@@ -30,11 +30,11 @@ const useStyles = makeStyles((theme) => ({
 
 const ManagePermissionDetail = () => {
     const classes = useStyles();
+    const { handleSubmit, control, setValue } = useForm();
     const dispatch = useDispatch();
     const { id } = useParams();
     const { dataAllRoles } = useSelector((state) => state.roles);
     const { dataUser } = useSelector((state) => state.user);
-    const { handleSubmit, control, setValue } = useForm();
 
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);

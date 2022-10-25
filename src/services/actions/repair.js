@@ -1,6 +1,8 @@
 import {
     CREATE_REPAIR_SUCCESS,
     CREATE_REPAIR_FAIL,
+    FETCH_REPAIR_SUCCESS,
+    FETCH_REPAIR_FAIL,
     UPDATE_REPAIR_SUCCESS,
     UPDATE_REPAIR_FAIL,
     SET_MESSAGE,
@@ -172,6 +174,45 @@ export const getRepairPDF = (id) => async (dispatch) => {
 
             dispatch({
                 type: FETCH_REPAIR_PDF_FAIL,
+            });
+
+            dispatch({
+                type: SET_MESSAGE,
+                payload: message,
+            });
+
+            return (
+                Promise.reject(),
+                actionHandler({
+                    error: message,
+                })
+            );
+        });
+};
+
+export const getRepair = (id) => async (dispatch) => {
+    await Repair.fetchRepair(id)
+        .then((response) => {
+            return response.data;
+        })
+
+        .then((responseJson) => {
+            dispatch({
+                type: FETCH_REPAIR_SUCCESS,
+                payload: responseJson,
+            });
+            return responseJson;
+        })
+        .catch((error) => {
+            const message =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString();
+
+            dispatch({
+                type: FETCH_REPAIR_FAIL,
             });
 
             dispatch({

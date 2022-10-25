@@ -4,12 +4,69 @@ import {
     LOGOUT,
     RESET_PASSWORD_SUCCESS,
     RESET_PASSWORD_FAIL,
+    REGISTER_SUCCESS,
+    REGISTER_FAIL,
     SET_MESSAGE,
 } from "./types";
 
 import AuthService from "../../middleware/auth";
 import actionHandler from "../../middleware/action_handler";
 import { history } from "../../helpers/history";
+
+export const registerUser = (registerUser) => async (dispatch) => {
+    await AuthService.register(registerUser)
+        .then((registerUser) => {
+            dispatch({
+                type: REGISTER_SUCCESS,
+                payload: registerUser,
+            });
+            return (
+                Promise.resolve(),
+                actionHandler({
+                    successMessage: "สร้างผู้ใช้งานสำเร็จ",
+                }),
+                setTimeout(function () {
+                    history.push("/");
+                    window.location.reload();
+                }, 1000 * 2)
+            );
+        })
+        .catch((error) => {
+            const message =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString();
+
+            const statusCode =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.statusCode) ||
+                error.message ||
+                error.toString();
+
+            dispatch({
+                type: REGISTER_FAIL,
+            });
+
+            dispatch({
+                type: SET_MESSAGE,
+                payload: message,
+            });
+
+            return (
+                Promise.reject(),
+                actionHandler(
+                    statusCode === 409
+                        ? {
+                              error: "User Email ถูกใช้งานไปแล้ว",
+                          }
+                        : message
+                )
+            );
+        });
+};
 
 export const login = (loginUser) => (dispatch) => {
     return AuthService.login(loginUser).then(
@@ -24,30 +81,27 @@ export const login = (loginUser) => (dispatch) => {
             );
         },
         (error) => {
-            const message =
+            const statusCode =
                 (error.response &&
                     error.response.data &&
-                    error.response.data.message) ||
-                error.message ||
+                    error.response.data.statusCode) ||
+                error.statusCode ||
                 error.toString();
 
             dispatch({
                 type: LOGIN_FAIL,
             });
 
-            dispatch({
-                type: SET_MESSAGE,
-                payload: message,
-            });
-
             return (
                 Promise.reject(),
                 actionHandler(
-                    message === "Unauthorized"
+                    statusCode === 401
                         ? {
                               error: "กรุณากรอก Email และ Password ให้ถูกต้อง",
                           }
-                        : message
+                        : {
+                              error: "ไม่สามารถเชื่อมต่อ Server ได้",
+                          }
                 )
             );
         }
@@ -82,31 +136,28 @@ export const forgotPassword = (user_email) => async (dispatch) => {
             );
         })
         .catch((error) => {
-            const message =
+            const statusCode =
                 (error.response &&
                     error.response.data &&
-                    error.response.data.message) ||
-                error.message ||
+                    error.response.data.statusCode) ||
+                error.statusCode ||
                 error.toString();
 
             dispatch({
                 type: RESET_PASSWORD_FAIL,
             });
 
-            dispatch({
-                type: SET_MESSAGE,
-                payload: message,
-            });
-
             return (
                 Promise.reject(),
                 actionHandler(
-                    message === "Invalid email."
+                    statusCode === 406
                         ? {
                               error: `ไม่มี Email ของท่านอยู่ในระบบ 
                               กรุณาตรวจสอบ Email ที่ท่านกรอก`,
                           }
-                        : message
+                        : {
+                              error: "ไม่สามารถเชื่อมต่อ Server ได้",
+                          }
                 )
             );
         });
@@ -147,6 +198,7 @@ export const resetPassword =
                     type: SET_MESSAGE,
                     payload: message,
                 });
+                
                 return (
                     Promise.reject(),
                     actionHandler({

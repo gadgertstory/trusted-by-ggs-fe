@@ -17,7 +17,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { clearMessage } from "../services/actions/message";
 
 import { history } from "../helpers/history";
-// import PreviewDocument from "./PreviewDocument";
 
 import { logout } from "../services/actions/auth";
 import AuthVerify from "../common/AuthVerify";
@@ -31,6 +30,7 @@ const LogIn = lazy(() => import("../pages/Login"));
 const Permission = lazy(() => import("../pages/ManagePermission"));
 const ForgotPassword = lazy(() => import("../pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("../pages/ResetPassword"));
+const Register = lazy(() => import("../pages/Register"));
 const NotFound = lazy(() => import("../pages/NotFound"));
 
 const App = () => {
@@ -59,6 +59,10 @@ const App = () => {
         {
             pathname: `/repair/*`,
             element: <Repair />,
+        },
+        {
+            pathname: `/register`,
+            element: <Register />,
         },
         {
             pathname: "/404",
