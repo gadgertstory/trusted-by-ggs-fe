@@ -175,7 +175,7 @@ const RepairTable = (roleUser) => {
                 <Typography variant="h4" component="h1">
                     <BuildIcon/> งานซ่อม
                 </Typography>
-                {roleUser.roleUser.role === "admin" ? (
+                {roleUser.roleUser.role !== "user"  ? (
                     <Button
                         sx={{
                             bgcolor: "secondary.light",
