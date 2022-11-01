@@ -131,7 +131,7 @@ const InputUploadImage = (props) => {
                                 disabled={
                                     imagesList.length === 3 ||
                                     !onEdit ||
-                                    (currentUser.data.role !== "admin" &&
+                                    (currentUser.data.role === "user" &&
                                         activeUpload === "all")
                                 }
                             >

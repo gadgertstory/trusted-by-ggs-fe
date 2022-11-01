@@ -208,7 +208,7 @@ const RepairDetail = (roleUser) => {
     ]);
 
     const onSubmit = (data) => {
-        if (currentUser.data.role === "admin") {
+        if (currentUser.data.role !== "user") {
             if (!notifiedDate) {
                 setNotifiedDateError("กรุณากรอกวันที่แจ้งเรื่อง");
                 setReceivedDate(null);
