@@ -18,6 +18,7 @@ import {
 
 import MenuIcon from "@mui/icons-material/Menu";
 import ConstructionIcon from "@mui/icons-material/Construction";
+import TrustedByGGSLogo from "../../assets/Logo/Trusted-by-GGS.png";
 
 import EventBus from "../../common/EventBus";
 import { logout } from "../../services/actions/auth";
@@ -31,6 +32,10 @@ const pagesList = [
     {
         pathname: "/repair?status_no=0&customer_name=",
         name: "งานซ่อม",
+    },
+    {
+        pathname: "/warranty",
+        name: "การรับประกัน",
     },
 ];
 
@@ -158,9 +163,15 @@ const ResponsiveAppBar = () => {
         <AppBar position="static">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <ConstructionIcon
+                    {/* <ConstructionIcon
                         sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                    />
+                    /> */}
+                    <Box
+                        component="img"
+                        sx={{ width: 50, my: 2 ,mr:2}}
+                        src={TrustedByGGSLogo}
+                        alt={TrustedByGGSLogo}
+                    ></Box>
                     <Typography
                         variant="h6"
                         noWrap
@@ -177,7 +188,7 @@ const ResponsiveAppBar = () => {
                             cursor: "pointer",
                         }}
                     >
-                        Repair System
+                        Trust By GGS
                     </Typography>
                     <Box
                         sx={{
@@ -216,7 +227,7 @@ const ResponsiveAppBar = () => {
                             whiteSpace: "pre-wrap",
                         }}
                     >
-                        Repair System
+                        Trust By GGS
                     </Typography>
                     <Box
                         sx={{
@@ -284,7 +295,7 @@ const ResponsiveAppBar = () => {
                             whiteSpace: "pre-wrap",
                         }}
                     >
-                        Repair System
+                        Trust By GGS
                     </Typography>
                     <Box
                         sx={{

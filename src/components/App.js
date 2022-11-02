@@ -26,6 +26,7 @@ const Header = lazy(() => import("./Header"));
 const Dashboard = lazy(() => import("../pages/Dashboard"));
 const Profile = lazy(() => import("../pages/Profile"));
 const Repair = lazy(() => import("../pages/Repair"));
+const Warranty = lazy(() => import("../pages/Warranty"));
 const LogIn = lazy(() => import("../pages/Login"));
 const Permission = lazy(() => import("../pages/ManagePermission"));
 const ForgotPassword = lazy(() => import("../pages/ForgotPassword"));
@@ -59,6 +60,10 @@ const App = () => {
         {
             pathname: `/repair/*`,
             element: <Repair />,
+        },
+        {
+            pathname: `/warranty`,
+            element: <Warranty />,
         },
         {
             pathname: `/register`,
