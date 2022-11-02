@@ -188,7 +188,7 @@ const ResponsiveAppBar = () => {
                             cursor: "pointer",
                         }}
                     >
-                        Trust By GGS
+                        Trusted By GGS
                     </Typography>
                     <Box
                         sx={{
@@ -227,7 +227,7 @@ const ResponsiveAppBar = () => {
                             whiteSpace: "pre-wrap",
                         }}
                     >
-                        Trust By GGS
+                        Trusted By GGS
                     </Typography>
                     <Box
                         sx={{
@@ -295,7 +295,7 @@ const ResponsiveAppBar = () => {
                             whiteSpace: "pre-wrap",
                         }}
                     >
-                        Trust By GGS
+                        Trusted By GGS
                     </Typography>
                     <Box
                         sx={{
