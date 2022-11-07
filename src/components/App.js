@@ -30,8 +30,8 @@ const Warranty = lazy(() => import("../pages/Warranty"));
 const WarrantyCheck = lazy(() =>
     import("../pages/Warranty/pages/WarrantyCheck")
 );
-const WarrantyDetails = lazy(() =>
-    import("../pages/Warranty/pages/WarrantyDetails")
+const WarrantyCheckDetail = lazy(() =>
+    import("../pages/Warranty/pages/WarrantyCheckDetail")
 );
 const LogIn = lazy(() => import("../pages/Login"));
 const Permission = lazy(() => import("../pages/ManagePermission"));
@@ -115,8 +115,8 @@ const App = () => {
                             />
                             <Route
                                 exact
-                                path={`/warranty-details`}
-                                element={<WarrantyDetails />}
+                                path={`/warranty-check-detail`}
+                                element={<WarrantyCheckDetail />}
                             />
                             <Route
                                 exact
