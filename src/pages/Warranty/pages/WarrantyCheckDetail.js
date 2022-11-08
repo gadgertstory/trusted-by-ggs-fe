@@ -17,7 +17,7 @@ import Logo from "../../../assets/Logo/Trusted-by-GGS.png";
 import CustomizedTimeline from "../../../components/Timeline";
 import { formatPhoneNumber } from "../../../utils/FormatPhoneNumber";
 
-const WarrantyDetails = () => {
+const WarrantyCheckDetail = () => {
     const id = useParams();
     const [dataRepair, setDataRepair] = useState({});
 
@@ -118,4 +118,4 @@ const WarrantyDetails = () => {
     );
 };
 
-export default WarrantyDetails;
+export default WarrantyCheckDetail;
