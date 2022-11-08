@@ -9,28 +9,13 @@ import Input from "../../../components/Input";
 import SelectMenu from "../../../components/SelectMenu";
 
 const HeaderTable = (props) => {
-    const { statusList = [] } = useSelector((state) => state.status);
-    const { status, onChangeStatus, onSearch, keyword, onChangeKeyword, roleUser, handleOpenDialog } =
+    const { onSearch, keyword, onChangeKeyword, handleOpenDialog } =
         props;
-
-    const statusDropdown = [
-        { status_id: 0, status_name: "ทั้งหมด" },
-        ...statusList,
-    ];
 
     return (
         <Grid container direction={'row'} justifyContent={'space-between'}>
             <Grid item xs={8} sx={{ my: 2 }}>
                 <Grid container spacing={2}>
-                    {/* <Grid item xs={12} md={3}>
-                        <SelectMenu
-                            list={statusDropdown}
-                            value={status}
-                            label="สถานะการซ่อม"
-                            fullWidth
-                            onChange={onChangeStatus}
-                        />
-                    </Grid> */}
                     <Grid item xs={12} md={3}>
                         <Input
                             onChange={onChangeKeyword}

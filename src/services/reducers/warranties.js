@@ -5,7 +5,6 @@ import {
 
 const initialState = {
     dataAllWarranty: [],
-    dataSearchWarranty: [],
     isLoading: false,
 };
 

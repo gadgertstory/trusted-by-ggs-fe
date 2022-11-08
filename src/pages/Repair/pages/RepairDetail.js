@@ -450,7 +450,7 @@ const RepairDetail = (roleUser) => {
                         >
                             <Feed fontSize="large" />
                             <Typography variant="h4" component="h2">
-                                รับซ่อม
+                                เพิ่มใบแจ้งซ่อม
                             </Typography>
                         </Grid>
                     </Grid>

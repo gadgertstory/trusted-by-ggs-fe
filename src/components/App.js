@@ -68,7 +68,7 @@ const App = () => {
             element: <Repair />,
         },
         {
-            pathname: `/warranty`,
+            pathname: `/warranty/*`,
             element: <Warranty />,
         },
         {

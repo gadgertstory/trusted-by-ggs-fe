@@ -7,10 +7,9 @@ import MaterialTable from "material-table";
 import { history } from "../../../helpers/history";
 import { Button, Stack, Typography, Box, Link } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
+import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 
-import { RepairRequestSearch } from "../../../services/actions/repairs";
-import { getAllStatus } from "../../../services/actions/status";
+import { warrantyRequestSearch } from "../../../services/actions/warranties";
 import HeaderTable from "../components/HeaderTable";
 import BadgeStatus from "../../../components/Badge";
 
@@ -30,7 +29,7 @@ import ExportExcel from "../../../utils/ExportExcel";
 const WarrantyTable = (roleUser) => {
     const dispatch = useDispatch();
     const { control } = useForm();
-    const { dataAllRepair = [] } = useSelector((state) => state.repairs);
+    const { dataAllWarranty = [] } = useSelector((state) => state.warranties);
 
     const { search } = useLocation();
     const [status, setStatus] = useState(0);
@@ -41,7 +40,7 @@ const WarrantyTable = (roleUser) => {
     const [newValue, setNewValue] = useState([null, null]);
 
     useEffect(() => {
-        dispatch(getAllStatus());
+        handleSearch();
     }, [dispatch]);
 
     const useQuery = () => {
@@ -50,24 +49,20 @@ const WarrantyTable = (roleUser) => {
 
     const query = useQuery();
 
-    useEffect(() => {
-        // handleSearchByDashboard();
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
     const selectRow = (selectRow) => {
-        const id = selectRow.repair_id;
+        const id = selectRow.warranty_id;
 
-        history.push(`/repair/${id}`);
+        history.push(`/warranty/${id}`);
         window.location.reload();
     };
 
     const selectNewtab = (rowData) => {
-        const id = rowData.repair_id;
-        window.open(`/repair/${id}`, "_blank");
+        const id = rowData.warranty_id;
+        window.open(`/warranty/${id}`, "_blank");
     };
 
-    const handleCreateRepair = () => {
-        history.push("/repair/new");
+    const handleCreateWarranty = () => {
+        history.push("/warranty/new");
         window.location.reload();
     };
 
@@ -79,28 +74,14 @@ const WarrantyTable = (roleUser) => {
         setKeyword(e.target.value);
     };
 
-    const handleSearchByDashboard = useCallback(
-        (isClear) => {
-            const _keyword = isClear ? "" : keyword;
-            setStatus(query.get("status_no"));
-            const queryParams = `?status_no=${query.get(
-                "status_no"
-            )}&customer_name=${_keyword}`;
-            history.push(queryParams);
-            dispatch(RepairRequestSearch(queryParams));
-        },
-        [keyword, dispatch, query]
-    );
-
     const handleSearch = useCallback(
         (isClear) => {
             const _keyword = isClear ? "" : keyword;
-
-            const queryParams = `?status_no=${status}&customer_name=${_keyword}`;
+            const queryParams = `?serial_number=${_keyword}`;
             history.push(queryParams);
-            dispatch(RepairRequestSearch(queryParams));
+            dispatch(warrantyRequestSearch(queryParams));
         },
-        [keyword, status, dispatch]
+        [keyword, dispatch, query]
     );
 
     const Logo = (brandName) => {
@@ -186,7 +167,7 @@ const WarrantyTable = (roleUser) => {
                         }}
                         variant="contained"
                         startIcon={<AddCircleOutlineIcon />}
-                        onClick={handleCreateRepair}
+                        onClick={handleCreateWarranty}
                     >
                         เพิ่มข้อมูลการรับประกัน
                     </Button>
@@ -226,32 +207,35 @@ const WarrantyTable = (roleUser) => {
                         ),
                     },
                     {
-                        title: "เลขที่ใบแจ้งซ่อม",
-                        field: "repair_no",
+                        title: "ชื่อ - นามสกุล",
                         render: (rowData) => (
                             <Link
                                 href="#"
                                 onClick={() => selectNewtab(rowData)}
                             >
-                                {rowData.repair_no}
+                                <Box
+                                    sx={{
+                                        textOverflow: "ellipsis",
+                                        whiteSpace: "nowrap",
+                                        overflow: "hidden",
+                                        maxWidth: 150,
+                                    }}
+                                >
+                                    {rowData.customer_firstname}{" "}
+                                    {rowData.customer_lastname}
+                                </Box>
                             </Link>
                         ),
                     },
                     {
-                        title: "ชื่อ - นามสกุล",
-                        render: (rowData) => (
-                            <Box
-                                sx={{
-                                    textOverflow: "ellipsis",
-                                    whiteSpace: "nowrap",
-                                    overflow: "hidden",
-                                    maxWidth: 150,
-                                }}
-                            >
-                                {rowData.customer_firstname}{" "}
-                                {rowData.customer_lastname}
-                            </Box>
-                        ),
+                        title: "เบอร์โทรศัพท์",
+                        field: "customer_tel",
+                        render: (rowData) => <>{rowData.customer_tel}</>,
+                    },
+                    {
+                        title: "อีเมล",
+                        field: "customer_email",
+                        render: (rowData) => <>{rowData.customer_email}</>,
                     },
                     {
                         title: "Brand",
@@ -264,78 +248,28 @@ const WarrantyTable = (roleUser) => {
                                     maxWidth: 150,
                                 }}
                             >
-                                {Logo(rowData.brand_name)}
+                                {Logo(rowData.brand.brand_name)}
                             </Box>
                         ),
                     },
                     {
-                        title: "วันที่แจ้งเรื่อง",
-                        render: (rowData) => (
-                            <Box
-                                sx={{
-                                    textOverflow: "ellipsis",
-                                    whiteSpace: "nowrap",
-                                    overflow: "hidden",
-                                    maxWidth: 100,
-                                }}
-                            >
-                                {rowData.notified_date
-                                    ?.split("-")
-                                    .reverse()
-                                    .join("/")}
-                            </Box>
-                        ),
-                    },
-                    {
-                        title: "วันที่รับซ่อม",
-                        render: (rowData) => (
-                            <Box
-                                sx={{
-                                    textOverflow: "ellipsis",
-                                    whiteSpace: "nowrap",
-                                    overflow: "hidden",
-                                    maxWidth: 100,
-                                }}
-                            >
-                                {rowData.received_date
-                                    ?.split("-")
-                                    .reverse()
-                                    .join("/")}
-                            </Box>
-                        ),
-                    },
-                    {
-                        title: "วันที่นัดรับ",
-                        render: (rowData) => (
-                            <Box
-                                sx={{
-                                    textOverflow: "ellipsis",
-                                    whiteSpace: "nowrap",
-                                    overflow: "hidden",
-                                    maxWidth: 100,
-                                }}
-                            >
-                                {rowData.return_date
-                                    ?.split("-")
-                                    .reverse()
-                                    .join("/")}
-                            </Box>
-                        ),
-                    },
-                    {
-                        title: "สถานะการซ่อม",
+                        title: "ชื่ออุปกรณ์",
                         align: "center",
                         cellStyle: {
                             textAlign: "center",
                         },
-                        render: (rowData) => (
-                            <BadgeStatus
-                                badgeContent={rowData.status_name}
-                            ></BadgeStatus>
-                        ),
+                        render: (rowData) => <>{rowData.product_name}</>,
+                    },
+                    {
+                        title: "Serial Number",
+                        align: "center",
+                        cellStyle: {
+                            textAlign: "center",
+                        },
+                        render: (rowData) => <>{rowData.product_serial_no}</>,
                     },
                 ]}
-                data={dataAllRepair}
+                data={dataAllWarranty}
                 actions={[
                     {
                         title: " ",
