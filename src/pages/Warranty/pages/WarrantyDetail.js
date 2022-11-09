@@ -21,10 +21,13 @@ import {
     Skeleton,
     InputLabel,
     Select,
+    TextField,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { MoreVert, VerifiedUser } from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
+import { LocalizationProvider, DesktopDatePicker } from "@mui/x-date-pickers";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
 
 import Input from "../../../components/Input";
 import ConfirmDialog from "../../../components/Dialog/ConfirmDialog";
@@ -33,13 +36,13 @@ import { history } from "../../../helpers/history";
 import {
     createWarranty,
     deleteWarranty,
-    getWarrantyBySerialNumber,
+    getWarrantyById,
     updateWarranty,
 } from "../../../services/actions/warranty";
 import { getAllBrand } from "../../../services/actions/brand";
 import { getProfile } from "../../../services/actions/profile";
-
 import { options } from "../../../dataMock/master";
+import { convertISOtoGMT } from "../../../utils/ConvertDate";
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -74,15 +77,19 @@ const WarrantyDetail = (props) => {
     const [placement, setPlacement] = React.useState();
     const [anchorEl, setAnchorEl] = React.useState(null);
 
+    //DateInput
+    const [startWarrantyDate, setStartWarrantyDate] = useState(null);
+    const [startWarrantyDateError, setStartWarrantyDateError] = useState("");
+
     useEffect(() => {
         if (id !== "new") {
-            dispatch(getWarrantyBySerialNumber(id));
+            dispatch(getWarrantyById(id));
         } else {
             setOnEdit(!onEdit);
         }
         dispatch(getAllBrand());
         dispatch(getProfile());
-    }, [dispatch, id]);
+    }, [dispatch,id]);
 
     useEffect(() => {
         if (dataWarranty) {
@@ -96,17 +103,29 @@ const WarrantyDetail = (props) => {
             setValue("product_name", dataWarranty.product_name || "");
             setValue("product_serial_no", dataWarranty.product_serial_no || "");
             setValue("brand_id", dataWarranty.brand?.brand_id || "");
+            if (dataWarranty.start_warranty_date) {
+                setStartWarrantyDate(
+                    convertISOtoGMT(dataWarranty.start_warranty_date)
+                );
+            }
         }
     }, [dataWarranty, setValue]);
 
     const onSubmit = (data) => {
-        if (!error) {
-            setLoading(true);
-        }
         const newData = {};
-        const userId = { user_id: profile.user_id };
-        Object.assign(newData, data, userId);
+        const _data = {
+            user_id: profile.user_id,
+            start_warranty_date: startWarrantyDate,
+        };
+        Object.assign(newData, data, _data);
 
+        if (!startWarrantyDate) {
+            setStartWarrantyDateError("กรุณากรอกวันที่เริ่มต้นรับประกัน");
+            return;
+        }
+        // if (!error) {
+        //     setLoading(true);
+        // }
         if (id === "new") {
             dispatch(createWarranty(newData));
         } else {
@@ -143,6 +162,17 @@ const WarrantyDetail = (props) => {
             setLoading(true);
         }
         dispatch(deleteWarranty(id));
+    };
+
+    const handleStartWarrantyDateChange = (startWarrantyDate) => {
+        setStartWarrantyDate(startWarrantyDate?.toISOString().split("T")[0]);
+        setStartWarrantyDateError("");
+    };
+
+    const handleDateChange = (e) => {
+        if (e) {
+            e.preventDefault();
+        }
     };
 
     return (
@@ -282,258 +312,326 @@ const WarrantyDetail = (props) => {
                     </Grid>
                 )}
             </Grid>
-            <Paper
-                sx={{
-                    p: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    mb: 3,
-                }}
-            >
-                <h2>รายละเอียดลูกค้า</h2>
-                <Grid container spacing={2}>
-                    <Grid item xs={12} md={6}>
-                        <Controller
-                            name="customer_firstname"
-                            control={control}
-                            defaultValue=""
-                            render={({
-                                field: { onChange, value },
-                                fieldState: { error },
-                            }) => (
-                                <Input
-                                    disabled={!onEdit}
-                                    required={true}
-                                    fullWidth
-                                    label="ชื่อ"
-                                    value={value}
-                                    onChange={onChange}
-                                    error={!!error}
-                                    helperText={error ? error.message : null}
-                                    inputProps={{
-                                        maxLength: 150,
+            {loading ? (
+                <Stack spacing={1}>
+                    <Skeleton variant="text" height={40} width={200} />
+                    <Skeleton
+                        variant="rectangular"
+                        width={"100%"}
+                        height={200}
+                    />
+                    <Skeleton variant="text" height={40} width={200} />
+                    <Skeleton
+                        variant="rectangular"
+                        width={"100%"}
+                        height={100}
+                    />
+                </Stack>
+            ) : (
+                <>
+                    <Paper
+                        sx={{
+                            p: 2,
+                            display: "flex",
+                            flexDirection: "column",
+                            mb: 3,
+                        }}
+                    >
+                        <h2>รายละเอียดลูกค้า</h2>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} md={6}>
+                                <Controller
+                                    name="customer_firstname"
+                                    control={control}
+                                    defaultValue=""
+                                    render={({
+                                        field: { onChange, value },
+                                        fieldState: { error },
+                                    }) => (
+                                        <Input
+                                            disabled={!onEdit}
+                                            required={true}
+                                            fullWidth
+                                            label="ชื่อ"
+                                            value={value}
+                                            onChange={onChange}
+                                            error={!!error}
+                                            helperText={
+                                                error ? error.message : null
+                                            }
+                                            inputProps={{
+                                                maxLength: 150,
+                                            }}
+                                        />
+                                    )}
+                                    rules={{ required: "กรุณากรอกชื่อ" }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <Controller
+                                    name="customer_lastname"
+                                    control={control}
+                                    defaultValue=""
+                                    render={({
+                                        field: { onChange, value },
+                                        fieldState: { error },
+                                    }) => (
+                                        <Input
+                                            disabled={!onEdit}
+                                            required={true}
+                                            fullWidth
+                                            label="นามสกุล"
+                                            value={value}
+                                            onChange={onChange}
+                                            error={!!error}
+                                            helperText={
+                                                error ? error.message : null
+                                            }
+                                            inputProps={{
+                                                maxLength: 150,
+                                            }}
+                                        />
+                                    )}
+                                    rules={{ required: "กรุณากรอกนามสกุล" }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <Controller
+                                    name="customer_tel"
+                                    control={control}
+                                    defaultValue=""
+                                    render={({
+                                        field: { onChange, value },
+                                        fieldState: { error },
+                                    }) => (
+                                        <Input
+                                            disabled={!onEdit}
+                                            required={true}
+                                            fullWidth
+                                            label="เบอร์โทรศัพท์"
+                                            value={value}
+                                            onChange={onChange}
+                                            error={!!error}
+                                            type="string"
+                                            inputProps={{
+                                                maxLength: 10,
+                                            }}
+                                            helperText={
+                                                error ? error.message : null
+                                            }
+                                        />
+                                    )}
+                                    rules={{
+                                        required: "กรุณากรอกเบอร์โทรศัพท์",
+                                        pattern: {
+                                            value: /^[0-9]+$/,
+                                            message: "กรุณาใส่ตัวเลขเท่านั้น",
+                                        },
                                     }}
                                 />
-                            )}
-                            rules={{ required: "กรุณากรอกชื่อ" }}
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                        <Controller
-                            name="customer_lastname"
-                            control={control}
-                            defaultValue=""
-                            render={({
-                                field: { onChange, value },
-                                fieldState: { error },
-                            }) => (
-                                <Input
-                                    disabled={!onEdit}
-                                    required={true}
-                                    fullWidth
-                                    label="นามสกุล"
-                                    value={value}
-                                    onChange={onChange}
-                                    error={!!error}
-                                    helperText={error ? error.message : null}
-                                    inputProps={{
-                                        maxLength: 150,
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <Controller
+                                    name="customer_email"
+                                    control={control}
+                                    defaultValue=""
+                                    render={({
+                                        field: { onChange, value },
+                                        fieldState: { error },
+                                    }) => (
+                                        <Input
+                                            disabled={!onEdit}
+                                            required={true}
+                                            fullWidth
+                                            label="อีเมล"
+                                            value={value}
+                                            onChange={onChange}
+                                            error={!!error}
+                                            helperText={
+                                                error ? error.message : null
+                                            }
+                                            inputProps={{
+                                                maxLength: 100,
+                                            }}
+                                        />
+                                    )}
+                                    rules={{
+                                        required: "กรุณากรอกเบอร์โทรศัพท์",
+                                        pattern: {
+                                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                            message: "รูปแบบอีเมลไม่ถูกต้อง",
+                                        },
                                     }}
                                 />
-                            )}
-                            rules={{ required: "กรุณากรอกนามสกุล" }}
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                        <Controller
-                            name="customer_tel"
-                            control={control}
-                            defaultValue=""
-                            render={({
-                                field: { onChange, value },
-                                fieldState: { error },
-                            }) => (
-                                <Input
-                                    disabled={!onEdit}
-                                    required={true}
-                                    fullWidth
-                                    label="เบอร์โทรศัพท์"
-                                    value={value}
-                                    onChange={onChange}
-                                    error={!!error}
-                                    type="string"
-                                    inputProps={{
-                                        maxLength: 10,
-                                    }}
-                                    helperText={error ? error.message : null}
+                            </Grid>
+                        </Grid>
+                    </Paper>
+                    <Paper
+                        sx={{
+                            p: 2,
+                            display: "flex",
+                            flexDirection: "column",
+                            mb: 3,
+                        }}
+                    >
+                        <h2>รายละเอียดอุปกรณ์</h2>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} md={6}>
+                                <Controller
+                                    name="product_name"
+                                    control={control}
+                                    defaultValue=""
+                                    render={({
+                                        field: { onChange, value },
+                                        fieldState: { error },
+                                    }) => (
+                                        <Input
+                                            disabled={!onEdit}
+                                            required={true}
+                                            fullWidth
+                                            label="ชื่ออุปกรณ์"
+                                            value={value}
+                                            onChange={onChange}
+                                            error={!!error}
+                                            helperText={
+                                                error ? error.message : null
+                                            }
+                                            inputProps={{
+                                                maxLength: 150,
+                                            }}
+                                        />
+                                    )}
+                                    rules={{ required: "กรุณากรอกชื่ออุปกรณ์" }}
                                 />
-                            )}
-                            rules={{
-                                required: "กรุณากรอกเบอร์โทรศัพท์",
-                                pattern: {
-                                    value: /^[0-9]+$/,
-                                    message: "กรุณาใส่ตัวเลขเท่านั้น",
-                                },
-                            }}
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                        <Controller
-                            name="customer_email"
-                            control={control}
-                            defaultValue=""
-                            render={({
-                                field: { onChange, value },
-                                fieldState: { error },
-                            }) => (
-                                <Input
-                                    disabled={!onEdit}
-                                    required={true}
-                                    fullWidth
-                                    label="อีเมล"
-                                    value={value}
-                                    onChange={onChange}
-                                    error={!!error}
-                                    helperText={error ? error.message : null}
-                                    inputProps={{
-                                        maxLength: 100,
-                                    }}
-                                />
-                            )}
-                            rules={{
-                                required: "กรุณากรอกเบอร์โทรศัพท์",
-                                pattern: {
-                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                    message: "รูปแบบอีเมลไม่ถูกต้อง",
-                                },
-                            }}
-                        />
-                    </Grid>
-                </Grid>
-            </Paper>
-            <Paper
-                sx={{
-                    p: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    mb: 3,
-                }}
-            >
-                <h2>รายละเอียดอุปกรณ์</h2>
-                <Grid container spacing={2}>
-                    <Grid item xs={12} md={4}>
-                        <Controller
-                            name="product_name"
-                            control={control}
-                            defaultValue=""
-                            render={({
-                                field: { onChange, value },
-                                fieldState: { error },
-                            }) => (
-                                <Input
-                                    disabled={!onEdit}
-                                    required={true}
-                                    fullWidth
-                                    label="ชื่ออุปกรณ์"
-                                    value={value}
-                                    onChange={onChange}
-                                    error={!!error}
-                                    helperText={error ? error.message : null}
-                                    inputProps={{
-                                        maxLength: 150,
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <Controller
+                                    name="product_serial_no"
+                                    control={control}
+                                    defaultValue=""
+                                    render={({
+                                        field: { onChange, value },
+                                        fieldState: { error },
+                                    }) => (
+                                        <Input
+                                            disabled={!onEdit}
+                                            required={true}
+                                            fullWidth
+                                            label="หมายเลขเครื่อง/Serial Number"
+                                            value={value}
+                                            onChange={onChange}
+                                            error={!!error}
+                                            helperText={
+                                                error ? error.message : null
+                                            }
+                                            inputProps={{
+                                                maxLength: 150,
+                                            }}
+                                        />
+                                    )}
+                                    rules={{
+                                        required:
+                                            "กรุณากรอก หมายเลขเครื่อง/Serial Number",
+                                        pattern: {
+                                            value: /^[A-Z0-9a-z-]+$/i,
+                                            message:
+                                                "รูปแบบ หมายเลขเครื่อง/Serial Number ไม่ถูกต้อง",
+                                        },
                                     }}
                                 />
-                            )}
-                            rules={{ required: "กรุณากรอกชื่ออุปกรณ์" }}
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                        <Controller
-                            name="product_serial_no"
-                            control={control}
-                            defaultValue=""
-                            render={({
-                                field: { onChange, value },
-                                fieldState: { error },
-                            }) => (
-                                <Input
-                                    disabled={!onEdit}
-                                    required={true}
-                                    fullWidth
-                                    label="หมายเลขเครื่อง/Serial Number"
-                                    value={value}
-                                    onChange={onChange}
-                                    error={!!error}
-                                    helperText={error ? error.message : null}
-                                    inputProps={{
-                                        maxLength: 150,
-                                    }}
-                                />
-                            )}
-                            rules={{
-                              required: "กรุณากรอก หมายเลขเครื่อง/Serial Number",
-                              pattern: {
-                                  value: /^[A-Z0-9a-z-]+$/i,
-                                  message: "รูปแบบ หมายเลขเครื่อง/Serial Number ไม่ถูกต้อง",
-                              },
-                          }}
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                        <Controller
-                            name="brand_id"
-                            required
-                            control={control}
-                            defaultValue=""
-                            render={({
-                                field: { onChange, value },
-                                fieldState: { error },
-                            }) => (
-                                <FormControl
-                                    disabled={!onEdit}
-                                    fullWidth
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <Controller
+                                    name="brand_id"
                                     required
-                                    error={!!error}
-                                    className={classes.formControl}
+                                    control={control}
+                                    defaultValue=""
+                                    render={({
+                                        field: { onChange, value },
+                                        fieldState: { error },
+                                    }) => (
+                                        <FormControl
+                                            disabled={!onEdit}
+                                            fullWidth
+                                            required
+                                            error={!!error}
+                                            className={classes.formControl}
+                                        >
+                                            <InputLabel id="demo-simple-select-required-label">
+                                                Brand
+                                            </InputLabel>
+                                            <Select
+                                                size="small"
+                                                value={value}
+                                                label="Brand"
+                                                onChange={onChange}
+                                                error={!!error}
+                                                MenuProps={{
+                                                    classes: {
+                                                        paper: classes.menuPaper,
+                                                    },
+                                                }}
+                                            >
+                                                {brandList?.map((item) => {
+                                                    return (
+                                                        <MenuItem
+                                                            key={
+                                                                item.brand_code
+                                                            }
+                                                            value={
+                                                                item.brand_id
+                                                            }
+                                                        >
+                                                            {item.brand_name}
+                                                        </MenuItem>
+                                                    );
+                                                })}
+                                            </Select>
+                                            <FormHelperText error>
+                                                {error ? error.message : null}
+                                            </FormHelperText>
+                                        </FormControl>
+                                    )}
+                                    rules={{
+                                        required: "กรุณาเลือก Brand",
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <LocalizationProvider
+                                    dateAdapter={AdapterDateFns}
                                 >
-                                    <InputLabel id="demo-simple-select-required-label">
-                                        Brand
-                                    </InputLabel>
-                                    <Select
-                                        size="small"
-                                        value={value}
-                                        label="Brand"
-                                        onChange={onChange}
-                                        error={!!error}
-                                        MenuProps={{
-                                            classes: {
-                                                paper: classes.menuPaper,
-                                            },
-                                        }}
-                                    >
-                                        {brandList?.map((item) => {
-                                            return (
-                                                <MenuItem
-                                                    key={item.brand_code}
-                                                    value={item.brand_id}
-                                                >
-                                                    {item.brand_name}
-                                                </MenuItem>
-                                            );
-                                        })}
-                                    </Select>
-                                    <FormHelperText error>
-                                        {error ? error.message : null}
-                                    </FormHelperText>
-                                </FormControl>
-                            )}
-                            rules={{
-                                required: "กรุณาเลือก Brand",
-                            }}
-                        />
-                    </Grid>
-                </Grid>
-            </Paper>
+                                    <DesktopDatePicker
+                                        label="วันที่เริ่มต้นรับประกัน"
+                                        inputFormat="dd/MM/yyyy"
+                                        value={startWarrantyDate}
+                                        onChange={handleStartWarrantyDateChange}
+                                        disabled={!onEdit}
+                                        renderInput={(params) => (
+                                            <TextField
+                                                onKeyDown={handleDateChange}
+                                                fullWidth
+                                                size="small"
+                                                {...params}
+                                            />
+                                        )}
+                                    />
+                                </LocalizationProvider>
+                                {startWarrantyDateError ? (
+                                    <FormControl>
+                                        <FormHelperText error>
+                                            {startWarrantyDateError}
+                                        </FormHelperText>
+                                    </FormControl>
+                                ) : (
+                                    ""
+                                )}
+                            </Grid>
+                        </Grid>
+                    </Paper>
+                </>
+            )}
+
             {onEdit ? (
                 <Stack
                     direction="row"
@@ -551,9 +649,10 @@ const WarrantyDetail = (props) => {
                         }}
                         variant="contained"
                         onClick={() => {
-                            history.push("/warranty?serial_number=");
+                            history.push("/warranty?sn=");
                             window.location.reload();
                         }}
+                        disabled={loading}
                     >
                         Cancel
                     </Button>

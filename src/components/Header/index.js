@@ -17,7 +17,6 @@ import {
 } from "@mui/material";
 
 import MenuIcon from "@mui/icons-material/Menu";
-import ConstructionIcon from "@mui/icons-material/Construction";
 import TrustedByGGSLogo from "../../assets/Logo/Trusted-by-GGS.png";
 
 import EventBus from "../../common/EventBus";

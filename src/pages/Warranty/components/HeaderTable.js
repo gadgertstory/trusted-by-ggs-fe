@@ -1,15 +1,15 @@
 import React from "react";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 
 import { Grid, Button } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
+// import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 import Input from "../../../components/Input";
-import SelectMenu from "../../../components/SelectMenu";
+// import SelectMenu from "../../../components/SelectMenu";
 
 const HeaderTable = (props) => {
-    const { onSearch, keyword, onChangeKeyword, handleOpenDialog } =
+    const { onSearch, keyword, onChangeKeyword } =
         props;
 
     return (

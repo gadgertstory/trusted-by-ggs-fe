@@ -26,7 +26,7 @@ export const createWarranty = (data) => async (dispatch) => {
                 actionHandler({
                     successMessage: "สร้างข้อมูลการรับประกันสำเร็จ",
                 }),
-                history.push("/warranty?serial_number="),
+                history.push("/warranty?sn="),
                 setTimeout(function () {
                     window.location.reload();
                 }, 1000 * 1.5)
@@ -116,7 +116,7 @@ export const deleteWarranty = (id) => async (dispatch) => {
                 actionHandler({
                     successMessage: "ลบข้อมูลการรับประกันสำเร็จ",
                 }),
-                history.push("/warranty?serial_number="),
+                history.push("/warranty?sn="),
                 setTimeout(function () {
                     window.location.reload();
                 }, 1000 * 1.5)
@@ -148,8 +148,8 @@ export const deleteWarranty = (id) => async (dispatch) => {
         });
 };
 
-export const getWarrantyBySerialNumber = (serialNumber) => async (dispatch) => {
-    await Warranty.getWarrantyBySerialNumber(serialNumber)
+export const getWarrantyById = (id) => async (dispatch) => {
+    await Warranty.getWarrantyById(id)
         .then((response) => {
             return response.data;
         })

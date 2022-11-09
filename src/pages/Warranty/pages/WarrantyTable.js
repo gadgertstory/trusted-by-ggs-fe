@@ -19,11 +19,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import LoadingButton from "@mui/lab/LoadingButton";
 
-import TextField from "@mui/material/TextField";
-import { LocalizationProvider } from "@mui/x-date-pickers-pro";
-import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
-import { AdapterDateFns } from "@mui/x-date-pickers-pro/AdapterDateFns";
-import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import ExportExcel from "../../../utils/ExportExcel";
 
 const WarrantyTable = (roleUser) => {
@@ -77,11 +72,11 @@ const WarrantyTable = (roleUser) => {
     const handleSearch = useCallback(
         (isClear) => {
             const _keyword = isClear ? "" : keyword;
-            const queryParams = `?serial_number=${_keyword}`;
+            const queryParams = `?sn=${_keyword}`;
             history.push(queryParams);
             dispatch(warrantyRequestSearch(queryParams));
         },
-        [keyword, dispatch, query]
+        [keyword, dispatch]
     );
 
     const Logo = (brandName) => {

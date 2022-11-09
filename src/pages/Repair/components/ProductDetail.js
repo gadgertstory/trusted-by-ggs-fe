@@ -75,7 +75,7 @@ const ProductDetail = (props) => {
         onSelectAfterRepair(afterRepair);
     }, [betweenRepair, beforeRepair, afterCustomer]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const handleDateChangeRaw = (e) => {
+    const handleDateChange = (e) => {
         if (e) {
             e.preventDefault();
         }
@@ -321,7 +321,7 @@ const ProductDetail = (props) => {
                             disabled={!onEdit}
                             renderInput={(params) => (
                                 <TextField
-                                    onKeyDown={handleDateChangeRaw}
+                                    onKeyDown={handleDateChange}
                                     fullWidth
                                     size="small"
                                     {...params}
@@ -341,7 +341,7 @@ const ProductDetail = (props) => {
                             disabled={!onEdit}
                             renderInput={(params) => (
                                 <TextField
-                                    onKeyDown={handleDateChangeRaw}
+                                    onKeyDown={handleDateChange}
                                     fullWidth
                                     size="small"
                                     {...params}
@@ -361,7 +361,7 @@ const ProductDetail = (props) => {
                             disabled={!onEdit}
                             renderInput={(params) => (
                                 <TextField
-                                    onKeyDown={handleDateChangeRaw}
+                                    onKeyDown={handleDateChange}
                                     fullWidth
                                     size="small"
                                     {...params}

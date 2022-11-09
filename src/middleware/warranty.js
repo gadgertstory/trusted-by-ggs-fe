@@ -35,7 +35,7 @@ const deleteWarranty = (id) => {
     });
 };
 
-const getWarrantyBySerialNumber = (serialNumber) => {
+const getWarrantyById = (serialNumber) => {
     return axios.get(`${API_URL}/warranty/${serialNumber}`, {
         headers: authHeader(),
     });
@@ -45,7 +45,7 @@ const exportedFunction = {
     createWarranty,
     updateWarranty,
     deleteWarranty,
-    getWarrantyBySerialNumber,
+    getWarrantyById,
     warrantyRequestSearch,
     // WarrantyRequestExport
 };
