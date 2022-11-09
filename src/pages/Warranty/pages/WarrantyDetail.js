@@ -63,7 +63,7 @@ const WarrantyDetail = (props) => {
     const { profile } = useSelector((state) => state.profile);
 
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
+    const [error] = useState("");
 
     //Dialog warning
     const [openConfirmRemoveRepair, setOpenConfirmRemoveRepair] =
@@ -89,7 +89,7 @@ const WarrantyDetail = (props) => {
         }
         dispatch(getAllBrand());
         dispatch(getProfile());
-    }, [dispatch,id]);
+    }, [dispatch, id]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         if (dataWarranty) {
@@ -123,9 +123,9 @@ const WarrantyDetail = (props) => {
             setStartWarrantyDateError("กรุณากรอกวันที่เริ่มต้นรับประกัน");
             return;
         }
-        // if (!error) {
-        //     setLoading(true);
-        // }
+        if (!error) {
+            setLoading(true);
+        }
         if (id === "new") {
             dispatch(createWarranty(newData));
         } else {

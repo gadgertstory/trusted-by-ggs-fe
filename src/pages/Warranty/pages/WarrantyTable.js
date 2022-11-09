@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import { useLocation } from "react-router-dom";
 
 import MaterialTable from "material-table";
 import { history } from "../../../helpers/history";
@@ -11,38 +10,30 @@ import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 
 import { warrantyRequestSearch } from "../../../services/actions/warranties";
 import HeaderTable from "../components/HeaderTable";
-import BadgeStatus from "../../../components/Badge";
 
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import LoadingButton from "@mui/lab/LoadingButton";
+// import Dialog from "@mui/material/Dialog";
+// import DialogActions from "@mui/material/DialogActions";
+// import DialogContent from "@mui/material/DialogContent";
+// import DialogContentText from "@mui/material/DialogContentText";
+// import LoadingButton from "@mui/lab/LoadingButton";
 
-import ExportExcel from "../../../utils/ExportExcel";
+// import ExportExcel from "../../../utils/ExportExcel";
 
 const WarrantyTable = (roleUser) => {
     const dispatch = useDispatch();
     const { control } = useForm();
     const { dataAllWarranty = [] } = useSelector((state) => state.warranties);
 
-    const { search } = useLocation();
     const [status, setStatus] = useState(0);
     const [keyword, setKeyword] = useState("");
-    const [openDialog, setOpenDialog] = useState(false);
 
-    const [value, setValue] = useState([null, null]);
-    const [newValue, setNewValue] = useState([null, null]);
+    // const [openDialog, setOpenDialog] = useState(false);
+    // const [value, setValue] = useState([null, null]);
+    // const [newValue, setNewValue] = useState([null, null]);
 
     useEffect(() => {
         handleSearch();
-    }, [dispatch]);
-
-    const useQuery = () => {
-        return React.useMemo(() => new URLSearchParams(search), []);
-    };
-
-    const query = useQuery();
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const selectRow = (selectRow) => {
         const id = selectRow.warranty_id;
@@ -117,29 +108,29 @@ const WarrantyTable = (roleUser) => {
         );
     };
 
-    const handleOpenDialog = () => {
-        setOpenDialog(true);
-    };
+    // const handleOpenDialog = () => {
+    //     setOpenDialog(true);
+    // };
 
-    const handleCloseDialog = () => {
-        setValue([null, null]);
-        setNewValue([null, null]);
-        setOpenDialog(false);
-    };
+    // const handleCloseDialog = () => {
+    //     setValue([null, null]);
+    //     setNewValue([null, null]);
+    //     setOpenDialog(false);
+    // };
 
-    const handleExport = (val) => {
-        ExportExcel(val);
-        handleSearch();
-        handleCloseDialog();
-        setNewValue([null, null]);
-        setValue([null, null]);
-    };
+    // const handleExport = (val) => {
+    //     ExportExcel(val);
+    //     handleSearch();
+    //     handleCloseDialog();
+    //     setNewValue([null, null]);
+    //     setValue([null, null]);
+    // };
 
-    const handleDateChangeRaw = (e) => {
-        if (e) {
-            e.preventDefault();
-        }
-    };
+    // const handleDateChange = (e) => {
+    //     if (e) {
+    //         e.preventDefault();
+    //     }
+    // };
 
     return (
         <>
@@ -178,7 +169,7 @@ const WarrantyTable = (roleUser) => {
                 keyword={keyword}
                 onChangeKeyword={handleChangeKeyword}
                 roleUser={roleUser}
-                handleOpenDialog={handleOpenDialog}
+                // handleOpenDialog={handleOpenDialog}
             />
 
             <MaterialTable
@@ -338,12 +329,12 @@ const WarrantyTable = (roleUser) => {
                                         <React.Fragment>
                                             <TextField
                                                 {...startProps}
-                                                onKeyDown={handleDateChangeRaw}
+                                                onKeyDown={handleDateChange}
                                             />
                                             <Box sx={{ mx: 2 }}> to </Box>
                                             <TextField
                                                 {...endProps}
-                                                onKeyDown={handleDateChangeRaw}
+                                                onKeyDown={handleDateChange}
                                             />
                                         </React.Fragment>
                                     )}

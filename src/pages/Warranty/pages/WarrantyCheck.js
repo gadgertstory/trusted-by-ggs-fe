@@ -39,6 +39,7 @@ const WarrantyCheck = () => {
     const { handleSubmit, register, formState } = useForm(formOptions);
     const { errors } = formState;
     const { dataAllWarranty = [] } = useSelector((state) => state.warranties);
+
     const [onSearch, setOnSearch] = useState(false);
     const [loading] = useState(false);
 
@@ -47,6 +48,29 @@ const WarrantyCheck = () => {
         history.push(queryParams);
         dispatch(warrantyRequestSearch(queryParams));
         setOnSearch(true);
+    };
+
+    const checkExpireDate = () => {
+        const endDate = dataAllWarranty?.[0]?.end_warranty_date;
+        const currentDate = new Date().toISOString();
+        if (endDate > currentDate) {
+            return (
+                <>
+                    <Typography variant="p">อยู่ในประกัน</Typography>
+                    <Typography component={"p"} variant="caption">
+                        (ประกันสิ้นสุด{" "}
+                        {dataAllWarranty?.[0]?.end_warranty_date
+                            ?.split("T")[0]
+                            .split("-")
+                            .reverse()
+                            .join("/")}
+                        )
+                    </Typography>
+                </>
+            );
+        } else {
+            return <Typography variant="p">หมดประกัน</Typography>;
+        }
     };
 
     return (
@@ -151,14 +175,26 @@ const WarrantyCheck = () => {
                                                 variant="p"
                                                 sx={{ fontWeight: 600 }}
                                             >
-                                                หมายเลขเครื่อง/Serial Number
+                                                วันที่เริ่มต้นการรับประกันสินค้า
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={12} md={6}>
-                                            {
-                                                dataAllWarranty?.[0]
-                                                    ?.warranty_date
-                                            }
+                                            {dataAllWarranty?.[0]?.start_warranty_date
+                                                .split("T")[0]
+                                                .split("-")
+                                                .reverse()
+                                                .join("/")}
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            <Typography
+                                                variant="p"
+                                                sx={{ fontWeight: 600 }}
+                                            >
+                                                การรับประกันสินค้า
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            {checkExpireDate()}
                                         </Grid>
                                         <Grid item xs={12} md={6}>
                                             <Typography
