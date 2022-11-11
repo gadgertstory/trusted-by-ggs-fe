@@ -1,7 +1,7 @@
 import axios from "axios";
 import authHeader from "./authHeader";
 
-const API_URL = process.env.REACT_APP_WARRANTY_API || "";
+const API_URL = process.env.REACT_APP_BASE_URL || "";
 
 const warrantyRequestSearch = (search) => {
     return axios.get(`${API_URL}/warranty${search}`);
