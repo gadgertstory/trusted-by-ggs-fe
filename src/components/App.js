@@ -26,6 +26,13 @@ const Header = lazy(() => import("./Header"));
 const Dashboard = lazy(() => import("../pages/Dashboard"));
 const Profile = lazy(() => import("../pages/Profile"));
 const Repair = lazy(() => import("../pages/Repair"));
+const Warranty = lazy(() => import("../pages/Warranty"));
+const WarrantyCheck = lazy(() =>
+    import("../pages/Warranty/pages/WarrantyCheck")
+);
+const WarrantyCheckDetail = lazy(() =>
+    import("../pages/Warranty/pages/WarrantyCheckDetail")
+);
 const LogIn = lazy(() => import("../pages/Login"));
 const Permission = lazy(() => import("../pages/ManagePermission"));
 const ForgotPassword = lazy(() => import("../pages/ForgotPassword"));
@@ -59,6 +66,10 @@ const App = () => {
         {
             pathname: `/repair/*`,
             element: <Repair />,
+        },
+        {
+            pathname: `/warranty`,
+            element: <Warranty />,
         },
         {
             pathname: `/register`,
@@ -96,6 +107,16 @@ const App = () => {
                                 exact
                                 path={`/repair-document/:id`}
                                 element={<PreviewDocument />}
+                            />
+                            <Route
+                                exact
+                                path={`/warranty-check`}
+                                element={<WarrantyCheck />}
+                            />
+                            <Route
+                                exact
+                                path={`/warranty-check-detail`}
+                                element={<WarrantyCheckDetail />}
                             />
                             <Route
                                 exact
@@ -147,13 +168,13 @@ const App = () => {
                                                                         theme
                                                                             .palette
                                                                             .mode ===
-                                                                            "light"
+                                                                        "light"
                                                                             ? theme
-                                                                                .palette
-                                                                                .grey[100]
+                                                                                  .palette
+                                                                                  .grey[100]
                                                                             : theme
-                                                                                .palette
-                                                                                .grey[900],
+                                                                                  .palette
+                                                                                  .grey[900],
                                                                 flexGrow: 1,
                                                                 height: "100vh",
                                                                 overflow:

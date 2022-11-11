@@ -10,6 +10,8 @@ import profile from "./profile";
 import user from "./user";
 import users from "./users";
 import roles from "./roles";
+import warranty from "./warranty";
+import warranties from "./warranties";
 
 import message from "./message";
 
@@ -26,4 +28,6 @@ export default combineReducers({
     user,
     users,
     roles,
+    warranty,
+    warranties,
 });

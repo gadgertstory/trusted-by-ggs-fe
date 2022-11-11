@@ -12,7 +12,7 @@ export const theme = createTheme({
     palette: {
         mode: "light",
         primary: {
-            main: lightBlue[500],
+            main: lightBlue[900],
             light: lightBlue[400],
             dark: lightBlue[800],
             contrastText: grey[50],
