@@ -32,6 +32,8 @@ spec:
           mountPath: /etc/timezone
           subPath: timezone
         ports:
+        - containerPort: 3000
+        ports:
         env:
         - name: WDS_SOCKET_PORT
           value: "0"
