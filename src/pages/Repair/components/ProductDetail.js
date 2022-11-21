@@ -2,7 +2,7 @@ import React from "react";
 import { Controller } from "react-hook-form";
 
 import { LocalizationProvider, DesktopDatePicker } from "@mui/x-date-pickers";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 
 import {
     FormHelperText,
@@ -51,7 +51,7 @@ const ProductDetail = (props) => {
         notifiedDateError,
         receivedDateError,
         returnDateError,
-        classes
+        classes,
     } = props;
 
     const handleReceivedDateChange = (receivedDate) => {
@@ -146,7 +146,8 @@ const ProductDetail = (props) => {
                             required: "กรุณากรอกหมายเลขเครื่อง/Serial Number",
                             pattern: {
                                 value: /^[A-Z0-9a-z-]+$/i,
-                                message: "รูปแบบ หมายเลขเครื่อง/Serial Number ไม่ถูกต้อง",
+                                message:
+                                    "รูปแบบ หมายเลขเครื่อง/Serial Number ไม่ถูกต้อง",
                             },
                         }}
                     />
@@ -161,7 +162,12 @@ const ProductDetail = (props) => {
                             field: { onChange, value },
                             fieldState: { error },
                         }) => (
-                            <FormControl fullWidth required error={!!error} className={classes.formControl}>
+                            <FormControl
+                                fullWidth
+                                required
+                                error={!!error}
+                                className={classes.formControl}
+                            >
                                 <InputLabel id="demo-simple-select-required-label">
                                     Brand
                                 </InputLabel>
@@ -175,7 +181,9 @@ const ProductDetail = (props) => {
                                     label="Brand"
                                     onChange={onChange}
                                     error={!!error}
-                                    MenuProps={{ classes: { paper: classes.menuPaper } }}
+                                    MenuProps={{
+                                        classes: { paper: classes.menuPaper },
+                                    }}
                                 >
                                     {brandList?.map((item) => {
                                         return (
@@ -200,7 +208,7 @@ const ProductDetail = (props) => {
                 </Grid>
                 <Grid item xs={12}>
                     <InputUploadImage
-                        activeUpload={'all'}
+                        activeUpload={"all"}
                         label={"รูปภาพก่อนซ่อม (อัปโหลด ไม่เกิน 3 รูป)"}
                         imagesList={beforeRepair}
                         onEdit={onEdit}
@@ -280,7 +288,10 @@ const ProductDetail = (props) => {
                                 field: { onChange, value },
                                 fieldState: { error },
                             }) => (
-                                <FormControl className={classes.formControl} fullWidth>
+                                <FormControl
+                                    className={classes.formControl}
+                                    fullWidth
+                                >
                                     <InputLabel id="demo-simple-select-required-label">
                                         สถานะการซ่อม
                                     </InputLabel>
@@ -290,7 +301,11 @@ const ProductDetail = (props) => {
                                         value={value}
                                         label="Status"
                                         onChange={onChange}
-                                        MenuProps={{ classes: { paper: classes.menuPaper } }}
+                                        MenuProps={{
+                                            classes: {
+                                                paper: classes.menuPaper,
+                                            },
+                                        }}
                                     >
                                         {statusList?.map((item) => {
                                             return (

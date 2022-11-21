@@ -63,7 +63,7 @@ const HeaderTable = (props) => {
                 </Grid>
             </Grid>
             <Grid display={'flex'} alignItems={'center'} >
-                {roleUser.roleUser.role === "admin" ? (
+                {roleUser.roleUser.role === "admin" || roleUser.roleUser.role === "superAdmin" ? (
                     <Button
                         sx={{
                             bgcolor: "primary.dark",
