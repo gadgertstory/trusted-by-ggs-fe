@@ -30,9 +30,6 @@ const Warranty = lazy(() => import("../pages/Warranty"));
 const WarrantyCheck = lazy(() =>
     import("../pages/Warranty/pages/WarrantyCheck")
 );
-const WarrantyCheckDetail = lazy(() =>
-    import("../pages/Warranty/pages/WarrantyCheckDetail")
-);
 const LogIn = lazy(() => import("../pages/Login"));
 const Permission = lazy(() => import("../pages/ManagePermission"));
 const ForgotPassword = lazy(() => import("../pages/ForgotPassword"));
@@ -68,7 +65,7 @@ const App = () => {
             element: <Repair />,
         },
         {
-            pathname: `/warranty`,
+            pathname: `/warranty/*`,
             element: <Warranty />,
         },
         {
@@ -112,11 +109,6 @@ const App = () => {
                                 exact
                                 path={`/warranty-check`}
                                 element={<WarrantyCheck />}
-                            />
-                            <Route
-                                exact
-                                path={`/warranty-check-detail`}
-                                element={<WarrantyCheckDetail />}
                             />
                             <Route
                                 exact
@@ -203,9 +195,6 @@ const App = () => {
                             })}
                         </>
                     )}
-                    {/* <Route path="/user" component={BoardUser} />
-                            <Route path="/mod" component={BoardModerator} />
-                        <Route path="/admin" component={BoardAdmin} /> */}
                 </Routes>
                 <AuthVerify logOut={logOut} />
             </Router>

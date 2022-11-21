@@ -7,11 +7,11 @@ import {
 import Warranty from "../../middleware/warranty";
 import actionHandler from "../../middleware/action_handler";
 
-export const RepairRequestSearch = (search) => async (dispatch) => {
+export const warrantyRequestSearch = (search) => async (dispatch) => {
     // Calling the server
-    await Warranty.WarrantyRequestSearch(search)
+    await Warranty.warrantyRequestSearch(search)
         .then((response) => {
-            return console.log(response.data);
+            return response.data;
         })
 
         .then((responseJson) => {

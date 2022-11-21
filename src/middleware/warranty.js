@@ -1,19 +1,19 @@
 import axios from "axios";
 import authHeader from "./authHeader";
 
-const API_URL = process.env.REACT_APP_BASE_URL2 || "";
+const API_URL = process.env.REACT_APP_BASE_URL || "";
 
-const WarrantyRequestSearch = (search) => {
+const warrantyRequestSearch = (search) => {
     return axios.get(`${API_URL}/warranty${search}`);
 };
 
-const WarrantyRequestExport = (value) => {
-    return axios.get(`${API_URL}/repair-request/export${value}`, { headers: authHeader() });
-};
+// const WarrantyRequestExport = (value) => {
+//     return axios.get(`${API_URL}/repair-request/export${value}`, { headers: authHeader() });
+// };
 
 const createWarranty = (data) => {
     return axios
-        .post(`${API_URL}/repair-request`, data, { headers: authHeader() })
+        .post(`${API_URL}/warranty`, data, { headers: authHeader() })
         .then((response) => {
             return response.data;
         });
@@ -21,7 +21,7 @@ const createWarranty = (data) => {
 
 const updateWarranty = (id, data) => {
     return axios
-        .patch(`${API_URL}/repair-request/${id}`, data, {
+        .patch(`${API_URL}/warranty/${id}`, data, {
             headers: authHeader(),
         })
         .then((response) => {
@@ -30,29 +30,24 @@ const updateWarranty = (id, data) => {
 };
 
 const deleteWarranty = (id) => {
-    return axios.delete(`${API_URL}/repair-request/${id}`, {
+    return axios.delete(`${API_URL}/warranty/${id}`, {
         headers: authHeader(),
     });
 };
 
-const fetchWarranty = (id) => {
-    return axios.get(`${API_URL}/repair-request/find/${id}`, {
+const getWarrantyById = (serialNumber) => {
+    return axios.get(`${API_URL}/warranty/${serialNumber}`, {
         headers: authHeader(),
     });
-};
-
-const fetchWarrantyCustomer = (id) => {
-    return axios.get(`${API_URL}/repair-pdf/detail/${id}`);
 };
 
 const exportedFunction = {
     createWarranty,
     updateWarranty,
     deleteWarranty,
-    fetchWarranty,
-    fetchWarrantyCustomer,
-    WarrantyRequestSearch,
-    WarrantyRequestExport
+    getWarrantyById,
+    warrantyRequestSearch,
+    // WarrantyRequestExport
 };
 
 export default exportedFunction;

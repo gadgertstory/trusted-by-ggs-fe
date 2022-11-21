@@ -71,10 +71,6 @@ const RepairDetail = (roleUser) => {
     const [error, setError] = useState("");
     const [imageError, setImageError] = useState("");
 
-    const [receivedDateError, setReceivedDateError] = useState("");
-    const [returnDateError, setReturnDateError] = useState("");
-    const [notifiedDateError, setNotifiedDateError] = useState("");
-
     const [newData, setNewData] = useState({});
 
     //Dialog warning
@@ -85,6 +81,9 @@ const RepairDetail = (roleUser) => {
     const [receivedDate, setReceivedDate] = useState(null);
     const [returnDate, setReturnDate] = useState(null);
     const [notifiedDate, setNotifiedDate] = useState(null);
+    const [receivedDateError, setReceivedDateError] = useState("");
+    const [returnDateError, setReturnDateError] = useState("");
+    const [notifiedDateError, setNotifiedDateError] = useState("");
 
     //Dropdown
     const [open, setOpen] = useState(false);
@@ -450,7 +449,7 @@ const RepairDetail = (roleUser) => {
                         >
                             <Feed fontSize="large" />
                             <Typography variant="h4" component="h2">
-                                รับซ่อม
+                                เพิ่มใบแจ้งซ่อม
                             </Typography>
                         </Grid>
                     </Grid>
@@ -657,6 +656,7 @@ const RepairDetail = (roleUser) => {
                                 );
                                 window.location.reload();
                             }}
+                            disabled={loading}
                         >
                             Cancel
                         </Button>

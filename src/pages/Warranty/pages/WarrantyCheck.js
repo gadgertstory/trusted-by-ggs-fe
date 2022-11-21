@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
@@ -19,51 +18,60 @@ import {
     Paper,
     Box,
     TextField,
-    Link,
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 
 import { history } from "../../../helpers/history";
-import { forgotPassword } from "../../../services/actions/auth";
 import Logo from "../../../assets/Logo/Trusted-by-GGS.png";
 
-import Repair from "../../../middleware/repair";
+import { warrantyRequestSearch } from "../../../services/actions/warranties";
 import { formatPhoneNumber } from "../../../utils/FormatPhoneNumber";
 
 const WarrantyCheck = () => {
-    const id = useParams();
     const schema = Yup.object().shape({
-        serial_number: Yup.string(),
+        serial_number: Yup.string().required(
+            "กรุณากรอก หมายเลขเครื่อง/Serial Number"
+        ),
     });
 
     const formOptions = { resolver: yupResolver(schema) };
     const dispatch = useDispatch();
     const { handleSubmit, register, formState } = useForm(formOptions);
     const { errors } = formState;
-    const [dataRepair, setDataRepair] = useState({});
-    const [loading, setLoading] = useState(false);
+    const { dataAllWarranty = [] } = useSelector((state) => state.warranties);
 
-    useEffect(() => {
-        Repair.fetchRepairPDFForCustomer(id.id)
-            .then((response) => response.data)
-            .then((data) => {
-                setDataRepair(data);
-            });
-    }, [id]);
+    const [onSearch, setOnSearch] = useState(false);
+    const [loading] = useState(false);
 
-    const onSubmit = (email) => {
-        setLoading(true);
-        // history.push("warranty-details");
-        // setTimeout(function () {
-        //     window.location.reload();
-        // }, 1000 * 1.5);
-        // setTimeout(() => {
-        //     dispatch(forgotPassword(email));
-        //     clearTimeout(setLoading(false));
-        // }, 1000 * 5);
+    const onSubmit = (serialNumber) => {
+        const queryParams = `?sn=${serialNumber.serial_number}`;
+        history.push(queryParams);
+        dispatch(warrantyRequestSearch(queryParams));
+        setOnSearch(true);
     };
 
-    console.log(typeof dataRepair);
+    const checkExpireDate = () => {
+        const endDate = dataAllWarranty?.[0]?.end_warranty_date ;
+        const currentDate = new Date().toISOString();
+        if (endDate > currentDate) {
+            return (
+                <>
+                    <Typography variant="p">อยู่ในประกัน</Typography>
+                    <Typography component={"p"} variant="caption">
+                        (ประกันสิ้นสุด{" "}
+                        {dataAllWarranty?.[0]?.end_warranty_date
+                            ?.split("T")[0]
+                            .split("-")
+                            .reverse()
+                            .join("/")}
+                        )
+                    </Typography>
+                </>
+            );
+        } else {
+            return <Typography variant="p">หมดประกัน</Typography>;
+        }
+    };
 
     return (
         <ThemeProvider theme={theme}>
@@ -118,7 +126,7 @@ const WarrantyCheck = () => {
                             <TextField
                                 margin="normal"
                                 fullWidth
-                                label="Serial number"
+                                label="หมายเลขเครื่อง/Serial Number"
                                 autoFocus
                                 type="text"
                                 error={!!errors["serial_number"]}
@@ -149,79 +157,121 @@ const WarrantyCheck = () => {
                             </Grid>
                         </Box>
                     </Paper>
-                    {typeof dataRepair !== "object" ? (
-                        <Paper
-                            sx={{
-                                p: 2,
-                                display: "flex",
-                                flexDirection: "column",
-                                mb: 3,
-                                borderLeft: `solid .25rem ${theme.palette.lightBlue[800]}`,
-                            }}
-                        >
-                            <Grid
-                                container
-                                justifyContent="center"
-                                alignItems="center"
-                            >
-                                <Grid item>
-                                    <Box
-                                        component="img"
-                                        sx={{ width: 100, mb: 2 }}
-                                        src={Logo}
-                                        alt={Logo}
-                                    ></Box>
-                                </Grid>
-                            </Grid>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} md={6}>
-                                    <Typography
-                                        variant="h6"
-                                        sx={{ fontWeight: 600 }}
-                                    >
-                                        Serial Number
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs={12} md={6}>
-                                    {dataRepair?.repair_no}
-                                </Grid>
-                                <Grid item xs={12} md={6}>
-                                    <Typography
-                                        variant="h6"
-                                        sx={{ fontWeight: 600 }}
-                                    >
-                                        ชื่อ-นามสกุล
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs={12} md={6}>
-                                    {`${dataRepair?.customer_firstname} XXXXXXX`}
-                                </Grid>
-                                <Grid item xs={12} md={6}>
-                                    <Typography
-                                        variant="h6"
-                                        sx={{ fontWeight: 600 }}
-                                    >
-                                        โทรศัพท์
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs={12} md={6}>
-                                    {formatPhoneNumber(
-                                        dataRepair.customer_tel
-                                    )?.slice(0, 8) + "XXXX"}
-                                </Grid>
-                                <Grid item xs={12} md={6}>
-                                    <Typography
-                                        variant="h6"
-                                        sx={{ fontWeight: 600 }}
-                                    >
-                                        ระยะเวลาประกัน
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs={12} md={6}>
-                                    {dataRepair?.warranty_status}
-                                </Grid>
-                            </Grid>
-                        </Paper>
+                    {onSearch === true ? (
+                        <>
+                            {dataAllWarranty.length > 0 ? (
+                                <Paper
+                                    sx={{
+                                        p: 2,
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        mb: 3,
+                                        borderLeft: `solid .25rem ${theme.palette.lightBlue[800]}`,
+                                    }}
+                                >
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={12} md={6}>
+                                            <Typography
+                                                variant="p"
+                                                sx={{ fontWeight: 600 }}
+                                            >
+                                                วันที่เริ่มต้นการรับประกันสินค้า
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            {dataAllWarranty?.[0]?.start_warranty_date
+                                                .split("T")[0]
+                                                .split("-")
+                                                .reverse()
+                                                .join("/")}
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            <Typography
+                                                variant="p"
+                                                sx={{ fontWeight: 600 }}
+                                            >
+                                                การรับประกันสินค้า
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            {checkExpireDate()}
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            <Typography
+                                                variant="p"
+                                                sx={{ fontWeight: 600 }}
+                                            >
+                                                หมายเลขเครื่อง/Serial Number
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            {
+                                                dataAllWarranty?.[0]
+                                                    ?.product_serial_no
+                                            }
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            <Typography
+                                                variant="p"
+                                                sx={{ fontWeight: 600 }}
+                                            >
+                                                ชื่อ-นามสกุล
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            {
+                                                dataAllWarranty?.[0]
+                                                    ?.customer_firstname
+                                            }{" "}
+                                            {
+                                                dataAllWarranty?.[0]
+                                                    ?.customer_lastname
+                                            }
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            <Typography
+                                                variant="p"
+                                                sx={{ fontWeight: 600 }}
+                                            >
+                                                โทรศัพท์
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            {formatPhoneNumber(
+                                                dataAllWarranty?.[0]
+                                                    ?.customer_tel
+                                            )}
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            <Typography
+                                                variant="p"
+                                                sx={{ fontWeight: 600 }}
+                                            >
+                                                อีเมล
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            {
+                                                dataAllWarranty?.[0]
+                                                    ?.customer_email
+                                            }
+                                        </Grid>
+                                    </Grid>
+                                </Paper>
+                            ) : (
+                                <Paper
+                                    sx={{
+                                        p: 2,
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        mb: 3,
+                                        borderLeft: `solid .25rem ${theme.palette.red[800]}`,
+                                    }}
+                                >
+                                    ไม่พบข้อมูลหมายเลขเครื่อง/Serial Number
+                                </Paper>
+                            )}
+                        </>
                     ) : (
                         ""
                     )}

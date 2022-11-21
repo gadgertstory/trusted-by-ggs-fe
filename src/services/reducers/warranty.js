@@ -53,7 +53,7 @@ const Warranty = (state = initialState, action) => {
         case FETCH_WARRANTY_SUCCESS:
             return {
                 ...state,
-                dataWARRANTY: action.payload,
+                dataWarranty: action.payload,
                 isLoading: true,
             };
         case FETCH_WARRANTY_FAIL:

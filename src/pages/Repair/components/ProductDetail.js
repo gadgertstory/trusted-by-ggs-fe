@@ -75,7 +75,7 @@ const ProductDetail = (props) => {
         onSelectAfterRepair(afterRepair);
     }, [betweenRepair, beforeRepair, afterCustomer]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const handleDateChangeRaw = (e) => {
+    const handleDateChange = (e) => {
         if (e) {
             e.preventDefault();
         }
@@ -116,7 +116,7 @@ const ProductDetail = (props) => {
                                 }}
                             />
                         )}
-                        rules={{ required: "กรุณากรอกชื่ออุปกรกรณ์" }}
+                        rules={{ required: "กรุณากรอกชื่ออุปกรณ์" }}
                     />
                 </Grid>
                 <Grid item xs={12} md={4}>
@@ -144,6 +144,10 @@ const ProductDetail = (props) => {
                         )}
                         rules={{
                             required: "กรุณากรอกหมายเลขเครื่อง/Serial Number",
+                            pattern: {
+                                value: /^[A-Z0-9a-z-]+$/i,
+                                message: "รูปแบบ หมายเลขเครื่อง/Serial Number ไม่ถูกต้อง",
+                            },
                         }}
                     />
                 </Grid>
@@ -317,7 +321,7 @@ const ProductDetail = (props) => {
                             disabled={!onEdit}
                             renderInput={(params) => (
                                 <TextField
-                                    onKeyDown={handleDateChangeRaw}
+                                    onKeyDown={handleDateChange}
                                     fullWidth
                                     size="small"
                                     {...params}
@@ -337,7 +341,7 @@ const ProductDetail = (props) => {
                             disabled={!onEdit}
                             renderInput={(params) => (
                                 <TextField
-                                    onKeyDown={handleDateChangeRaw}
+                                    onKeyDown={handleDateChange}
                                     fullWidth
                                     size="small"
                                     {...params}
@@ -357,7 +361,7 @@ const ProductDetail = (props) => {
                             disabled={!onEdit}
                             renderInput={(params) => (
                                 <TextField
-                                    onKeyDown={handleDateChangeRaw}
+                                    onKeyDown={handleDateChange}
                                     fullWidth
                                     size="small"
                                     {...params}

@@ -17,7 +17,6 @@ import {
 } from "@mui/material";
 
 import MenuIcon from "@mui/icons-material/Menu";
-import ConstructionIcon from "@mui/icons-material/Construction";
 import TrustedByGGSLogo from "../../assets/Logo/Trusted-by-GGS.png";
 
 import EventBus from "../../common/EventBus";
@@ -163,12 +162,14 @@ const ResponsiveAppBar = () => {
         <AppBar position="static">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    {/* <ConstructionIcon
-                        sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                    /> */}
                     <Box
                         component="img"
-                        sx={{ width: 50, my: 2 ,mr:2}}
+                        sx={{
+                            width: 50,
+                            my: 2,
+                            mr: 2,
+                            display: { xs: "none", md: "flex" },
+                        }}
                         src={TrustedByGGSLogo}
                         alt={TrustedByGGSLogo}
                     ></Box>
@@ -202,13 +203,17 @@ const ResponsiveAppBar = () => {
                             : ""}
                     </Box>
                     {/* ============================Menu Responsive==========================      */}
-                    <ConstructionIcon
+                    <Box
+                        component="img"
                         sx={{
+                            width: 50,
+                            my: 2,
+                            mr: 2,
                             display: { xs: "flex", md: "none" },
-                            fontSize: 40,
-                            mr: 1,
                         }}
-                    />
+                        src={TrustedByGGSLogo}
+                        alt={TrustedByGGSLogo}
+                    ></Box>
                     <Typography
                         variant="h5"
                         noWrap
@@ -268,45 +273,6 @@ const ResponsiveAppBar = () => {
                                 ? renderSuperAdminPageListResponsive
                                 : ""}
                         </Menu>
-                    </Box>
-                    {/* ==========================Menu Responsive=========================== */}
-                    <ConstructionIcon
-                        sx={{
-                            display: { xs: "flex", md: "none" },
-                            fontSize: 40,
-                            mr: 1,
-                        }}
-                    />
-                    <Typography
-                        variant="h5"
-                        noWrap
-                        component="a"
-                        href=""
-                        sx={{
-                            mr: 2,
-                            display: { xs: "flex", md: "none" },
-                            direction: "flex-wrap",
-                            flexGrow: 1,
-                            fontFamily: "monospace",
-                            fontWeight: 700,
-                            letterSpacing: ".2rem",
-                            color: "inherit",
-                            textDecoration: "none",
-                            whiteSpace: "pre-wrap",
-                        }}
-                    >
-                        Trusted By GGS
-                    </Typography>
-                    <Box
-                        sx={{
-                            flexGrow: 1,
-                            display: { xs: "none", md: "flex" },
-                        }}
-                    >
-                        {renderPageListResponsive}
-                        {profile.role?.role_name === "superAdmin"
-                            ? renderSuperAdminPageListResponsive
-                            : ""}
                     </Box>
                     {/* ============================Setting==========================      */}
                     <Box
