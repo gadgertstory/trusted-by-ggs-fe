@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trusted-by-ggs-fe
+  labels:
+    app: trusted-by-ggs-fe
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trusted-by-ggs-fe
+  template:
+    metadata:
+      labels:
+        app: trusted-by-ggs-fe
+    spec:
+      volumes:
+      - name: tz-config
+        hostPath:
+          path: /usr/share/zoneinfo/Asia/Bangkok
+      - name: tz-bk-config
+        configMap:
+          name: tz-bk-config
+      containers:
+      - name: trusted-by-ggs-fe
+        image: itgadgetstory/trusted-by-ggs-fe:latest
+        volumeMounts:
+        - name: tz-config
+          mountPath: /etc/localtime
+        - name: tz-bk-config
+          mountPath: /etc/timezone
+          subPath: timezone
+        ports:
+        - containerPort: 3000
+        ports:
+        env:
+        - name: WDS_SOCKET_PORT
+          value: "0"
+        - name: REACT_APP_BASE_URL
+          value: "https://trusted-by-ggs-be-dev.gadgetstory.co.th"
+        - name: GENERATE_SOURCEMAP
+          value: "false"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trusted-by-ggs-fe-svc
+  namespace: dev
+spec:
+  selector:
+    app: trusted-by-ggs-fe
+  #type: NodePort
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+      #nodePort: 30081
