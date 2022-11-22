@@ -8,7 +8,7 @@ import { Button, Stack, Typography, Box, Link } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 
-import { warrantyRequestSearch } from "../../../services/actions/warranties";
+import { warrantyRequestSearchByAdmin } from "../../../services/actions/warranties";
 import HeaderTable from "../components/HeaderTable";
 
 // import Dialog from "@mui/material/Dialog";
@@ -22,7 +22,9 @@ import HeaderTable from "../components/HeaderTable";
 const WarrantyTable = (roleUser) => {
     const dispatch = useDispatch();
     const { control } = useForm();
-    const { dataAllWarranty = [] } = useSelector((state) => state.warranties);
+    const { dataAllWarrantyByAdmin = [] } = useSelector(
+        (state) => state.warranties
+    );
 
     const [status, setStatus] = useState(0);
     const [keyword, setKeyword] = useState("");
@@ -65,7 +67,7 @@ const WarrantyTable = (roleUser) => {
             const _keyword = isClear ? "" : keyword;
             const queryParams = `?sn=${_keyword}`;
             history.push(queryParams);
-            dispatch(warrantyRequestSearch(queryParams));
+            dispatch(warrantyRequestSearchByAdmin(queryParams));
         },
         [keyword, dispatch]
     );
@@ -255,7 +257,7 @@ const WarrantyTable = (roleUser) => {
                         render: (rowData) => <>{rowData.product_serial_no}</>,
                     },
                 ]}
-                data={dataAllWarranty}
+                data={dataAllWarrantyByAdmin}
                 actions={[
                     {
                         title: " ",

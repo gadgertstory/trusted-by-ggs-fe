@@ -3,8 +3,12 @@ import authHeader from "./authHeader";
 
 const API_URL = process.env.REACT_APP_BASE_URL || "";
 
-const warrantyRequestSearch = (search) => {
+const warrantyRequestSearchByUser = (search) => {
     return axios.get(`${API_URL}/warranty${search}`);
+};
+
+const warrantyRequestSearchByAdmin = (search) => {
+    return axios.get(`${API_URL}/warranty${search}`, { headers: authHeader() });
 };
 
 // const WarrantyRequestExport = (value) => {
@@ -46,7 +50,8 @@ const exportedFunction = {
     updateWarranty,
     deleteWarranty,
     getWarrantyById,
-    warrantyRequestSearch,
+    warrantyRequestSearchByUser,
+    warrantyRequestSearchByAdmin,
     // WarrantyRequestExport
 };
 
