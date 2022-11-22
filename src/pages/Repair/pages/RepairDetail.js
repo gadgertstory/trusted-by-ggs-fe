@@ -222,9 +222,9 @@ const RepairDetail = (roleUser) => {
             }
         }
 
-        // if (!error) {
-        //     setLoading(true);
-        // }
+        if (!error) {
+            setLoading(true);
+        }
 
         if (id === "new") {
             const _data = Object.assign(data, newData);
