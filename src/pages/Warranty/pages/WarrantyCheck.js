@@ -24,7 +24,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { history } from "../../../helpers/history";
 import Logo from "../../../assets/Logo/Trusted-by-GGS.png";
 
-import { warrantyRequestSearch } from "../../../services/actions/warranties";
+import { warrantyRequestSearchByUser } from "../../../services/actions/warranties";
 import { formatPhoneNumber } from "../../../utils/FormatPhoneNumber";
 
 const WarrantyCheck = () => {
@@ -38,7 +38,9 @@ const WarrantyCheck = () => {
     const dispatch = useDispatch();
     const { handleSubmit, register, formState } = useForm(formOptions);
     const { errors } = formState;
-    const { dataAllWarranty = [] } = useSelector((state) => state.warranties);
+    const { dataAllWarrantyByUser = [] } = useSelector(
+        (state) => state.warranties
+    );
 
     const [onSearch, setOnSearch] = useState(false);
     const [loading] = useState(false);
@@ -46,12 +48,12 @@ const WarrantyCheck = () => {
     const onSubmit = (serialNumber) => {
         const queryParams = `?sn=${serialNumber.serial_number}`;
         history.push(queryParams);
-        dispatch(warrantyRequestSearch(queryParams));
+        dispatch(warrantyRequestSearchByUser(queryParams));
         setOnSearch(true);
     };
 
     const checkExpireDate = () => {
-        const endDate = dataAllWarranty?.[0]?.end_warranty_date ;
+        const endDate = dataAllWarrantyByUser?.[0]?.end_warranty_date;
         const currentDate = new Date().toISOString();
         if (endDate > currentDate) {
             return (
@@ -59,7 +61,7 @@ const WarrantyCheck = () => {
                     <Typography variant="p">อยู่ในประกัน</Typography>
                     <Typography component={"p"} variant="caption">
                         (ประกันสิ้นสุด{" "}
-                        {dataAllWarranty?.[0]?.end_warranty_date
+                        {dataAllWarrantyByUser?.[0]?.end_warranty_date
                             ?.split("T")[0]
                             .split("-")
                             .reverse()
@@ -159,7 +161,7 @@ const WarrantyCheck = () => {
                     </Paper>
                     {onSearch === true ? (
                         <>
-                            {dataAllWarranty.length > 0 ? (
+                            {dataAllWarrantyByUser.length > 0 ? (
                                 <Paper
                                     sx={{
                                         p: 2,
@@ -179,7 +181,7 @@ const WarrantyCheck = () => {
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={12} md={6}>
-                                            {dataAllWarranty?.[0]?.start_warranty_date
+                                            {dataAllWarrantyByUser?.[0]?.start_warranty_date
                                                 .split("T")[0]
                                                 .split("-")
                                                 .reverse()
@@ -206,7 +208,7 @@ const WarrantyCheck = () => {
                                         </Grid>
                                         <Grid item xs={12} md={6}>
                                             {
-                                                dataAllWarranty?.[0]
+                                                dataAllWarrantyByUser?.[0]
                                                     ?.product_serial_no
                                             }
                                         </Grid>
@@ -220,11 +222,11 @@ const WarrantyCheck = () => {
                                         </Grid>
                                         <Grid item xs={12} md={6}>
                                             {
-                                                dataAllWarranty?.[0]
+                                                dataAllWarrantyByUser?.[0]
                                                     ?.customer_firstname
                                             }{" "}
                                             {
-                                                dataAllWarranty?.[0]
+                                                dataAllWarrantyByUser?.[0]
                                                     ?.customer_lastname
                                             }
                                         </Grid>
@@ -238,7 +240,7 @@ const WarrantyCheck = () => {
                                         </Grid>
                                         <Grid item xs={12} md={6}>
                                             {formatPhoneNumber(
-                                                dataAllWarranty?.[0]
+                                                dataAllWarrantyByUser?.[0]
                                                     ?.customer_tel
                                             )}
                                         </Grid>
@@ -252,7 +254,7 @@ const WarrantyCheck = () => {
                                         </Grid>
                                         <Grid item xs={12} md={6}>
                                             {
-                                                dataAllWarranty?.[0]
+                                                dataAllWarrantyByUser?.[0]
                                                     ?.customer_email
                                             }
                                         </Grid>
