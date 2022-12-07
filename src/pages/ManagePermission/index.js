@@ -13,8 +13,8 @@ const Permission = () => {
         <Routes>
             <Route path=":id" element={<ManagePermissionDetail roleUser={roleUser} />} />
             <Route path="/" element={<ManagePermissionTable roleUser={roleUser} />} />
-            <Route path="/404" element={<NotFound />} />
-            <Route path="*" element={<Navigate replace to="/404" />} />
+            <Route path="/NotFoundPage" element={<NotFound />} />
+            <Route path="*" element={<Navigate replace to="/NotFoundPage" />} />
         </Routes>
     );
 };
