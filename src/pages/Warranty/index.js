@@ -14,8 +14,8 @@ const Warranty = () => {
         <Routes>
             <Route path="/" element={<WarrantyTable roleUser={roleUser} />} />
             <Route path=":id" element={<WarrantyDetail roleUser={roleUser} />} />
-            <Route path="/404" element={<NotFound />} />
-            <Route path="*" element={<Navigate replace to="/404" />} />
+            <Route path="/NotFoundPage" element={<NotFound />} />
+            <Route path="*" element={<Navigate replace to="/NotFoundPage" />} />
         </Routes>
     );
 };

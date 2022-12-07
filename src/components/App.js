@@ -73,12 +73,12 @@ const App = () => {
             element: <Register />,
         },
         {
-            pathname: "/404",
+            pathname: "/NotFoundPage",
             element: <NotFound />,
         },
         {
             pathname: "*",
-            element: <Navigate replace to="/404" />,
+            element: <Navigate replace to="/NotFoundPage" />,
         },
         {
             pathname: `/manage-permission/*`,
@@ -120,18 +120,18 @@ const App = () => {
                                 path={`/reset-password`}
                                 element={<ResetPassword />}
                             />
-                            <Route path="/404" element={<NotFound />} />
+                            <Route path="/NotFoundPage" element={<NotFound />} />
                             <Route
                                 path="*"
-                                element={<Navigate replace to="/404" />}
+                                element={<Navigate replace to="/NotFoundPage" />}
                             />
                             <Route
                                 path={`/repair-document/*`}
-                                element={<Navigate replace to="/404" />}
+                                element={<Navigate replace to="/NotFoundPage" />}
                             />
                             <Route
                                 path={`/forgot-password/*`}
-                                element={<Navigate replace to="/404" />}
+                                element={<Navigate replace to="/NotFoundPage" />}
                             />
                         </>
                     ) : (
