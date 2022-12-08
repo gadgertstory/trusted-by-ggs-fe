@@ -46,7 +46,7 @@ import ConvertBase64 from "../../../utils/ConvertBase64";
 
 import { options } from "../../../dataMock/master";
 
-import Logo from "../../../assets/Logo/GadgetStory_logo.png";
+import Logo from "../../../assets/Logo/Trusted-by-GGS.png";
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
