@@ -1,34 +1,32 @@
 import {
-    CREATE_REPAIR_SUCCESS,
-    CREATE_REPAIR_FAIL,
-    FETCH_REPAIR_SUCCESS,
-    FETCH_REPAIR_FAIL,
-    UPDATE_REPAIR_SUCCESS,
-    UPDATE_REPAIR_FAIL,
+    CREATE_WARRANTY_SUCCESS,
+    CREATE_WARRANTY_FAIL,
+    FETCH_WARRANTY_SUCCESS,
+    FETCH_WARRANTY_FAIL,
+    UPDATE_WARRANTY_SUCCESS,
+    UPDATE_WARRANTY_FAIL,
     SET_MESSAGE,
-    DELETE_REPAIR_SUCCESS,
-    DELETE_REPAIR_FAIL,
-    FETCH_REPAIR_PDF_SUCCESS,
-    FETCH_REPAIR_PDF_FAIL,
+    DELETE_WARRANTY_SUCCESS,
+    DELETE_WARRANTY_FAIL,
 } from "./types";
 
-import Repair from "../../middleware/repair";
+import Warranty from "../../middleware/warranty";
 import actionHandler from "../../middleware/action_handler";
 import { history } from "../../helpers/history";
 
-export const createRepair = (data) => async (dispatch) => {
-   await Repair.createRepair(data)
+export const createWarranty = (data) => async (dispatch) => {
+    await Warranty.createWarranty(data)
         .then((data) => {
             dispatch({
-                type: CREATE_REPAIR_SUCCESS,
+                type: CREATE_WARRANTY_SUCCESS,
                 payload: { data: data },
             });
             return (
                 Promise.resolve(),
                 actionHandler({
-                    successMessage: "สร้างใบแจ้งซ่อมสำเร็จ",
+                    successMessage: "สร้างข้อมูลการรับประกันสำเร็จ",
                 }),
-                history.push("/repair?status_no=0&customer_name="),
+                history.push("/warranty?sn="),
                 setTimeout(function () {
                     window.location.reload();
                 }, 1000 * 1.5)
@@ -43,7 +41,7 @@ export const createRepair = (data) => async (dispatch) => {
                 error.toString();
 
             dispatch({
-                type: CREATE_REPAIR_FAIL,
+                type: CREATE_WARRANTY_FAIL,
             });
 
             dispatch({
@@ -59,17 +57,17 @@ export const createRepair = (data) => async (dispatch) => {
         });
 };
 
-export const updateRepair = (id, data,formData) => async (dispatch) => {
-    await Repair.updateRepair(id, data,formData)
+export const updateWarranty = (id, dataUpdate) => async (dispatch) => {
+    await Warranty.updateWarranty(id, dataUpdate)
         .then((id, data) => {
             dispatch({
-                type: UPDATE_REPAIR_SUCCESS,
+                type: UPDATE_WARRANTY_SUCCESS,
                 payload: { id, data: data },
             });
             return (
                 Promise.resolve(),
                 actionHandler({
-                    successMessage: "บันทึกข้อมูลใบแจ้งซ่อมสำเร็จ",
+                    successMessage: "บันทึกข้อมูลการรับประกันสำเร็จ",
                 }),
                 setTimeout(function () {
                     window.location.reload();
@@ -85,7 +83,7 @@ export const updateRepair = (id, data,formData) => async (dispatch) => {
                 error.toString();
 
             dispatch({
-                type: UPDATE_REPAIR_FAIL,
+                type: UPDATE_WARRANTY_FAIL,
             });
 
             dispatch({
@@ -102,23 +100,23 @@ export const updateRepair = (id, data,formData) => async (dispatch) => {
         });
 };
 
-export const deleteRepair = (id) => async (dispatch) => {
-    await Repair.deleteRepair(id)
+export const deleteWarranty = (id) => async (dispatch) => {
+    await Warranty.deleteWarranty(id)
         .then((response) => {
             return response.data;
         })
 
         .then((responseJson) => {
             dispatch({
-                type: DELETE_REPAIR_SUCCESS,
+                type: DELETE_WARRANTY_SUCCESS,
                 payload: responseJson,
             });
             return (
                 Promise.resolve(),
                 actionHandler({
-                    successMessage: "ลบใบแจ้งซ่อมสำเร็จ",
+                    successMessage: "ลบข้อมูลการรับประกันสำเร็จ",
                 }),
-                history.push("/repair?status_no=0&customer_name="),
+                history.push("/warranty?sn="),
                 setTimeout(function () {
                     window.location.reload();
                 }, 1000 * 1.5)
@@ -133,7 +131,7 @@ export const deleteRepair = (id) => async (dispatch) => {
                 error.toString();
 
             dispatch({
-                type: DELETE_REPAIR_FAIL,
+                type: DELETE_WARRANTY_FAIL,
             });
 
             dispatch({
@@ -150,16 +148,15 @@ export const deleteRepair = (id) => async (dispatch) => {
         });
 };
 
-export const getRepairPDF = (id) => async (dispatch) => {
-    // Calling the server
-    await Repair.fetchRepairPDF(id)
+export const getWarrantyById = (id) => async (dispatch) => {
+    await Warranty.getWarrantyById(id)
         .then((response) => {
             return response.data;
         })
 
         .then((responseJson) => {
             dispatch({
-                type: FETCH_REPAIR_PDF_SUCCESS,
+                type: FETCH_WARRANTY_SUCCESS,
                 payload: responseJson,
             });
             return responseJson;
@@ -173,46 +170,7 @@ export const getRepairPDF = (id) => async (dispatch) => {
                 error.toString();
 
             dispatch({
-                type: FETCH_REPAIR_PDF_FAIL,
-            });
-
-            dispatch({
-                type: SET_MESSAGE,
-                payload: message,
-            });
-
-            return (
-                Promise.reject(),
-                actionHandler({
-                    error: message,
-                })
-            );
-        });
-};
-
-export const getRepair = (id) => async (dispatch) => {
-    await Repair.fetchRepair(id)
-        .then((response) => {
-            return response.data;
-        })
-
-        .then((responseJson) => {
-            dispatch({
-                type: FETCH_REPAIR_SUCCESS,
-                payload: responseJson,
-            });
-            return responseJson;
-        })
-        .catch((error) => {
-            const message =
-                (error.response &&
-                    error.response.data &&
-                    error.response.data.message) ||
-                error.message ||
-                error.toString();
-
-            dispatch({
-                type: FETCH_REPAIR_FAIL,
+                type: FETCH_WARRANTY_FAIL,
             });
 
             dispatch({

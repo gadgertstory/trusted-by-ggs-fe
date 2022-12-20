@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trusted-by-ggs-be-main
+  labels:
+    app: trusted-by-ggs-be-main
+  namespace: prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trusted-by-ggs-be-main
+  template:
+    metadata:
+      labels:
+        app: trusted-by-ggs-be-main
+    spec:
+      volumes:
+      - name: tz-config
+        hostPath:
+          path: /usr/share/zoneinfo/Asia/Bangkok
+      - name: tz-bk-config
+        configMap:
+          name: tz-bk-config
+      containers:
+      - name: trusted-by-ggs-be-main
+        image: itgadgetstory/trusted-by-ggs-be-main:IMAGE_VERSION
+        imagePullPolicy: Always
+        # imagePullSecrets: 
+        # - name: gadgetstory-reg
+        volumeMounts:
+        - name: tz-config
+          mountPath: /etc/localtime
+        - name: tz-bk-config
+          mountPath: /etc/timezone
+          subPath: timezone
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /health-check
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /health-check
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 5
+        env:
+        - name: STAGE
+          value: "Production"
+        - name: REPAIR_SERVICE_HOST
+          value: "trusted-by-ggs-be-repair-svc"
+        - name: AUTH_SERVICE_HOST
+          value: "trusted-by-ggs-be-auth-svc"
+        - name: WARRANTY_SERVICE_HOST
+          value: "trusted-by-ggs-be-warranty-svc"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trusted-by-ggs-be-main-svc
+  namespace: prod
+spec:
+  selector:
+    app: trusted-by-ggs-be-main
+  #type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      #nodePort: 30081

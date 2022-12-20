@@ -17,7 +17,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { clearMessage } from "../services/actions/message";
 
 import { history } from "../helpers/history";
-// import PreviewDocument from "./PreviewDocument";
 
 import { logout } from "../services/actions/auth";
 import AuthVerify from "../common/AuthVerify";
@@ -27,9 +26,15 @@ const Header = lazy(() => import("./Header"));
 const Dashboard = lazy(() => import("../pages/Dashboard"));
 const Profile = lazy(() => import("../pages/Profile"));
 const Repair = lazy(() => import("../pages/Repair"));
+const Warranty = lazy(() => import("../pages/Warranty"));
+const WarrantyCheck = lazy(() =>
+    import("../pages/Warranty/pages/WarrantyCheck")
+);
 const LogIn = lazy(() => import("../pages/Login"));
+const Permission = lazy(() => import("../pages/ManagePermission"));
 const ForgotPassword = lazy(() => import("../pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("../pages/ResetPassword"));
+const Register = lazy(() => import("../pages/Register"));
 const NotFound = lazy(() => import("../pages/NotFound"));
 
 const App = () => {
@@ -60,12 +65,24 @@ const App = () => {
             element: <Repair />,
         },
         {
-            pathname: "/404",
+            pathname: `/warranty/*`,
+            element: <Warranty />,
+        },
+        {
+            pathname: `/register`,
+            element: <Register />,
+        },
+        {
+            pathname: "/NotFoundPage",
             element: <NotFound />,
         },
         {
             pathname: "*",
-            element: <Navigate replace to="/404" />,
+            element: <Navigate replace to="/NotFoundPage" />,
+        },
+        {
+            pathname: `/manage-permission/*`,
+            element: <Permission />,
         },
     ];
 
@@ -90,6 +107,11 @@ const App = () => {
                             />
                             <Route
                                 exact
+                                path={`/warranty-check`}
+                                element={<WarrantyCheck />}
+                            />
+                            <Route
+                                exact
                                 path={`/forgot-password`}
                                 element={<ForgotPassword />}
                             />
@@ -98,18 +120,18 @@ const App = () => {
                                 path={`/reset-password`}
                                 element={<ResetPassword />}
                             />
-                            <Route path="/404" element={<NotFound />} />
+                            <Route path="/NotFoundPage" element={<NotFound />} />
                             <Route
                                 path="*"
-                                element={<Navigate replace to="/404" />}
+                                element={<Navigate replace to="/NotFoundPage" />}
                             />
                             <Route
                                 path={`/repair-document/*`}
-                                element={<Navigate replace to="/404" />}
+                                element={<Navigate replace to="/NotFoundPage" />}
                             />
                             <Route
                                 path={`/forgot-password/*`}
-                                element={<Navigate replace to="/404" />}
+                                element={<Navigate replace to="/NotFoundPage" />}
                             />
                         </>
                     ) : (
@@ -173,9 +195,6 @@ const App = () => {
                             })}
                         </>
                     )}
-                    {/* <Route path="/user" component={BoardUser} />
-                            <Route path="/mod" component={BoardModerator} />
-                        <Route path="/admin" component={BoardAdmin} /> */}
                 </Routes>
                 <AuthVerify logOut={logOut} />
             </Router>

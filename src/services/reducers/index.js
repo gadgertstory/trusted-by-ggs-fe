@@ -7,6 +7,11 @@ import brand from "./brand";
 import status from "./status";
 import dashboard from "./dashboard";
 import profile from "./profile";
+import user from "./user";
+import users from "./users";
+import roles from "./roles";
+import warranty from "./warranty";
+import warranties from "./warranties";
 
 import message from "./message";
 
@@ -20,4 +25,9 @@ export default combineReducers({
     status,
     dashboard,
     profile,
+    user,
+    users,
+    roles,
+    warranty,
+    warranties,
 });

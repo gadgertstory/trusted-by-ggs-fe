@@ -103,9 +103,9 @@ const InputUploadImage = (props) => {
                                                 }}
                                                 disabled={
                                                     !onEdit ||
-                                                    (currentUser.data.role !==
-                                                        "admin" &&
-                                                        activeUpload === "all")
+                                                    currentUser.data.role ===
+                                                        "user" &&
+                                                        activeUpload === "all"
                                                 }
                                             >
                                                 <CloseIcon />
@@ -131,8 +131,8 @@ const InputUploadImage = (props) => {
                                 disabled={
                                     imagesList.length === 3 ||
                                     !onEdit ||
-                                    (currentUser.data.role !== "admin" &&
-                                        activeUpload === "all")
+                                    currentUser.data.role === "user" &&
+                                        activeUpload === "all"
                                 }
                             >
                                 <Box noWrap>เลือกรูป</Box>

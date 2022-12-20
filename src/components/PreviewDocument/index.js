@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 
 import Repair from "../../middleware/repair";
-import Logo from "../../assets/Logo/GadgetStory_logo.png";
+import Logo from "../../assets/Logo/Trusted-by-GGS.png";
 import CustomizedTimeline from '../Timeline'
 import { formatPhoneNumber } from "../../utils/FormatPhoneNumber";
 
@@ -51,7 +51,7 @@ const PreviewDocument = () => {
                     >
                         <Box
                             component="img"
-                            sx={{ width: 150, mb: 2 }}
+                            sx={{ width: 100, mb: 2 }}
                             src={Logo}
                             alt={Logo}
                         ></Box>

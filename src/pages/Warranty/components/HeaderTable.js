@@ -1,42 +1,27 @@
 import React from "react";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 
 import { Grid, Button } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
+// import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 import Input from "../../../components/Input";
-import SelectMenu from "../../../components/SelectMenu";
+// import SelectMenu from "../../../components/SelectMenu";
 
 const HeaderTable = (props) => {
-    const { statusList = [] } = useSelector((state) => state.status);
-    const { status, onChangeStatus, onSearch, keyword, onChangeKeyword, roleUser, handleOpenDialog } =
+    const { onSearch, keyword, onChangeKeyword } =
         props;
-
-    const statusDropdown = [
-        { status_id: 0, status_name: "ทั้งหมด" },
-        ...statusList,
-    ];
 
     return (
         <Grid container direction={'row'} justifyContent={'space-between'}>
             <Grid item xs={8} sx={{ my: 2 }}>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={3}>
-                        <SelectMenu
-                            list={statusDropdown}
-                            value={status}
-                            label="สถานะการซ่อม"
-                            fullWidth
-                            onChange={onChangeStatus}
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={3}>
                         <Input
                             onChange={onChangeKeyword}
                             value={keyword}
                             fullWidth={true}
-                            label="ค้นหาจาก ชื่อ"
+                            label="ค้นหาจาก Serial Number"
                             type="search"
                             onKeyDown={(event) => {
                                 if (event.code === "Enter") {
@@ -62,8 +47,8 @@ const HeaderTable = (props) => {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid display={'flex'} alignItems={'center'} >
-                {roleUser.roleUser.role === "admin" || roleUser.roleUser.role === "superAdmin" ? (
+            {/* <Grid display={'flex'} alignItems={'center'} >
+                {roleUser.roleUser.role === "admin" ? (
                     <Button
                         sx={{
                             bgcolor: "primary.dark",
@@ -81,7 +66,7 @@ const HeaderTable = (props) => {
                 ) : (
                     ""
                 )}
-            </Grid>
+            </Grid> */}
         </Grid>
     );
 };

@@ -1,25 +1,20 @@
 import {
-    SET_MESSAGE,
-    REQUEST_REPAIR_SEARCH_SUCCESS,
-    REQUEST_REPAIR_SEARCH_FAIL,
+    FETCH_ALL_ROLE_SUCCESS,
+    FETCH_ALL_ROLE_FAIL,
+    SET_MESSAGE
 } from "./types";
 
-import Repair from "../../middleware/repair";
+import fetchMaster from "../../middleware/master";
 import actionHandler from "../../middleware/action_handler";
 
-export const RepairRequestSearch = (search) => async (dispatch) => {
-    // Calling the server
-    await Repair.RepairRequestSearch(search)
-        .then((response) => {
-            return response.data;
-        })
-
-        .then((responseJson) => {
+export const getAllRoles = () => async (dispatch) => {
+    await fetchMaster.getAllRoles()
+        .then((response) => response.data)
+        .then((responseJson) => { 
             dispatch({
-                type: REQUEST_REPAIR_SEARCH_SUCCESS,
+                type: FETCH_ALL_ROLE_SUCCESS,
                 payload: responseJson,
             });
-            return responseJson;
         })
         .catch((error) => {
             const message =
@@ -30,7 +25,7 @@ export const RepairRequestSearch = (search) => async (dispatch) => {
                 error.toString();
 
             dispatch({
-                type: REQUEST_REPAIR_SEARCH_FAIL,
+                type: FETCH_ALL_ROLE_FAIL,
             });
 
             dispatch({

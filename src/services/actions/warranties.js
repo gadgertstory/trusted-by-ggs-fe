@@ -1,24 +1,24 @@
 import {
-    UPDATE_PROFILE_SUCCESS,
-    UPDATE_PROFILE_FAIL,
-    FETCH_PROFILE_SUCCESS,
-    FETCH_PROFILE_FAIL,
     SET_MESSAGE,
+    REQUEST_WARRANTY_SEARCH_BY_ADMIN_SUCCESS,
+    REQUEST_WARRANTY_SEARCH_BY_ADMIN_FAIL,
+    REQUEST_WARRANTY_SEARCH_BY_USER_SUCCESS,
+    REQUEST_WARRANTY_SEARCH_BY_USER_FAIL,
 } from "./types";
 
-import Profile from "../../middleware/user";
+import Warranty from "../../middleware/warranty";
 import actionHandler from "../../middleware/action_handler";
 
-export const getProfile = () => async (dispatch) => {
+export const warrantyRequestSearchByAdmin = (search) => async (dispatch) => {
     // Calling the server
-    await Profile.getProfile()
+    await Warranty.warrantyRequestSearchByAdmin(search)
         .then((response) => {
             return response.data;
         })
 
         .then((responseJson) => {
             dispatch({
-                type: FETCH_PROFILE_SUCCESS,
+                type: REQUEST_WARRANTY_SEARCH_BY_ADMIN_SUCCESS,
                 payload: responseJson,
             });
             return responseJson;
@@ -32,7 +32,7 @@ export const getProfile = () => async (dispatch) => {
                 error.toString();
 
             dispatch({
-                type: FETCH_PROFILE_FAIL,
+                type: REQUEST_WARRANTY_SEARCH_BY_ADMIN_FAIL,
             });
 
             dispatch({
@@ -49,22 +49,19 @@ export const getProfile = () => async (dispatch) => {
         });
 };
 
-export const updateProfile = (profile) => async (dispatch) => {
-    await Profile.updateProfile(profile)
-        .then((profile) => {
+export const warrantyRequestSearchByUser = (search) => async (dispatch) => {
+    // Calling the server
+    await Warranty.warrantyRequestSearchByUser(search)
+        .then((response) => {
+            return response.data;
+        })
+
+        .then((responseJson) => {
             dispatch({
-                type: UPDATE_PROFILE_SUCCESS,
-                payload: { profile: profile },
+                type: REQUEST_WARRANTY_SEARCH_BY_USER_SUCCESS,
+                payload: responseJson,
             });
-            return (
-                Promise.resolve(),
-                actionHandler({
-                    successMessage: "บันทึกข้อมูลผู้ใช้สำเร็จ",
-                }),
-                setTimeout(function () {
-                    window.location.reload();
-                }, 1000 * 1.5)
-            );
+            return responseJson;
         })
         .catch((error) => {
             const message =
@@ -75,7 +72,7 @@ export const updateProfile = (profile) => async (dispatch) => {
                 error.toString();
 
             dispatch({
-                type: UPDATE_PROFILE_FAIL,
+                type: REQUEST_WARRANTY_SEARCH_BY_USER_FAIL,
             });
 
             dispatch({

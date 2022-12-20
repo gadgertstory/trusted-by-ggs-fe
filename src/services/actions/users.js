@@ -1,25 +1,20 @@
 import {
+    FETCH_ALL_USER_SUCCESS,
+    FETCH_ALL_USER_FAIL,
     SET_MESSAGE,
-    REQUEST_REPAIR_SEARCH_SUCCESS,
-    REQUEST_REPAIR_SEARCH_FAIL,
 } from "./types";
 
-import Repair from "../../middleware/repair";
+import fetchMaster from "../../middleware/user";
 import actionHandler from "../../middleware/action_handler";
 
-export const RepairRequestSearch = (search) => async (dispatch) => {
-    // Calling the server
-    await Repair.RepairRequestSearch(search)
-        .then((response) => {
-            return response.data;
-        })
-
+export const getAllUsers = () => async (dispatch) => {
+    await fetchMaster.getAllUsers()
+        .then((response) => response.data)
         .then((responseJson) => {
             dispatch({
-                type: REQUEST_REPAIR_SEARCH_SUCCESS,
+                type: FETCH_ALL_USER_SUCCESS,
                 payload: responseJson,
             });
-            return responseJson;
         })
         .catch((error) => {
             const message =
@@ -30,7 +25,7 @@ export const RepairRequestSearch = (search) => async (dispatch) => {
                 error.toString();
 
             dispatch({
-                type: REQUEST_REPAIR_SEARCH_FAIL,
+                type: FETCH_ALL_USER_FAIL,
             });
 
             dispatch({
@@ -46,3 +41,4 @@ export const RepairRequestSearch = (search) => async (dispatch) => {
             );
         });
 };
+

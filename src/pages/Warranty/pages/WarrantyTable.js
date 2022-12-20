@@ -1,73 +1,56 @@
 import React, { useEffect, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import { useLocation } from "react-router-dom";
 
 import MaterialTable from "material-table";
 import { history } from "../../../helpers/history";
 import { Button, Stack, Typography, Box, Link } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import BuildIcon from '@mui/icons-material/Build';
+import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 
-import { RepairRequestSearch } from "../../../services/actions/repairs";
-import { getAllStatus } from "../../../services/actions/status";
+import { warrantyRequestSearchByAdmin } from "../../../services/actions/warranties";
 import HeaderTable from "../components/HeaderTable";
-import BadgeStatus from "../../../components/Badge";
 
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import LoadingButton from "@mui/lab/LoadingButton";
+// import Dialog from "@mui/material/Dialog";
+// import DialogActions from "@mui/material/DialogActions";
+// import DialogContent from "@mui/material/DialogContent";
+// import DialogContentText from "@mui/material/DialogContentText";
+// import LoadingButton from "@mui/lab/LoadingButton";
 
-import TextField from "@mui/material/TextField";
-import { LocalizationProvider } from "@mui/x-date-pickers-pro";
-import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
-import { AdapterDateFns } from "@mui/x-date-pickers-pro/AdapterDateFns";
-import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
-import ExportExcel from "../../../utils/ExportExcel";
+// import ExportExcel from "../../../utils/ExportExcel";
 
-const RepairTable = (roleUser) => {
+const WarrantyTable = (roleUser) => {
     const dispatch = useDispatch();
     const { control } = useForm();
-    const { dataAllRepair = [] } = useSelector((state) => state.repairs);
+    const { dataAllWarrantyByAdmin = [] } = useSelector(
+        (state) => state.warranties
+    );
 
-    const { search } = useLocation();
     const [status, setStatus] = useState(0);
     const [keyword, setKeyword] = useState("");
-    const [openDialog, setOpenDialog] = useState(false);
 
-    const [value, setValue] = useState([null, null]);
-    const [newValue, setNewValue] = useState([null, null]);
-
-    useEffect(() => {
-        dispatch(getAllStatus());
-    }, [dispatch]);
-
-    const useQuery = () => {
-        return React.useMemo(() => new URLSearchParams(search), []);
-    };
-
-    const query = useQuery();
+    // const [openDialog, setOpenDialog] = useState(false);
+    // const [value, setValue] = useState([null, null]);
+    // const [newValue, setNewValue] = useState([null, null]);
 
     useEffect(() => {
-        handleSearchByDashboard();
+        handleSearch();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const selectRow = (selectRow) => {
-        const id = selectRow.repair_id;
+        const id = selectRow.warranty_id;
 
-        history.push(`/repair/${id}`);
+        history.push(`/warranty/${id}`);
         window.location.reload();
     };
 
     const selectNewtab = (rowData) => {
-        const id = rowData.repair_id;
-        window.open(`/repair/${id}`, "_blank");
+        const id = rowData.warranty_id;
+        window.open(`/warranty/${id}`, "_blank");
     };
 
-    const handleCreateRepair = () => {
-        history.push("/repair/new");
+    const handleCreateWarranty = () => {
+        history.push("/warranty/new");
         window.location.reload();
     };
 
@@ -79,28 +62,14 @@ const RepairTable = (roleUser) => {
         setKeyword(e.target.value);
     };
 
-    const handleSearchByDashboard = useCallback(
-        (isClear) => {
-            const _keyword = isClear ? "" : keyword;
-            setStatus(query.get("status_no"));
-            const queryParams = `?status_no=${query.get(
-                "status_no"
-            )}&customer_name=${_keyword}`;
-            history.push(queryParams);
-            dispatch(RepairRequestSearch(queryParams));
-        },
-        [keyword, dispatch, query]
-    );
-
     const handleSearch = useCallback(
         (isClear) => {
             const _keyword = isClear ? "" : keyword;
-
-            const queryParams = `?status_no=${status}&customer_name=${_keyword}`;
+            const queryParams = `?sn=${_keyword}`;
             history.push(queryParams);
-            dispatch(RepairRequestSearch(queryParams));
+            dispatch(warrantyRequestSearchByAdmin(queryParams));
         },
-        [keyword, status, dispatch]
+        [keyword, dispatch]
     );
 
     const Logo = (brandName) => {
@@ -141,29 +110,29 @@ const RepairTable = (roleUser) => {
         );
     };
 
-    const handleOpenDialog = () => {
-        setOpenDialog(true);
-    };
+    // const handleOpenDialog = () => {
+    //     setOpenDialog(true);
+    // };
 
-    const handleCloseDialog = () => {
-        setValue([null, null]);
-        setNewValue([null, null]);
-        setOpenDialog(false);
-    };
+    // const handleCloseDialog = () => {
+    //     setValue([null, null]);
+    //     setNewValue([null, null]);
+    //     setOpenDialog(false);
+    // };
 
-    const handleExport = (val) => {
-        ExportExcel(val);
-        handleSearch();
-        handleCloseDialog();
-        setNewValue([null, null]);
-        setValue([null, null]);
-    };
+    // const handleExport = (val) => {
+    //     ExportExcel(val);
+    //     handleSearch();
+    //     handleCloseDialog();
+    //     setNewValue([null, null]);
+    //     setValue([null, null]);
+    // };
 
-    const handleDateChangeRaw = (e) => {
-        if (e) {
-            e.preventDefault();
-        }
-    };
+    // const handleDateChange = (e) => {
+    //     if (e) {
+    //         e.preventDefault();
+    //     }
+    // };
 
     return (
         <>
@@ -173,9 +142,9 @@ const RepairTable = (roleUser) => {
                 justifyContent={"space-between"}
             >
                 <Typography variant="h4" component="h1">
-                    <BuildIcon/> งานซ่อม
+                    <VerifiedUserIcon /> การรับประกัน
                 </Typography>
-                {roleUser.roleUser.role !== "user"  ? (
+                {roleUser.roleUser.role !== "user" ? (
                     <Button
                         sx={{
                             bgcolor: "secondary.light",
@@ -186,9 +155,9 @@ const RepairTable = (roleUser) => {
                         }}
                         variant="contained"
                         startIcon={<AddCircleOutlineIcon />}
-                        onClick={handleCreateRepair}
+                        onClick={handleCreateWarranty}
                     >
-                        เพิ่มใบแจ้งซ่อม
+                        เพิ่มข้อมูลการรับประกัน
                     </Button>
                 ) : (
                     ""
@@ -202,7 +171,7 @@ const RepairTable = (roleUser) => {
                 keyword={keyword}
                 onChangeKeyword={handleChangeKeyword}
                 roleUser={roleUser}
-                handleOpenDialog={handleOpenDialog}
+                // handleOpenDialog={handleOpenDialog}
             />
 
             <MaterialTable
@@ -226,32 +195,35 @@ const RepairTable = (roleUser) => {
                         ),
                     },
                     {
-                        title: "เลขที่ใบแจ้งซ่อม",
-                        field: "repair_no",
+                        title: "ชื่อ - นามสกุล",
                         render: (rowData) => (
                             <Link
                                 href="#"
                                 onClick={() => selectNewtab(rowData)}
                             >
-                                {rowData.repair_no}
+                                <Box
+                                    sx={{
+                                        textOverflow: "ellipsis",
+                                        whiteSpace: "nowrap",
+                                        overflow: "hidden",
+                                        maxWidth: 150,
+                                    }}
+                                >
+                                    {rowData.customer_firstname}{" "}
+                                    {rowData.customer_lastname}
+                                </Box>
                             </Link>
                         ),
                     },
                     {
-                        title: "ชื่อ - นามสกุล",
-                        render: (rowData) => (
-                            <Box
-                                sx={{
-                                    textOverflow: "ellipsis",
-                                    whiteSpace: "nowrap",
-                                    overflow: "hidden",
-                                    maxWidth: 150,
-                                }}
-                            >
-                                {rowData.customer_firstname}{" "}
-                                {rowData.customer_lastname}
-                            </Box>
-                        ),
+                        title: "เบอร์โทรศัพท์",
+                        field: "customer_tel",
+                        render: (rowData) => <>{rowData.customer_tel}</>,
+                    },
+                    {
+                        title: "อีเมล",
+                        field: "customer_email",
+                        render: (rowData) => <>{rowData.customer_email}</>,
                     },
                     {
                         title: "Brand",
@@ -264,78 +236,28 @@ const RepairTable = (roleUser) => {
                                     maxWidth: 150,
                                 }}
                             >
-                                {Logo(rowData.brand_name)}
+                                {Logo(rowData.brand.brand_name)}
                             </Box>
                         ),
                     },
                     {
-                        title: "วันที่แจ้งเรื่อง",
-                        render: (rowData) => (
-                            <Box
-                                sx={{
-                                    textOverflow: "ellipsis",
-                                    whiteSpace: "nowrap",
-                                    overflow: "hidden",
-                                    maxWidth: 100,
-                                }}
-                            >
-                                {rowData.notified_date
-                                    ?.split("-")
-                                    .reverse()
-                                    .join("/")}
-                            </Box>
-                        ),
-                    },
-                    {
-                        title: "วันที่รับซ่อม",
-                        render: (rowData) => (
-                            <Box
-                                sx={{
-                                    textOverflow: "ellipsis",
-                                    whiteSpace: "nowrap",
-                                    overflow: "hidden",
-                                    maxWidth: 100,
-                                }}
-                            >
-                                {rowData.received_date
-                                    ?.split("-")
-                                    .reverse()
-                                    .join("/")}
-                            </Box>
-                        ),
-                    },
-                    {
-                        title: "วันที่นัดรับ",
-                        render: (rowData) => (
-                            <Box
-                                sx={{
-                                    textOverflow: "ellipsis",
-                                    whiteSpace: "nowrap",
-                                    overflow: "hidden",
-                                    maxWidth: 100,
-                                }}
-                            >
-                                {rowData.return_date
-                                    ?.split("-")
-                                    .reverse()
-                                    .join("/")}
-                            </Box>
-                        ),
-                    },
-                    {
-                        title: "สถานะการซ่อม",
+                        title: "ชื่ออุปกรณ์",
                         align: "center",
                         cellStyle: {
                             textAlign: "center",
                         },
-                        render: (rowData) => (
-                            <BadgeStatus
-                                badgeContent={rowData.status_name}
-                            ></BadgeStatus>
-                        ),
+                        render: (rowData) => <>{rowData.product_name}</>,
+                    },
+                    {
+                        title: "Serial Number",
+                        align: "center",
+                        cellStyle: {
+                            textAlign: "center",
+                        },
+                        render: (rowData) => <>{rowData.product_serial_no}</>,
                     },
                 ]}
-                data={dataAllRepair}
+                data={dataAllWarrantyByAdmin}
                 actions={[
                     {
                         title: " ",
@@ -365,7 +287,7 @@ const RepairTable = (roleUser) => {
                 }}
             />
 
-            <Dialog open={openDialog} onClose={handleCloseDialog}>
+            {/* <Dialog open={openDialog} onClose={handleCloseDialog}>
                 <DialogContent>
                     <Typography
                         component={"h5"}
@@ -373,7 +295,7 @@ const RepairTable = (roleUser) => {
                         fontWeight={"bold"}
                         sx={{ mb: 2 }}
                     >
-                         Export Excel
+                        Export Excel
                     </Typography>
                     <DialogContentText id="alert-dialog-description">
                         <LocalizationProvider
@@ -409,12 +331,12 @@ const RepairTable = (roleUser) => {
                                         <React.Fragment>
                                             <TextField
                                                 {...startProps}
-                                                onKeyDown={handleDateChangeRaw}
+                                                onKeyDown={handleDateChange}
                                             />
                                             <Box sx={{ mx: 2 }}> to </Box>
                                             <TextField
                                                 {...endProps}
-                                                onKeyDown={handleDateChangeRaw}
+                                                onKeyDown={handleDateChange}
                                             />
                                         </React.Fragment>
                                     )}
@@ -447,9 +369,9 @@ const RepairTable = (roleUser) => {
                         Submit
                     </LoadingButton>
                 </DialogActions>
-            </Dialog>
+            </Dialog> */}
         </>
     );
 };
 
-export default RepairTable;
+export default WarrantyTable;
