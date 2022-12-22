@@ -95,7 +95,7 @@ export const login = (loginUser) => (dispatch) => {
             return (
                 Promise.reject(),
                 actionHandler(
-                    statusCode === 401
+                    statusCode > 399 && statusCode < 500
                         ? {
                               error: "กรุณากรอก Email และ Password ให้ถูกต้อง",
                           }
