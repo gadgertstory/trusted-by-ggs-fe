@@ -150,7 +150,7 @@ export const forgotPassword = (user_email) => async (dispatch) => {
             return (
                 Promise.reject(),
                 actionHandler(
-                    statusCode === 406
+                    error.response.status > 399 && error.response.status < 500
                         ? {
                               error: `ไม่มี Email ของท่านอยู่ในระบบ 
                               กรุณาตรวจสอบ Email ที่ท่านกรอก`,
