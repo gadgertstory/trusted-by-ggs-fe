@@ -71,30 +71,9 @@ const WarrantyCheck = () => {
                 </>
             );
         } else {
-            return (
-                <>
-                    <Typography variant="p">หมดประกัน</Typography>
-                    <Typography component={"p"} variant="caption">
-                        (ประกันสิ้นสุด{" "}
-                        {dataAllWarrantyByUser?.[0]?.end_warranty_date
-                            ?.split("T")[0]
-                            .split("-")
-                            .reverse()
-                            .join("/")}
-                        )
-                    </Typography>
-                </>
-            )
-            
+            return <Typography variant="p">หมดประกัน</Typography>;
         }
     };
-
-    const purchaseMethodCheck = () => {
-        const purchase_method = dataAllWarrantyByUser?.[0]?.purchase_method
-        if (!purchase_method) {
-            return "none"
-        }
-    }
 
     return (
         <ThemeProvider theme={theme}>
@@ -160,11 +139,7 @@ const WarrantyCheck = () => {
                                 }
                                 {...register("serial_number")}
                             />
-                            <p>
-                                <p style={{color: "red"}}>*ตัวอย่างการระบุข้อมูล: X-XXXXXXXXXXXX</p>
-                                <p style={{color: "red"}}>**ไม่ต้องระบุ SN นำหน้า</p>
-                            </p>
-                            <></>
+
                             <Grid
                                 container
                                 justifyContent="center"
@@ -202,31 +177,6 @@ const WarrantyCheck = () => {
                                                 variant="p"
                                                 sx={{ fontWeight: 600 }}
                                             >
-                                                ชื่อสินค้า
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={12} md={6}>
-                                            {dataAllWarrantyByUser?.[0]?.product_name}
-                                        </Grid>
-                                        <Grid item xs={12} md={6}>
-                                            <Typography
-                                                variant="p"
-                                                sx={{ fontWeight: 600 }}
-                                            >
-                                                หมายเลขเครื่อง/Serial Number
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={12} md={6}>
-                                            {
-                                                dataAllWarrantyByUser?.[0]
-                                                    ?.product_serial_no
-                                            }
-                                        </Grid>
-                                        <Grid item xs={12} md={6}>
-                                            <Typography
-                                                variant="p"
-                                                sx={{ fontWeight: 600 }}
-                                            >
                                                 วันที่เริ่มต้นการรับประกันสินค้า
                                             </Typography>
                                         </Grid>
@@ -248,17 +198,18 @@ const WarrantyCheck = () => {
                                         <Grid item xs={12} md={6}>
                                             {checkExpireDate()}
                                         </Grid>
-                                        <Grid item xs={12} md={6} display={purchaseMethodCheck()}>
+                                        <Grid item xs={12} md={6}>
                                             <Typography
                                                 variant="p"
                                                 sx={{ fontWeight: 600 }}
                                             >
-                                                ช่องทางการสั่งซื้อ
+                                                หมายเลขเครื่อง/Serial Number
                                             </Typography>
                                         </Grid>
-                                        <Grid item xs={12} md={6} display={purchaseMethodCheck()}>
+                                        <Grid item xs={12} md={6}>
                                             {
-                                                dataAllWarrantyByUser?.[0]?.purchase_method                                             
+                                                dataAllWarrantyByUser?.[0]
+                                                    ?.product_serial_no
                                             }
                                         </Grid>
                                         <Grid item xs={12} md={6}>
@@ -292,6 +243,20 @@ const WarrantyCheck = () => {
                                                 dataAllWarrantyByUser?.[0]
                                                     ?.customer_tel
                                             )}
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            <Typography
+                                                variant="p"
+                                                sx={{ fontWeight: 600 }}
+                                            >
+                                                อีเมล
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            {
+                                                dataAllWarrantyByUser?.[0]
+                                                    ?.customer_email
+                                            }
                                         </Grid>
                                     </Grid>
                                 </Paper>
