@@ -88,7 +88,7 @@ const LogIn = () => {
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="p">
-                    Repair System
+                    Trusted by GGS
                 </Typography>
                 <Typography variant="h5">Sign in</Typography>
                 <Box
