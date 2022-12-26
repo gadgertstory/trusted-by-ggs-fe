@@ -103,6 +103,7 @@ const WarrantyDetail = (props) => {
             setValue("product_name", dataWarranty.product_name || "");
             setValue("product_serial_no", dataWarranty.product_serial_no || "");
             setValue("brand_id", dataWarranty.brand?.brand_id || "");
+            setValue("purchase_method", dataWarranty.purchase_method || "");
             if (dataWarranty.start_warranty_date) {
                 setStartWarrantyDate(
                     convertISOtoGMT(dataWarranty.start_warranty_date)
@@ -281,13 +282,13 @@ const WarrantyDetail = (props) => {
                                                                 }}
                                                                 color={
                                                                     option.name ===
-                                                                    "Delete"
+                                                                        "Delete"
                                                                         ? "error.light"
                                                                         : ""
                                                                 }
                                                             >
                                                                 {option.name ===
-                                                                "Print" ? (
+                                                                    "Print" ? (
                                                                     ""
                                                                 ) : (
                                                                     <>
@@ -462,6 +463,30 @@ const WarrantyDetail = (props) => {
                                             message: "รูปแบบอีเมลไม่ถูกต้อง",
                                         },
                                     }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <Controller
+                                    name="purchase_method"
+                                    control={control}
+                                    defaultValue=""
+                                    render={({
+                                        field: { onChange, value },
+                                        fieldState: { error },
+                                    }) => (
+                                        <Input
+                                            disabled={!onEdit}
+                                            fullWidth
+                                            label="ช่องทางการสั่งซื้อ"
+                                            value={value}
+                                            onChange={onChange}
+                                            error={!!error}
+                                            helperText={error ? error.message : null}
+                                            inputProps={{
+                                                maxLength: 100,
+                                            }}
+                                        />
+                                    )}
                                 />
                             </Grid>
                         </Grid>
