@@ -194,15 +194,6 @@ const WarrantyTable = (roleUser) => {
                             </Typography>
                         ),
                     },
-
-                    {
-                        title: "Serial Number",
-                        align: "center",
-                        cellStyle: {
-                            textAlign: "center",
-                        },
-                        render: (rowData) => <>{rowData.product_serial_no}</>,
-                    },
                     {
                         title: "ชื่อ - นามสกุล",
                         render: (rowData) => (
@@ -225,19 +216,14 @@ const WarrantyTable = (roleUser) => {
                         ),
                     },
                     {
-                        title: "วันที่เริ่มต้นประกัน",
-                        field: "start_warranty_date",
-                        render: (rowData) =>  <>{rowData.start_warranty_date
-                        ?.split("T")[0].split("-")
-                        .reverse()
-                        .join("/")}</> ,
+                        title: "เบอร์โทรศัพท์",
+                        field: "customer_tel",
+                        render: (rowData) => <>{rowData.customer_tel}</>,
                     },
                     {
-                        title: "วันที่สิ้นสุดประกัน",
-                        field: "end_warranty_date",
-                        render: (rowData) => <>{rowData.end_warranty_date?.split("T")[0].split("-")
-                        .reverse()
-                        .join("/")}</>,
+                        title: "อีเมล",
+                        field: "customer_email",
+                        render: (rowData) => <>{rowData.customer_email}</>,
                     },
                     {
                         title: "Brand",
@@ -261,6 +247,14 @@ const WarrantyTable = (roleUser) => {
                             textAlign: "center",
                         },
                         render: (rowData) => <>{rowData.product_name}</>,
+                    },
+                    {
+                        title: "Serial Number",
+                        align: "center",
+                        cellStyle: {
+                            textAlign: "center",
+                        },
+                        render: (rowData) => <>{rowData.product_serial_no}</>,
                     },
                 ]}
                 data={dataAllWarrantyByAdmin}
