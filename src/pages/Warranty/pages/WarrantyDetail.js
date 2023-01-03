@@ -425,7 +425,7 @@ const WarrantyDetail = (props) => {
                                     rules={{
                                         required: "กรุณากรอกเบอร์โทรศัพท์",
                                         pattern: {
-                                            value: /^[0-9-]+$/,
+                                            value: /^[0-9]+$/,
                                             message: "กรุณาใส่ตัวเลขเท่านั้น",
                                         },
                                     }}
@@ -457,7 +457,7 @@ const WarrantyDetail = (props) => {
                                         />
                                     )}
                                     rules={{
-                                        required: "กรุณากรอกอีเมลล์",
+                                        required: "กรุณากรอกเบอร์โทรศัพท์",
                                         pattern: {
                                             value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                                             message: "รูปแบบอีเมลไม่ถูกต้อง",
