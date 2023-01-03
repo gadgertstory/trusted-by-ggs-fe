@@ -278,7 +278,7 @@ const WarrantyCheck = () => {
                                                     ?.customer_lastname
                                             }
                                         </Grid>
-                                        {/* <Grid item xs={12} md={6}>
+                                        <Grid item xs={12} md={6} display="none">
                                             <Typography
                                                 variant="p"
                                                 sx={{ fontWeight: 600 }}
@@ -286,12 +286,12 @@ const WarrantyCheck = () => {
                                                 โทรศัพท์
                                             </Typography>
                                         </Grid>
-                                        <Grid item xs={12} md={6}>
+                                        <Grid item xs={12} md={6} display="none">
                                             {formatPhoneNumber(
                                                 dataAllWarrantyByUser?.[0]
                                                     ?.customer_tel
                                             )}
-                                        </Grid> */}
+                                        </Grid>
                                     </Grid>
                                 </Paper>
                             ) : (
