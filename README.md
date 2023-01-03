@@ -1,5 +1,4 @@
-# ggsrepair-frontend
-Gadgetstory Repair system
+# Trusted By GGS
 
-🔗 <a href="https://repair-frontend-dev.gadgetstory.co.th">DEV Environment </a>
+🔗 <a href="https://trusted-by-ggs-fe-dev.gadgetstory.co.th/">DEV Environment</a>
 
