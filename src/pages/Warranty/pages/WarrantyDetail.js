@@ -351,7 +351,7 @@ const WarrantyDetail = (props) => {
                                     }) => (
                                         <Input
                                             disabled={!onEdit}
-                                            required={true}
+                                            // required={true}
                                             fullWidth
                                             label="ชื่อ"
                                             value={value}
@@ -379,7 +379,7 @@ const WarrantyDetail = (props) => {
                                     }) => (
                                         <Input
                                             disabled={!onEdit}
-                                            required={true}
+                                            // required={true}
                                             fullWidth
                                             label="นามสกุล"
                                             value={value}
@@ -407,7 +407,7 @@ const WarrantyDetail = (props) => {
                                     }) => (
                                         <Input
                                             disabled={!onEdit}
-                                            required={true}
+                                            // required={true}
                                             fullWidth
                                             label="เบอร์โทรศัพท์"
                                             value={value}
@@ -442,7 +442,7 @@ const WarrantyDetail = (props) => {
                                     }) => (
                                         <Input
                                             disabled={!onEdit}
-                                            required={true}
+                                            // required={true}
                                             fullWidth
                                             label="อีเมล"
                                             value={value}
@@ -512,7 +512,7 @@ const WarrantyDetail = (props) => {
                                     }) => (
                                         <Input
                                             disabled={!onEdit}
-                                            required={true}
+                                            // required={true}
                                             fullWidth
                                             label="ชื่ออุปกรณ์"
                                             value={value}
@@ -540,7 +540,7 @@ const WarrantyDetail = (props) => {
                                     }) => (
                                         <Input
                                             disabled={!onEdit}
-                                            required={true}
+                                            // required={true}
                                             fullWidth
                                             label="หมายเลขเครื่อง/Serial Number"
                                             value={value}
@@ -568,7 +568,7 @@ const WarrantyDetail = (props) => {
                             <Grid item xs={12} md={6}>
                                 <Controller
                                     name="brand_id"
-                                    required
+                                    // required
                                     control={control}
                                     defaultValue=""
                                     render={({
@@ -578,7 +578,7 @@ const WarrantyDetail = (props) => {
                                         <FormControl
                                             disabled={!onEdit}
                                             fullWidth
-                                            required
+                                            // required
                                             error={!!error}
                                             className={classes.formControl}
                                         >
