@@ -554,15 +554,15 @@ const WarrantyDetail = (props) => {
                                             }}
                                         />
                                     )}
-                                    rules={{
-                                        required:
-                                            "กรุณากรอก หมายเลขเครื่อง/Serial Number",
-                                        pattern: {
-                                            value: /^[A-Z0-9a-z-]+$/i,
-                                            message:
-                                                "รูปแบบ หมายเลขเครื่อง/Serial Number ไม่ถูกต้อง",
-                                        },
-                                    }}
+                                    // rules={{
+                                    //     required:
+                                    //         "กรุณากรอก หมายเลขเครื่อง/Serial Number",
+                                    //     pattern: {
+                                    //         value: /^[A-Z0-9a-z-]+$/i,
+                                    //         message:
+                                    //             "รูปแบบ หมายเลขเครื่อง/Serial Number ไม่ถูกต้อง",
+                                    //     },
+                                    // }}
                                 />
                             </Grid>
                             <Grid item xs={12} md={6}>
