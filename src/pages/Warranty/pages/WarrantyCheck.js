@@ -160,9 +160,7 @@ const WarrantyCheck = () => {
                                 }
                                 {...register("serial_number")}
                             />
-                            <p>
-                                <p style={{color: "red"}}>**ไม่ต้องระบุ SN นำหน้า</p>
-                            </p>
+                            <p style={{color: "red"}}>**ไม่ต้องระบุ SN นำหน้า</p>
                             <></>
                             <Grid
                                 container
