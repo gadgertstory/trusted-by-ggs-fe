@@ -424,7 +424,7 @@ const WarrantyDetail = (props) => {
                                     rules={{
                                         required: "กรุณากรอกเบอร์โทรศัพท์",
                                         pattern: {
-                                            value: /^[0-9-]+$/,
+                                            value: /^[0-9]+$/,
                                             message: "กรุณาใส่ตัวเลขเท่านั้น",
                                         },
                                     }}
