@@ -160,9 +160,7 @@ const WarrantyCheck = () => {
                                 }
                                 {...register("serial_number")}
                             />
-                            <p>
-                                <p style={{color: "red"}}>**ไม่ต้องระบุ SN นำหน้า</p>
-                            </p>
+                            <p style={{color: "red"}}>**ไม่ต้องระบุ SN นำหน้า</p>
                             <></>
                             <Grid
                                 container
@@ -278,7 +276,7 @@ const WarrantyCheck = () => {
                                                     ?.customer_lastname
                                             }
                                         </Grid>
-                                        {/* <Grid item xs={12} md={6}>
+                                        <Grid item xs={12} md={6} display="none">
                                             <Typography
                                                 variant="p"
                                                 sx={{ fontWeight: 600 }}
@@ -286,12 +284,12 @@ const WarrantyCheck = () => {
                                                 โทรศัพท์
                                             </Typography>
                                         </Grid>
-                                        <Grid item xs={12} md={6}>
+                                        <Grid item xs={12} md={6} display="none">
                                             {formatPhoneNumber(
                                                 dataAllWarrantyByUser?.[0]
                                                     ?.customer_tel
                                             )}
-                                        </Grid> */}
+                                        </Grid>
                                     </Grid>
                                 </Paper>
                             ) : (
