@@ -351,7 +351,7 @@ const WarrantyDetail = (props) => {
                                     }) => (
                                         <Input
                                             disabled={!onEdit}
-                                            // required={true}
+                                            required={true}
                                             fullWidth
                                             label="ชื่อ"
                                             value={value}
@@ -379,7 +379,7 @@ const WarrantyDetail = (props) => {
                                     }) => (
                                         <Input
                                             disabled={!onEdit}
-                                            // required={true}
+                                            required={true}
                                             fullWidth
                                             label="นามสกุล"
                                             value={value}
@@ -407,7 +407,7 @@ const WarrantyDetail = (props) => {
                                     }) => (
                                         <Input
                                             disabled={!onEdit}
-                                            // required={true}
+                                            required={true}
                                             fullWidth
                                             label="เบอร์โทรศัพท์"
                                             value={value}
@@ -425,7 +425,7 @@ const WarrantyDetail = (props) => {
                                     rules={{
                                         required: "กรุณากรอกเบอร์โทรศัพท์",
                                         pattern: {
-                                            value: /^[0-9]+$/,
+                                            value: /^[0-9-]+$/,
                                             message: "กรุณาใส่ตัวเลขเท่านั้น",
                                         },
                                     }}
@@ -442,7 +442,7 @@ const WarrantyDetail = (props) => {
                                     }) => (
                                         <Input
                                             disabled={!onEdit}
-                                            // required={true}
+                                            required={true}
                                             fullWidth
                                             label="อีเมล"
                                             value={value}
@@ -512,7 +512,7 @@ const WarrantyDetail = (props) => {
                                     }) => (
                                         <Input
                                             disabled={!onEdit}
-                                            // required={true}
+                                            required={true}
                                             fullWidth
                                             label="ชื่ออุปกรณ์"
                                             value={value}
@@ -540,7 +540,7 @@ const WarrantyDetail = (props) => {
                                     }) => (
                                         <Input
                                             disabled={!onEdit}
-                                            // required={true}
+                                            required={true}
                                             fullWidth
                                             label="หมายเลขเครื่อง/Serial Number"
                                             value={value}
@@ -554,21 +554,21 @@ const WarrantyDetail = (props) => {
                                             }}
                                         />
                                     )}
-                                    // rules={{
-                                    //     required:
-                                    //         "กรุณากรอก หมายเลขเครื่อง/Serial Number",
-                                    //     pattern: {
-                                    //         value: /^[A-Z0-9a-z-]+$/i,
-                                    //         message:
-                                    //             "รูปแบบ หมายเลขเครื่อง/Serial Number ไม่ถูกต้อง",
-                                    //     },
-                                    // }}
+                                    rules={{
+                                        required:
+                                            "กรุณากรอก หมายเลขเครื่อง/Serial Number",
+                                        pattern: {
+                                            value: /^[A-Z0-9a-z-]+$/i,
+                                            message:
+                                                "รูปแบบ หมายเลขเครื่อง/Serial Number ไม่ถูกต้อง",
+                                        },
+                                    }}
                                 />
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <Controller
                                     name="brand_id"
-                                    // required
+                                    required
                                     control={control}
                                     defaultValue=""
                                     render={({
@@ -578,7 +578,7 @@ const WarrantyDetail = (props) => {
                                         <FormControl
                                             disabled={!onEdit}
                                             fullWidth
-                                            // required
+                                            required
                                             error={!!error}
                                             className={classes.formControl}
                                         >
